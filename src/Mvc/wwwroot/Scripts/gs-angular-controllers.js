@@ -4,14 +4,59 @@
 
 var greenShelterControllers = angular.module('greenShelterControllers', []);
 
-greenShelterControllers.controller('HomeCtrl', ['$scope', '$http',
-  function($scope, $http) {
-    // add binding data to $scope
-    $scope.example = 'data1';
-    $scope.example2 = 'data2';
-  }]);
+greenShelterControllers.controller('HomeController', ['$scope', '$http',
+	function($scope, $http) {
+		// add binding data to $scope
+		// using $http.get to fetch data
+	}]);
 
-greenShelterControllers.controller('AboutCtrl', ['$scope', '$routeParams',
-  function($scope, $routeParams) {
-    $scope.phoneId = $routeParams.phoneId;
-  }]);
+greenShelterControllers.controller('AboutController', ['$scope', '$routeParams',
+	function($scope, $routeParams) {
+		// add binding data to $scope
+	}]);
+
+greenShelterControllers.controller('AboutMissionController', ['$scope', '$routeParams',
+	function($scope, $routeParams) {
+		// add binding data to $scope
+	}]);
+	
+greenShelterControllers.controller('AboutBoardController', ['$scope', '$routeParams',
+	function($scope, $routeParams) {
+		// add binding data to $scope
+	}]);
+	
+greenShelterControllers.controller('AboutEmploymentController', ['$scope', '$routeParams',
+	function($scope, $routeParams) {
+		// add binding data to $scope
+	}]);
+	
+greenShelterControllers.controller('AboutFAQController', ['$scope', '$routeParams',
+	function($scope, $routeParams) {
+		// add binding data to $scope
+	}]);
+	
+greenShelterControllers.controller('OurServicesController', ['$scope', '$routeParams',
+	function($scope, $routeParams) {
+		// add binding data to $scope
+	}]);
+	
+greenShelterControllers.controller('FamilyServiceController', ['$scope', '$routeParams',
+	function($scope, $routeParams) {
+		// add binding data to $scope
+	}]);
+
+greenShelterControllers.controller('HousingServiceController', ['$scope', '$routeParams',
+	function($scope, $routeParams) {
+		// add binding data to $scope
+	}]);
+	
+greenShelterControllers.controller('EmergencyCareServiceController', ['$scope', '$routeParams',
+	function($scope, $routeParams) {
+		// add binding data to $scope
+	}]);
+	
+greenShelterControllers.controller('ContactController', ['$scope', '$routeParams',
+	function($scope, $routeParams) {
+		// add binding data to $scope
+	}]);
+	
