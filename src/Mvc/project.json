@@ -1,0 +1,58 @@
+{
+  "webroot": "wwwroot",
+  "version": "1.0.0.0",
+  "authors": [
+    "Karega Scott - PCSC"
+  ],
+  "description": "Green Shelter Core Project",
+  "compilationOptions": {
+    "warningsAsErrors": true
+  },
+  "exclude": "*.bk",
+  "dependencies": {
+    "Microsoft.Framework.ConfigurationModel": "1.0.0-*",
+    "Microsoft.Framework.ConfigurationModel.Json": "1.0.0-*",
+    "Microsoft.Framework.Logging": "1.0.0-*",
+    "Microsoft.Framework.Logging.Console": "1.0.0-*",
+    "Kestrel": "1.0.0-*",
+    "Microsoft.AspNet.Diagnostics": "1.0.0-*",
+    "Microsoft.AspNet.Hosting": "1.0.0-*",
+    "Microsoft.AspNet.Mvc": "6.0.0-*",
+    "Microsoft.AspNet.Mvc.Core": "6.0.0-*",
+    "Microsoft.AspNet.Routing": "1.0.0-*",
+    "Microsoft.AspNet.Server.WebListener": "1.0.0-*",
+    "Microsoft.AspNet.StaticFiles": "1.0.0-*",
+    "Mongodb": "1.7.1.4791",
+    "MongoDB.AspNet.Identity": "1.0.5",
+  },
+  "commands": {
+    "web": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.WebListener --server.urls http://localhost:8080",
+    "kestrel": "Microsoft.AspNet.Hosting --server Kestrel --server.urls http://localhost:8181"
+  },
+  "frameworks": {
+    "aspnet50": {
+      "dependencies": {
+        "Microsoft.Framework.Logging.NLog": "1.0.0-*"
+      }
+    }
+  },
+  "configurations": {
+    "Debug": {
+      "compilationOptions": {
+        "define": [
+          "DEBUG",
+          "TRACE"
+        ]
+      }
+    },
+    "Release": {
+      "compilationOptions": {
+        "define": [
+          "RELEASE",
+          "TRACE"
+        ],
+        "optimize": true
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+	"development": {
+		"databases": {
+			"sqlserver": {
+				"connectionstring": "Data Source=.\\SQLLocalDB;AttachDbFilename=|DataDirectory|\\GreenShelter.mdf;Integrated Security=True;User Instance=True",
+				"providername": "System.Data.SqlClient",
+				"databasename": "GreenShelter.mdf"
+			},
+			"mongodb": {
+				"connectionstring": "mongodb://localhost",
+				"daemon": "mongod --config |DataDirectory|\\mongodb.cfg", //AppDomain.CurrentDomain.GetData("DataDirectory"),
+				"databasename": "GreenShelter"
+			}
+		}
+	}
+}
