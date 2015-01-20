@@ -31,7 +31,7 @@ bin/
 bower_components/
 logs/
 node_modules/
-App_Data/db
+App_Data/db/
 build.cmd
 build.sh
 makefile.shade
