@@ -2,7 +2,6 @@
   "name": "GreenShelter Asp.Net Mvc",
   "version": "1.0.0",
   "description": "Green Shelter ASP.NET 5 MVC App",
-  //"main": "wwwroot\\Scripts\\package.js",
   "main": "package.json",
   "moduleType": [
     "globals"
