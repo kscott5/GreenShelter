@@ -31,8 +31,7 @@ bin/
 bower_components/
 logs/
 node_modules/
-App_Data/db/
+db/
 build.cmd
 build.sh
 makefile.shade
-spa_support
