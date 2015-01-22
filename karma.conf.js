@@ -15,13 +15,17 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'src/Mvc/wwwroot/Scripts/*.js',
+      'src/Mvc/wwwroot/Scripts/angular.js',
+	  'src/Mvc/wwwroot/Scripts/angular-route.js',
+	  'src/Mvc/wwwroot/Scripts/gs-*.js',
+	  'src/Mvc/wwwroot/*template.html',
       'test/Mvc/wwwroot/Scripts/*.js'
     ],
 
 
     // list of files to exclude
     exclude: [
+		'src/Mvc/wwwroot/Scripts/*.min.js'
     ],
 
 
@@ -61,6 +65,6 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: false
+    singleRun: true
   });
 };

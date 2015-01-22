@@ -40,9 +40,7 @@ module.exports = function (grunt) {
 			},
 			karma: {
 				unit: {
-					configFile: 'karma.conf.js',
-					background: false, 
-					singleRun: false
+					configFile: 'karma.conf.js'
 				}
 			},
 			copy: {
@@ -96,8 +94,11 @@ module.exports = function (grunt) {
 					tasks: ['dev']
 				},
 				karma: { //run unit tests with karma (server needs to be already running)
-					files: ['src/Mvc/wwwroot/Scripts/**/*.js', 'test/Mvc/wwwroot/Scripts/**/*.js'],
-					exclude: ['src/Mvc/wwwroot/Scripts/**/*.min.js'],
+					unit : {
+						configFile: 'karma.conf.js'
+					},
+					//files: ['src/Mvc/wwwroot/Scripts/**/*.js', 'test/Mvc/wwwroot/Scripts/**/*.js'],
+					//exclude: ['src/Mvc/wwwroot/Scripts/**/*.min.js'],
 					tasks: ['karma:unit:run'] //NOTE the :run flag
 				}
 			}
