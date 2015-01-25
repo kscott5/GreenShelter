@@ -2,6 +2,7 @@
 
 using PCSC.GreenShelter;
 using PCSC.GreenShelter.Extensions;
+using PCSC.GreenShelter.Models;
 
 namespace PCSC.GreenShelter.Controllers
 {
@@ -15,9 +16,10 @@ namespace PCSC.GreenShelter.Controllers
 		/// </summary>
 		public string TagName {get { return "HomeController" ; } }
 
-		public IActionResult Index()
-		{
+		public IActionResult Index() {
 			this.WriteInformation("Index");
+			var userMgr = Context.ApplicationServices.GetService(typeof(ApplicationUserManager)) as ApplicationUserManager;
+			this.WriteInformation(string.Format("User Manager: {0}", userMgr));
 			
             return View();
         }
