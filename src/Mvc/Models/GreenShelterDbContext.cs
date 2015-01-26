@@ -26,10 +26,14 @@ namespace PCSC.GreenShelter.Models {
 			builder.Entity<Address>().Key(a => a.AddressId);
 			builder.Entity<Organization>().Key(a => a.OrganizationId);
 
-			builder.Entity<ApplicationUser>().ForRelational(u => u.Addresses);
+			//builder.Entity<ApplicationUser>().ForRelational(u => u.Addresses);
 			//builder.Entity<ApplicationUser>().OneToMany(u => u.Organizations);
-			
+
 			base.OnModelCreating(builder);
+		}
+
+		protected override void OnConfiguring(DbContextOptions options) {
+			options.UseSqlServer();
 		}
 	} // end class
 } // end namespace

@@ -39,8 +39,8 @@ namespace PCSC.GreenShelter
 			//.AddMessageProvider<SmsMessageProvider>(); /* public class SmsMessageProvider: IIdentityMessageProvider {} */
 
 			services.ConfigureCookieAuthentication(options => {
-				options.LoginPath = new PathString("/Site/Login");
-				options.LogoutPath = new PathString("/Site/Logout");
+				options.LoginPath = new PathString("/Home/Login");
+				options.LogoutPath = new PathString("/Home/Logout");
 			});
 			
 			if(this.FacebookEnabled()) {

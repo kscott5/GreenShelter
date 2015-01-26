@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 using Microsoft.AspNet.Mvc;
@@ -5,7 +6,7 @@ using Microsoft.AspNet.Mvc;
 using PCSC.GreenShelter;
 using PCSC.GreenShelter.Extensions;
 
-namespace PCSC.GreenShelter.Controllers.Api.V1 
+namespace PCSC.GreenShelter.Controllers.Api.V1
 {
 	/// <summary>
 	///
@@ -16,12 +17,13 @@ namespace PCSC.GreenShelter.Controllers.Api.V1
 		/// <summary>
 		/// Describe name for the class implementing <cref="IGreenShelterApplication"/> interface
 		/// </summary>
-		public string TagName {get { return "Api/v1/ShelterController" ; } }
+		public string TagName { get { return "Api/v1/ShelterController"; } }
 
 		/// <summary>
 		///
 		/// </summary>
 		[HttpGet("ok")]
+		[Authorize]
 		public IActionResult GetOk() {
 			this.WriteInformation("GetOK");
 			

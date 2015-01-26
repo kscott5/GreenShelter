@@ -7,7 +7,14 @@
     "DefaultAdminPassword": "",
     "Data": {
         "DefaultConnection": {
-            "Connectionstring": "Data Source=.\\SQLLocalDB;AttachDbFilename=|DataDirectory|\\GreenShelter.mdf;Integrated Security=True;User Instance=True"
+		    /* NOTE: Execute the following commands before run k web
+				
+				SQLLocalDB.exe create GreenShelterLocalDB
+				SQLLocalDB.exe start GreenShelterLocalDB
+				SQLLocalDB.exe info GreenShelterLocalDB
+				
+			*/
+            "ConnectionString": "Server=(LocalDB)\\GreenShelterLocalDB; Integrated Security=true"
         }
     },
     "EntityFramework": {
