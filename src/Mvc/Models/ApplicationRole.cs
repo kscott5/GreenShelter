@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-using AspNet.Identity.MongoDB;
+using Microsoft.AspNet.Identity;
 
 ﻿namespace PCSC.GreenShelter.Models {
 	/// <summary>

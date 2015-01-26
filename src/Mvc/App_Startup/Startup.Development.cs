@@ -9,7 +9,6 @@ using Microsoft.Framework.DependencyInjection;
 
 using PCSC.GreenShelter.Extensions;
 using PCSC.GreenShelter.Models;
-using PCSC.GreenShelter.Data;
 
 namespace PCSC.GreenShelter
 {
@@ -34,7 +33,6 @@ namespace PCSC.GreenShelter
             // default path is: /runtimeinfo
             app.UseRuntimeInfoPage();
 
-			
             Configure(app);
         }
     } // end class

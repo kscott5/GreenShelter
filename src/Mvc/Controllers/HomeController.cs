@@ -3,6 +3,7 @@
 using PCSC.GreenShelter;
 using PCSC.GreenShelter.Extensions;
 using PCSC.GreenShelter.Models;
+using PCSC.GreenShelter.Data;
 
 namespace PCSC.GreenShelter.Controllers
 {
@@ -18,8 +19,6 @@ namespace PCSC.GreenShelter.Controllers
 
 		public IActionResult Index() {
 			this.WriteInformation("Index");
-			var userMgr = Context.ApplicationServices.GetService(typeof(ApplicationUserManager)) as ApplicationUserManager;
-			this.WriteInformation(string.Format("User Manager: {0}", userMgr));
 			
             return View();
         }

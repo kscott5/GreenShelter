@@ -1,15 +1,13 @@
 using Microsoft.AspNet.Identity;
-using AspNet.Identity.MongoDB;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace PCSC.GreenShelter.Models {
 	/// <summary>
 	///
 	/// </summary>
-	public class ApplicationUserStore : UserStore<ApplicationUser> {		
-		/// <summary>
-		///
-		/// </summary>
-		public ApplicationUserStore(IdentityContext context) : base(context) {
+	public class ApplicationUserStore : UserStore<ApplicationUser, ApplicationRole, GreenShelterDbContext> {
+		public ApplicationUserStore(GreenShelterDbContext context, IdentityErrorDescriber describer = null) : base(context, describer)
+		{
 		}
     } // end class
 } // end namespace

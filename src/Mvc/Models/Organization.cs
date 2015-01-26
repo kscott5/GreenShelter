@@ -2,6 +2,7 @@ using System;
 
 namespace PCSC.GreenShelter.Models {
 	public class Organization {
+		public virtual int OrganizationId {get; set;}
 		public virtual string SecretKey {get; set;}
 		
 		public virtual string Name {get; set;}

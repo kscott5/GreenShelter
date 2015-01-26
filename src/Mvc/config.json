@@ -1,16 +1,40 @@
 {
-	"development": {
-		"databases": {
-			"sqlserver": {
-				"connectionstring": "Data Source=.\\SQLLocalDB;AttachDbFilename=|DataDirectory|\\GreenShelter.mdf;Integrated Security=True;User Instance=True",
-				"providername": "System.Data.SqlClient",
-				"databasename": "GreenShelter.mdf"
-			},
-			"mongodb": {
-				"connectionstring": "mongodb://localhost",
-				"daemon": "mongod --config |DataDirectory|\\mongodb.cfg", //AppDomain.CurrentDomain.GetData("DataDirectory"),
-				"databasename": "GreenShelter"
-			}
-		}
+	"Application": {
+		"Name": "Green Shelter",
+		"Version": "1.0.0.0"
+	},
+	"DefaultAdminUsername": "",
+    "DefaultAdminPassword": "",
+    "Data": {
+        "DefaultConnection": {
+            "Connectionstring": "Data Source=.\\SQLLocalDB;AttachDbFilename=|DataDirectory|\\GreenShelter.mdf;Integrated Security=True;User Instance=True"
+        }
+    },
+    "EntityFramework": {
+        "GreenShelterDbContext": {
+            "ConnectionStringKey": "Data:DefaultConnection:ConnectionString"
+        }
+    },
+	"Authentication": {
+		"Facebook": {
+			"Enabled": "false",
+			"AppId": "",
+			"AppSecret": ""
+		},
+		"Google": {
+			"Enabled": "false",
+			"ClientId": "",
+			"ClientSecret": ""
+		},
+		"MicrosoftAccount": {
+			"Enabled": "false",
+			"ClientId": "",
+			"ClientSecret": ""
+		},
+		"Twitter": {
+			"Enabled": "false",
+			"ConsumerKey": "",
+			"ConsumerSecret": ""
+		}		
 	}
 }

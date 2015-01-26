@@ -8,7 +8,7 @@ namespace PCSC.GreenShelter.Data {
 	/// Concrete implementation of the IOrganizationData interface used to 
 	///	perform database operation for an organization's client list
 	/// </summary>
-	public class OrganizationData : GreenShelterData, IOrganizationData {
+	public class OrganizationData : IOrganizationData {
 		/// <summary>
 		/// Adds a new organization's information to the application
 		/// </summary>
