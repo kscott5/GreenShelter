@@ -44,7 +44,7 @@ namespace PCSC.GreenShelter {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller}/{action}/{id?}",
-                    defaults: new { controller = "Home", action = "Index" });
+                    defaults: new { controller = "Spa", action = "StartPage" });
             });
         }
     } // end class

@@ -19,7 +19,6 @@
     "Microsoft.AspNet.Diagnostics": "1.0.0-*",
     "Microsoft.AspNet.Hosting": "1.0.0-*",
     "Microsoft.AspNet.Http": "1.0.0-*",
-    /*"Microsoft.AspNet.Identity.Core": "2.2.0-alpha1",*/
     "Microsoft.AspNet.Mvc": "6.0.0-*",
     "Microsoft.AspNet.Routing": "1.0.0-*",
     "Microsoft.AspNet.Server.WebListener": "1.0.0-*",
@@ -34,7 +33,7 @@
     "EntityFramework.Core": "7.0.0-*",
     "EntityFramework.Relational": "7.0.0-*",
     "EntityFramework.InMemory": "7.0.0-*",
-    "EntityFramework.SqlServer": "7.0.0-beta4-12057",
+    "EntityFramework.SqlServer": "7.0.0-*",
     "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-*"
   },
   "commands": {

@@ -23,22 +23,22 @@
         }
     },
 	"Authentication": {
-		"Facebook": {
+		"Facebook": { /* https://developers.facebook.com/apps/652388851540226/dashboard/ */
 			"Enabled": "false",
 			"AppId": "",
 			"AppSecret": ""
 		},
-		"Google": {
+		"Google": { /* https://console.developers.google.com */
 			"Enabled": "false",
 			"ClientId": "",
 			"ClientSecret": ""
 		},
-		"MicrosoftAccount": {
+		"MicrosoftAccount": { /* https://account.live.com/developers/applications/index */
 			"Enabled": "false",
 			"ClientId": "",
 			"ClientSecret": ""
 		},
-		"Twitter": {
+		"Twitter": { /* https://dev.twitter.com/rest/tools/console, https://apps.twitter.com/ */
 			"Enabled": "false",
 			"ConsumerKey": "",
 			"ConsumerSecret": ""

@@ -9,59 +9,75 @@ var greenShelterApp = angular.module('greenShelterApp', [
 
 greenShelterApp.config(['$routeProvider', function($routeProvider) {
 	$routeProvider.
+		/* Static Templates */
 		when('/', {
-			templateUrl: '/home_template.html',
+			templateUrl: '/app/home/index.html',
 			controller: 'HomeController'
 		}).
-		when('/home', {
-			templateUrl: '/home_template.html',
+		when('/spa', {
+			templateUrl: '/app/home/index.html',
 			controller: 'HomeController'
 		}).
-		when('/home/index', {
-			templateUrl: '/home_template.html',
+		when('/spa/startpage', {
+			templateUrl: '/app/home/index.html',
 			controller: 'HomeController'
 		}).
 		when('/contact', {
-			templateUrl: '/contact_template.html',
+			templateUrl: '/app/contact/index.html',
 			controller: 'ContactController'
 		}).
 		when('/about', {
-			templateUrl: '/about_template.html',
+			templateUrl: '/app/about/index.html',
 			controller: 'AboutController'
 		}).
 		when('/about/mission', {
-			templateUrl: '/about_mission_template.html',
+			templateUrl: '/app/about/mission.html',
 			controller: 'AboutMissionController'
 		}).
 		when('/about/board', {
-			templateUrl: '/about_board_template.html',
+			templateUrl: '/app/about/board.html',
 			controller: 'AboutBoardController'
 		}).
 		when('/about/employment', {
-			templateUrl: '/about_employment_template.html',
+			templateUrl: '/app/about/employment.html',
 			controller: 'AboutEmploymentController'
 		}).
 		when('/about/faqs', {
-			templateUrl: '/about_faqs_template.html',
+			templateUrl: '/app/about/faqs.html',
 			controller: 'AboutFAQController'
 		}).
 		when('/services', {
-			templateUrl: 'our_services_template.html',
+			templateUrl: '/app/services/index.html',
 			controller: 'OurServicesController'
 		}).
 		when('/services/family', {
-			templateUrl: 'family_services_template.html',
+			templateUrl: '/app/services/family.html',
 			controller: 'FamilyServiceController'
 		}).
 		when('/services/housing', {
-			templateUrl: 'housing_service_template.html',
+			templateUrl: '/app/services/housing.html',
 			controller: 'HousingServiceController'
 		}).
 		when('/services/emergency/care', {
-			templateUrl: 'emergency_care_service_template.html',
+			templateUrl: '/app/services/emergencycare.html',
 			controller: 'EmergencyCareServiceController'
 		}).
+		
+		/* Dynamic Templates */
+				when('/account/login', {
+			templateUrl: '/app/account/login.html',
+			controller: 'LoginController'
+		}).
+		when('/account/logout', {
+			templateUrl: '/app/account/logout.html',
+			controller: 'LogoutController'
+		}).
+		when('/account/register', {
+			templateUrl: '/app/account/Registration.html',
+			controller: 'RegistrationController'
+		}).
+
       otherwise({
-        redirectTo: '/home'
+        redirectTo: '/'
       });
   }]);

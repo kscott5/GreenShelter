@@ -1,0 +1,57 @@
+<div class="row">
+    <div class="col-md-8">
+        <section id="loginForm">
+			<form class="form-horizontal">
+			  <div class="form-group">
+				<label for="email" class="col-sm-2 control-label">{{login.label.email}}</label>
+				<div class="col-sm-10">
+				  <input type="email" class="form-control" id="email" name="name" ng-model="login.email" placeholder="Email">
+				</div>
+			  </div>
+			  <div class="form-group">
+				<label for="password" class="col-sm-2 control-label">{{login.label.password}}</label>
+				<div class="col-sm-10">
+				  <input type="password" class="form-control" id="password" name="password" ng-model="login.password" placeholder="Password">
+				</div>
+			  </div>
+			  <div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+				  <div class="checkbox">
+					<label>
+					  <input type="checkbox"> {{login.label.remember_me}}
+					</label>
+				  </div>
+				</div>
+			  </div>
+			  <div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+				  <button type="submit" class="btn btn-default" ng-click="login.clicked(login)">{{login.label.submit}}</button>
+				</div>
+			  </div>
+			  <input type="hidden" id="token" name="token" ng-model="login.token"/>
+			</form>
+		</section>
+	</div>
+	<div class="col-md-4">
+        <section id="socialLoginForm">
+            <h4>Use another service to log in.</h4>
+            <hr />
+            
+				<div ng-hide="login.external.provider.configured">
+					<p>
+						There are no external authentication services configured. See <a href="http://go.microsoft.com/fwlink/?LinkId=313242">this article</a>
+						for details on setting up this ASP.NET application to support logging in via external services.
+					</p>
+				</div>
+                
+				<div ng-show="login.external.provider.configured">
+					<form class="form-inline">
+						<input type="hidden" id="token" name="token" ng-model="login.token"/>
+						<p>                                
+							<button type="submit" class="btn btn-default" ng-repeat="provider in login.external.provider.types" id="{{provider.AuthenticationType}}" name="provider" value="{{provider.AuthenticationType}}" title="Log in using your {{provider.Caption}} account">{{provider.AuthenticationType}}</button>                                
+						</p>
+					</form>
+				</div>
+        </section>
+    </div>
+</div>
