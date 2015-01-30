@@ -1,3 +1,4 @@
+
 /// <reference path="node_modules/grunt/lib/grunt.js" />
 
 // node-debug (Resolve-Path ~\AppData\Roaming\npm\node_modules\grunt-cli\bin\grunt) task:target
@@ -63,6 +64,7 @@ module.exports = function (grunt) {
 								"jquery.validation/dist/*.{js,map}",
 								"bootstrap/dist/**/*.js",
 								"angular/*.{js,.js.map}",
+								"angular-resource/*.{js,.js.map}",
 								"angular-route/*.{js,.js.map}"
 							],
 							dest: 'src/Mvc/wwwroot/Scripts/',
