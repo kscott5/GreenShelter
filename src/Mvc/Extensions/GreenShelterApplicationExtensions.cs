@@ -186,6 +186,10 @@ namespace PCSC.GreenShelter.Extensions {
 			ExtensionHelper.logger.WriteInformation(string.Format("{0} => {1}", app.TagName, message));
 		}
 		
+		public static void WriteInformation(this IGreenShelterApplication app, string format, params object[] args) {
+			ExtensionHelper.logger.WriteInformation(format, args);
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -206,5 +210,8 @@ namespace PCSC.GreenShelter.Extensions {
 			ExtensionHelper.logger.WriteCritical(message, exception);
 		}
 
+		public static void WriteCritical(this IGreenShelterApplication app, string format, params object[] args) {
+			ExtensionHelper.logger.WriteCritical(format, args);
+		}
 	} // end class
 } // end namespace

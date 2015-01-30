@@ -25,8 +25,8 @@ greenShelterControllers.controller('HomeController', ['$scope', '$http',
 	}
 ]);
 
-greenShelterControllers.controller('LoginController', ['$scope', '$http',
-	function($scope, $http) {
+greenShelterControllers.controller('LoginController', ['$scope', '$http', '$log', 'Login', 
+	function($scope, $http, $log, Login) {
 		$scope.login = { 
 			'label': {
 				'email': 'Email',
@@ -37,7 +37,18 @@ greenShelterControllers.controller('LoginController', ['$scope', '$http',
 			'email': '',
 			'password': '',
 			'token': 'TODO: Get AntiForgeryToken from server',
-			'clicked': function(login) {console.log('login.email: ' + login.email); },
+			'clicked': function(login) {
+				$log.info(login);
+				
+				Login.save(login).$promise.then(
+					function(data){
+						$log.info(data.Description);
+					},
+					function(error) {
+						$log.info(error.Description);
+					}
+				);
+			},
 			'external': {
 				'provider': {
 					'configured': true,

@@ -23,11 +23,19 @@ namespace PCSC.GreenShelter.Controllers.Api.V1
 		///
 		/// </summary>
 		[HttpGet("ok")]
-		[Authorize]
 		public IActionResult GetOk() {
 			this.WriteInformation("GetOK");
-			
-			return new ObjectResult("OK");
+
+			try {
+				var antiForgery = Context.ApplicationServices.GetService(typeof(AntiForgery)) as AntiForgery;
+				antiForgery.SetCookieTokenAndHeader(Context);
+				
+			} catch(Exception ex) {
+				this.WriteError("Failed get antiforgery", ex);
+			}
+
+
+			return new ObjectResult(string.Format("OK: {0}", "Get token"));
 		}
 		
 		/// <summary>

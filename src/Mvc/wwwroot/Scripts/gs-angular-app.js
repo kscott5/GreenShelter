@@ -4,7 +4,8 @@
 
 var greenShelterApp = angular.module('greenShelterApp', [
 	'ngRoute',
-	'greenShelterControllers'
+	'greenShelterControllers',
+	'greenShelterServices'
 ]);
 
 greenShelterApp.config(['$routeProvider', function($routeProvider) {

@@ -20,6 +20,8 @@
     "Microsoft.AspNet.Hosting": "1.0.0-*",
     "Microsoft.AspNet.Http": "1.0.0-*",
     "Microsoft.AspNet.Mvc": "6.0.0-*",
+    "Microsoft.AspNet.Mvc.Core": "6.0.0-*",
+	"Microsoft.AspNet.Mvc.ModelBinding": "6.0.0-*",
     "Microsoft.AspNet.Routing": "1.0.0-*",
     "Microsoft.AspNet.Server.WebListener": "1.0.0-*",
     "Microsoft.AspNet.StaticFiles": "1.0.0-*",
@@ -29,12 +31,13 @@
     "Microsoft.AspNet.Security.Twitter": "1.0.0-*",
     "Microsoft.AspNet.Security.Google": "1.0.0-*",
     "Microsoft.AspNet.Security.MicrosoftAccount": "1.0.0-*",
-    "EntityFramework.Commands": "7.0.0-*",
+    "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-*",
+    "Microsoft.AspNet.Security.DataProtection": "1.0.0-*",
+	"EntityFramework.Commands": "7.0.0-*",
     "EntityFramework.Core": "7.0.0-*",
     "EntityFramework.Relational": "7.0.0-*",
     "EntityFramework.InMemory": "7.0.0-*",
-    "EntityFramework.SqlServer": "7.0.0-*",
-    "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-*"
+    "EntityFramework.SqlServer": "7.0.0-*"
   },
   "commands": {
     "web": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.WebListener --server.urls http://localhost:8080",
