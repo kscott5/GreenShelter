@@ -25,30 +25,32 @@ greenShelterControllers.controller('HomeController', ['$scope', '$http',
 	}
 ]);
 
-greenShelterControllers.controller('LoginController', ['$scope', '$http', '$log', 'Login', 
-	function($scope, $http, $log, Login) {
+greenShelterControllers.controller('LoginController', ['$scope', '$http', '$log', 'Client', 
+	function($scope, $http, $log, Client) {
 		$scope.login = { 
 			'label': {
-				'email': 'Email',
+				'username': 'Username',
 				'password': 'Password',
 				'submit': 'Login',
 				'remember_me': 'Remember Me'
-			},
+			}, // end label
 			'email': '',
 			'password': '',
 			'token': 'TODO: Get AntiForgeryToken from server',
 			'clicked': function(login) {
-				$log.info(login);
+				if($("#loginForm form").valid()) {				
+					$log.info('Preparing to log-in to site');
 				
-				Login.save(login).$promise.then(
-					function(data){
-						$log.info(data.Description);
-					},
-					function(error) {
-						$log.info(error.Description);
-					}
-				);
-			},
+					Client.login.post(login).$promise.then(
+						function(data){
+							$log.info(data.Description);
+						},
+						function(error) {
+							$log.info(error.Description);
+						}
+					);
+				}
+			}, // end clicked
 			'external': {
 				'provider': {
 					'configured': true,
@@ -60,10 +62,21 @@ greenShelterControllers.controller('LoginController', ['$scope', '$http', '$log'
 						{ 'AuthenticationType': 'MSN', 'Caption': 'MSN'}
 					]
 				}
-			}
-		};
+			} // end external
+		}; // end $scope.login
 		
-		// TODO: Call login $http.get
+		Client.authtypes.getProviders().$promise.then(
+			function(data) {
+				$log.info('Retreived ' + data.length + ' external login providers');
+				
+				$scope.login.external.provider.configured = data.length > 0;
+				$scope.login.external.provider.types = data;
+			},
+			function(error) {
+				$log.info('Failed retreiving external login providers. [Error: ' + error.Description + ']');
+				$scope.login.external.provider.configured = false;
+			}
+		);
 	}
 ]);
 

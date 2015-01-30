@@ -203,7 +203,11 @@ namespace PCSC.GreenShelter.Extensions {
 			ExtensionHelper.logger.WriteError(message, exception);
 		}
 		
-				/// <summary>
+		public static void WriteError(this IGreenShelterApplication app, string format, params object[] args) {
+			ExtensionHelper.logger.WriteError(format, args);
+		}
+
+		/// <summary>
 		/// 
 		/// </summary>
 		public static void WriteCritical(this IGreenShelterApplication app, string message, Exception exception) {

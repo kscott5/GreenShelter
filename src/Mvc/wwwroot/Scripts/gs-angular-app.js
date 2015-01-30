@@ -65,16 +65,16 @@ greenShelterApp.config(['$routeProvider', function($routeProvider) {
 		}).
 		
 		/* Dynamic Templates */
-				when('/account/login', {
-			templateUrl: '/app/account/login.html',
+				when('/client/login', {
+			templateUrl: '/app/client/login.html',
 			controller: 'LoginController'
 		}).
-		when('/account/logout', {
-			templateUrl: '/app/account/logout.html',
+		when('/client/logout', {
+			templateUrl: '/app/client/logout.html',
 			controller: 'LogoutController'
 		}).
-		when('/account/register', {
-			templateUrl: '/app/account/Registration.html',
+		when('/client/register', {
+			templateUrl: '/app/client/registration.html',
 			controller: 'RegistrationController'
 		}).
 

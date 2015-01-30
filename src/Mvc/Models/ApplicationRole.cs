@@ -8,5 +8,6 @@ using Microsoft.AspNet.Identity;
 	/// 
 	/// </summary>
 	public class ApplicationRole : IdentityRole {
+		public virtual string Description {get;set;}
 	} // end class 
 } // end namespace
