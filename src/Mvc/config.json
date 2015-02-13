@@ -3,35 +3,25 @@
 		"Name": "Green Shelter",
 		"Version": "1.0.0.0"
 	},
-	"DefaultAdminUsername": "",
-    "DefaultAdminPassword": "",
-    "Data": {
-        "DefaultConnection": {
-		    /* NOTE: Execute the following commands before run k web
-				
-				SQLLocalDB.exe create GreenShelterLocalDB
-				SQLLocalDB.exe start GreenShelterLocalDB
-				SQLLocalDB.exe info GreenShelterLocalDB
-				
-			*/
-            "ConnectionString": "Server=(LocalDB)\\GreenShelterLocalDB; Integrated Security=true"
-        }
-    },
-    "EntityFramework": {
-        "GreenShelterDbContext": {
-            "ConnectionStringKey": "Data:DefaultConnection:ConnectionString"
-        }
-    },
-	"Authentication": {
+	"DefaultAdminUserName": "admin@greenshelter.com",
+    "DefaultAdminPassword": "P@ssw0rd",
+	"Data": {
+		"Development": 	{
+			"ConnectionString": "Server=PCSC-WIN7P-001\\SQLExpress;Database=GreenShelter;Integrated Security=True;MultipleActiveResultSets=True;",
+			"CommandTimeout": "",
+			"MaxBatchSize": ""			
+		}
+	},
+	"Athentication": {
 		"Facebook": { /* https://developers.facebook.com/apps/652388851540226/dashboard/ */
 			"Enabled": "false",
 			"AppId": "",
 			"AppSecret": ""
 		},
 		"Google": { /* https://console.developers.google.com */
-			"Enabled": "false",
-			"ClientId": "",
-			"ClientSecret": ""
+			"Enabled": "true",
+			"ClientId": "204805279074-lbqt4u5iq7uqjbthdkqb1b8sgqsl3ugc.apps.googleusercontent.com",
+			"ClientSecret": "pDfENoR3XWlsw0VFOukYdmwG"
 		},
 		"MicrosoftAccount": { /* https://account.live.com/developers/applications/index */
 			"Enabled": "false",

@@ -155,7 +155,9 @@ namespace PCSC.GreenShelter.Extensions {
 		/// Gets connection string to the database
 		/// </summary>
 		public static string ConnectionString(this IGreenShelterApplication app) {
-			return ExtensionHelper.configuration.Get("Data:DefaultConnection:ConnectionString");
+			var kre_env = ExtensionHelper.configuration.Get("KRE_ENV")?? "Development";
+			var key = string.Format("Data:{0}:ConnectionString", kre_env);
+			return ExtensionHelper.configuration.Get(key);
 		}
 
 		/// <summary>
@@ -170,6 +172,14 @@ namespace PCSC.GreenShelter.Extensions {
 		/// </summary>
 		public static string ApplicationVersion(this IGreenShelterApplication app) {
 			return ExtensionHelper.configuration.Get("Application:Version");
+		}
+		
+		public static string DefaultAdminUserName(this IGreenShelterApplication app) {
+			return ExtensionHelper.configuration.Get("DefaultAdminUserName");
+		}
+		
+		public static string DefaultAdminPassword(this IGreenShelterApplication app) {
+			return ExtensionHelper.configuration.Get("DefaultAdminPassword");
 		}
 		
 		/// <summary>

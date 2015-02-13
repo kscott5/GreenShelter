@@ -37,9 +37,13 @@
     "EntityFramework.Core": "7.0.0-*",
     "EntityFramework.Relational": "7.0.0-*",
     "EntityFramework.InMemory": "7.0.0-*",
-    "EntityFramework.SqlServer": "7.0.0-*"
+    "EntityFramework.SqlServer": "7.0.0-*",
+	"System.Collections": "4.0.10-*",
+	"System.ComponentModel.Annotations": "4.0.10-*",
+	"System.Linq": "4.0.0-*"
   },
   "commands": {
+	"ef": "EntityFramework.Commands",
     "web": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.WebListener --server.urls http://localhost:8080",
     "kestrel": "Microsoft.AspNet.Hosting --server Kestrel --server.urls http://localhost:8181"
   },

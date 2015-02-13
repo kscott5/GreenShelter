@@ -4,9 +4,14 @@ using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Diagnostics;
 using Microsoft.AspNet.Routing;
+using Microsoft.AspNet.Identity;
 
 using Microsoft.Framework.ConfigurationModel;
 using Microsoft.Framework.DependencyInjection;
+
+using Microsoft.Data.Entity;
+using Microsoft.Data.Entity.Infrastructure;
+using Microsoft.Data.Entity.SqlServer;
 
 using PCSC.GreenShelter.Extensions;
 using PCSC.GreenShelter.Models;
@@ -26,20 +31,44 @@ namespace PCSC.GreenShelter
 			// Add MVC services to the services container
             services.AddMvc();
 
-			services.AddEntityFramework(this.Configuration())
-                        .AddSqlServer()
-                        .AddDbContext<GreenShelterDbContext>();
+			services.AddEntityFramework()
+				.AddSqlServer()
+				.AddDbContext<GreenShelterDbContext>(options => {
+					options.UseSqlServer(this.ConnectionString());
+				});
 
+			services.Configure<DbContextOptions>(options => {
+				Action<SqlServerOptionsExtension> actionExtension = extension => {
+					extension.ConnectionString = this.ConnectionString();
+				};
+	
+				((IDbContextOptions)options).AddOrUpdateExtension(actionExtension);
+							
+			});
+			
+			services.Configure<IdentityOptions>(options => {
+				options.User = new UserOptions { 
+					RequireUniqueEmail = true
+				};
+			
+				options.Password = new PasswordOptions { 
+					RequiredLength = 6, 
+					RequireNonLetterOrDigit = true, 
+					RequireDigit = true, 
+					RequireLowercase = true,
+					RequireUppercase = true
+				};               
+            });
+			
 			// Add Identity services to the services container
             services.AddIdentity<ApplicationUser, ApplicationRole>(this.Configuration())
-                    .AddEntityFrameworkStores<GreenShelterDbContext>()
-                    .AddDefaultTokenProviders();
-
+				.AddEntityFrameworkStores<GreenShelterDbContext, int>()
+				.AddTokenProvider(typeof(DataProtectorTokenProvider<ApplicationUser>));
+				
 			//.AddMessageProvider<EmailMessageProvider>() /* public class EmailMessageProvider: IIdentityMessageProvider {} */
 			//.AddMessageProvider<SmsMessageProvider>(); /* public class SmsMessageProvider: IIdentityMessageProvider {} */
+			// Add services needed for application. They are injected into the objects as needed
 
-			services.AddInstance(typeof(GreenShelterDbSetInitializer), new GreenShelterDbSetInitializer());
-			
 			services.ConfigureCookieAuthentication(options => {
 				options.LoginPath = new PathString("/#client/login");
 				options.LogoutPath = new PathString("/#client/logout");
@@ -56,6 +85,8 @@ namespace PCSC.GreenShelter
 				services.ConfigureGoogleAuthentication(options => {
 					options.ClientId = this.GoogleClientId();
 					options.ClientSecret = this.GoogleClientSecret();
+					options.Scope.Add("profile");
+					options.Scope.Add("email");
 				});
 			}
 

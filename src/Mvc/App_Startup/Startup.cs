@@ -35,9 +35,6 @@ namespace PCSC.GreenShelter {
 			
 			this.ConfigureAuthenticiation(app);
 			 
-            // Add static files to the request pipeline
-            app.UseStaticFiles();
-
             // Add MVC to the request pipeline
             app.UseMvc(routes =>
             {
@@ -46,6 +43,8 @@ namespace PCSC.GreenShelter {
                     template: "{controller}/{action}/{id?}",
                     defaults: new { controller = "Spa", action = "StartPage" });
             });
+			
+			GreenShelterDbContext.InitializeDatabaseAsync(app.ApplicationServices, this).Wait();
         }
     } // end class
 } // end namespace

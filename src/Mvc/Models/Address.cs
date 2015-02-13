@@ -1,3 +1,7 @@
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace PCSC.GreenShelter.Models {
 	public enum AddressType : int {
 		Home,
@@ -6,7 +10,11 @@ namespace PCSC.GreenShelter.Models {
 	};
 	
 	public class Address {
-		public virtual int AddressId {get; set;}
+		[Key]
+		[Column("AddressId")]
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public virtual int Id {get; set;}
+		
 		public virtual string Street1 {get; set;}
 		public virtual string Street2 {get; set;}
 		public virtual string City {get; set;}

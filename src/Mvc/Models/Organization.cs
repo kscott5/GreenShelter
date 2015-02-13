@@ -1,8 +1,13 @@
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PCSC.GreenShelter.Models {
 	public class Organization {
-		public virtual int OrganizationId {get; set;}
+		[Key]
+		[Column("OrganizationId")]
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public virtual int Id {get; set;}
 		public virtual string SecretKey {get; set;}
 		
 		public virtual string Name {get; set;}

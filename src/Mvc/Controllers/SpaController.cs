@@ -4,7 +4,6 @@ using Microsoft.AspNet.Mvc;
 using PCSC.GreenShelter;
 using PCSC.GreenShelter.Extensions;
 using PCSC.GreenShelter.Models;
-using PCSC.GreenShelter.Data;
 
 namespace PCSC.GreenShelter.Controllers
 {

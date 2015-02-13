@@ -67,10 +67,11 @@ greenShelterControllers.controller('LoginController', ['$scope', '$http', '$log'
 		
 		Client.authtypes.getProviders().$promise.then(
 			function(data) {
-				$log.info('Retreived ' + data.length + ' external login providers');
+				$log.info(data);
+				$log.info('Retreived ' + data.Data.length + ' external login providers');
 				
-				$scope.login.external.provider.configured = data.length > 0;
-				$scope.login.external.provider.types = data;
+				$scope.login.external.provider.configured = data.Data.length > 0;
+				$scope.login.external.provider.types = data.Data;
 			},
 			function(error) {
 				$log.info('Failed retreiving external login providers. [Error: ' + error.Description + ']');
