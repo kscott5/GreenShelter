@@ -8,12 +8,10 @@ The project demonstrates a few features such as Identity (customization and conf
 
 Identity 
 ---------
-### Customization
+#### Customization
 Most of the cusomization occurs by extendend IdentityDbContext, IdentityUser, IdentityRole, UserStore and RoleStore classes. This was done to override the base functionality related to the Id property and its underline type. Basicly, I wanted to integer Id key for better index. Review any class marked with either User or Role found in code in src/Mvc/Models folders.
 
-Identity 
-----------
-### Configuration
+#### Configuration
 Configuring the new custom Identity class requires override a few base services method located in [Startup.Services.cs](./src/Mvc/App_Startup/Startup.Services.cs) class. 
 ```c#
 ...
