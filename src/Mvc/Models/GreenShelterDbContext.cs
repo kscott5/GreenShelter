@@ -45,7 +45,7 @@ namespace PCSC.GreenShelter.Models {
             using (var db = serviceProvider.GetRequiredService<GreenShelterDbContext>()) {
 				var sqlServerDatabase = db.Database.AsSqlServer();
 				
-                if (sqlServerDatabase != null && !await sqlServerDatabase.ExistsAsync() && !await sqlServerDatabase.HasTablesAsync()) {
+                if (sqlServerDatabase != null) {
 					application.WriteInformation("Sql Server Database ensured created");
 					
 					await CreateRoles(serviceProvider, application);
@@ -63,27 +63,32 @@ namespace PCSC.GreenShelter.Models {
         private static async Task CreateRoles(IServiceProvider serviceProvider, IGreenShelterApplication application) {
 			application.WriteInformation("Creating the Application Roles asynchronously");
 			
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();            
+			var options = new IdentityOptions();
+			OptionsServices.ReadProperties(options, application.Configuration());
+			
+			var claimType = options.ClaimsIdentity.RoleClaimType;
+			
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
 			
 			var role = await roleManager.FindByNameAsync("Administrator");			
 			if(role == null) {
 				await roleManager.CreateAsync(new ApplicationRole{Name = "Administrator", Description = "Person for overrall site maintenance and usability"});
 				role = await roleManager.FindByNameAsync("Administrator");
-				await roleManager.AddClaimAsync(role, new Claim(ClaimTypes.Role, role.Name));
+				await roleManager.AddClaimAsync(role, new Claim(claimType, role.Name));
 			}
 			
 			role = await roleManager.FindByNameAsync("Organization");			
 			if(role == null) {
 				await roleManager.CreateAsync(new ApplicationRole{Name = "Organization", Description = "A business entity responsible for providing services to a client"});
 				role = await roleManager.FindByNameAsync("Organization");
-				await roleManager.AddClaimAsync(role, new Claim(ClaimTypes.Role, role.Name));
+				await roleManager.AddClaimAsync(role, new Claim(claimType, role.Name));
 			}
 			
 			role = await roleManager.FindByNameAsync("Client");			
 			if(role == null) {
 				await roleManager.CreateAsync(new ApplicationRole{Name = "Client", Description = "Person receiving services from an organization"});		
 				role = await roleManager.FindByNameAsync("Client");
-				await roleManager.AddClaimAsync(role, new Claim(ClaimTypes.Role, role.Name));
+				await roleManager.AddClaimAsync(role, new Claim(claimType, role.Name));
 			}
 		}
 		
@@ -97,6 +102,11 @@ namespace PCSC.GreenShelter.Models {
 			
             const string adminRole = "Administrator";
 
+			var options = new IdentityOptions();
+			OptionsServices.ReadProperties(options, application.Configuration());
+			
+			var claimType = options.ClaimsIdentity.UserNameClaimType;
+			
             var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();            
 			var role = await roleManager.FindByNameAsync(adminRole);
 			
@@ -111,7 +121,7 @@ namespace PCSC.GreenShelter.Models {
                 user = new ApplicationUser { UserName = application.DefaultAdminUserName(), Email = application.DefaultAdminUserName(), Role = role };
                 await userManager.CreateAsync(user, application.DefaultAdminPassword());
                 await userManager.AddToRoleAsync(user, adminRole); // TODO: Does this address the 1-to-1 with Role?
-                await userManager.AddClaimAsync(user, new Claim(ClaimTypes.Email, application.DefaultAdminUserName()));
+                await userManager.AddClaimAsync(user, new Claim(claimType, application.DefaultAdminUserName()));
             }
         } 
 	} // end class

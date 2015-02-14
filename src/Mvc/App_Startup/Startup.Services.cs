@@ -1,4 +1,5 @@
 using System;
+using System.Security.Claims;
 
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
@@ -57,14 +58,22 @@ namespace PCSC.GreenShelter
 					RequireDigit = true, 
 					RequireLowercase = true,
 					RequireUppercase = true
-				};               
+				};
+
+				options.ClaimsIdentity = new ClaimsIdentityOptions {
+					RoleClaimType = ClaimTypes.Role,
+					UserNameClaimType = ClaimTypes.Name,
+					UserIdClaimType = ClaimTypes.NameIdentifier
+				};
             });
 			
 			// Add Identity services to the services container
             services.AddIdentity<ApplicationUser, ApplicationRole>(this.Configuration())
 				.AddEntityFrameworkStores<GreenShelterDbContext, int>()
 				.AddTokenProvider(typeof(DataProtectorTokenProvider<ApplicationUser>));
-				
+			
+			services.AddScoped(typeof(DataProtectorTokenProvider<ApplicationUser>));
+			
 			//.AddMessageProvider<EmailMessageProvider>() /* public class EmailMessageProvider: IIdentityMessageProvider {} */
 			//.AddMessageProvider<SmsMessageProvider>(); /* public class SmsMessageProvider: IIdentityMessageProvider {} */
 			// Add services needed for application. They are injected into the objects as needed
