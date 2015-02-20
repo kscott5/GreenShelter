@@ -7,13 +7,13 @@ using System;
 namespace mvc.Migrations
 {
     [ContextType(typeof(PCSC.GreenShelter.Models.GreenShelterDbContext))]
-    public partial class GreenShelterDbContext : IMigrationMetadata
+    public partial class ApplicationUser_First_Last_Name : IMigrationMetadata
     {
         string IMigrationMetadata.MigrationId
         {
             get
             {
-                return "201502131843055_GreenShelterDbContext";
+                return "201502200323054_ApplicationUser_First_Last_Name";
             }
         }
         
@@ -21,7 +21,7 @@ namespace mvc.Migrations
         {
             get
             {
-                return "7.0.0-beta3-12093";
+                return "7.0.0-beta3-12166";
             }
         }
         
@@ -108,9 +108,11 @@ namespace mvc.Migrations
                         b.Property<DateTime>("CreationDate");
                         b.Property<string>("Email");
                         b.Property<bool>("EmailConfirmed");
+                        b.Property<string>("FirstName");
                         b.Property<int>("Id")
                             .GenerateValueOnAdd();
                         b.Property<DateTime>("LastActive");
+                        b.Property<string>("LastName");
                         b.Property<bool>("LockoutEnabled");
                         b.Property<DateTimeOffset?>("LockoutEnd");
                         b.Property<int?>("ModifiedByUserId");

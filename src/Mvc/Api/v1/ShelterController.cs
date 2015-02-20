@@ -6,7 +6,7 @@ using Microsoft.AspNet.Mvc;
 using PCSC.GreenShelter;
 using PCSC.GreenShelter.Extensions;
 
-namespace PCSC.GreenShelter.Controllers.Api.V1
+namespace PCSC.GreenShelter.Api.v1
 {
 	/// <summary>
 	///

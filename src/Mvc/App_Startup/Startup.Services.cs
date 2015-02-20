@@ -2,13 +2,18 @@ using System;
 using System.Security.Claims;
 
 using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Diagnostics;
-using Microsoft.AspNet.Routing;
+using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Routing;
+using Microsoft.AspNet.Security;
+using Microsoft.AspNet.Security.Cookies;
+using Microsoft.AspNet.StaticFiles;
 
 using Microsoft.Framework.ConfigurationModel;
 using Microsoft.Framework.DependencyInjection;
+using Microsoft.Framework.OptionsModel;
 
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Infrastructure;
@@ -29,24 +34,7 @@ namespace PCSC.GreenShelter
 		public void ConfigureServices(IServiceCollection services) {
 			this.WriteInformation("\tConfigure Services");
 
-			// Add MVC services to the services container
-            services.AddMvc();
-
-			services.AddEntityFramework()
-				.AddSqlServer()
-				.AddDbContext<GreenShelterDbContext>(options => {
-					options.UseSqlServer(this.ConnectionString());
-				});
-
-			services.Configure<DbContextOptions>(options => {
-				Action<SqlServerOptionsExtension> actionExtension = extension => {
-					extension.ConnectionString = this.ConnectionString();
-				};
-	
-				((IDbContextOptions)options).AddOrUpdateExtension(actionExtension);
-							
-			});
-			
+			// Configure options for Identity Manager
 			services.Configure<IdentityOptions>(options => {
 				options.User = new UserOptions { 
 					RequireUniqueEmail = true
@@ -67,52 +55,63 @@ namespace PCSC.GreenShelter
 				};
             });
 			
-			// Add Identity services to the services container
-            services.AddIdentity<ApplicationUser, ApplicationRole>(this.Configuration())
-				.AddEntityFrameworkStores<GreenShelterDbContext, int>()
-				.AddTokenProvider(typeof(DataProtectorTokenProvider<ApplicationUser>));
-			
-			services.AddScoped(typeof(DataProtectorTokenProvider<ApplicationUser>));
-			
-			//.AddMessageProvider<EmailMessageProvider>() /* public class EmailMessageProvider: IIdentityMessageProvider {} */
-			//.AddMessageProvider<SmsMessageProvider>(); /* public class SmsMessageProvider: IIdentityMessageProvider {} */
-			// Add services needed for application. They are injected into the objects as needed
+			// Configure options for cookie authentication
+			services.Configure<CookieAuthenticationOptions>(options => {
+				options.AuthenticationType = IdentityOptions.ApplicationCookieAuthenticationType;
+				options.AuthenticationMode = AuthenticationMode.Active;
+				options.CookieName = IdentityOptions.ApplicationCookieAuthenticationType;
+
+				options.LoginPath = new PathString("/#client/login");
+				options.LogoutPath = new PathString("/#client/logout");
+			});
 
 			services.ConfigureCookieAuthentication(options => {
+				options.AuthenticationType = IdentityOptions.ApplicationCookieAuthenticationType;
+				options.AuthenticationMode = AuthenticationMode.Active;
+				options.CookieName = IdentityOptions.ApplicationCookieAuthenticationType;
+
 				options.LoginPath = new PathString("/#client/login");
 				options.LogoutPath = new PathString("/#client/logout");
 			});
 			
-			if(this.FacebookEnabled()) {
-				services.ConfigureFacebookAuthentication(options => {
-					options.AppId = this.FacebookAppId();
-					options.AppSecret = this.FacebookAppSecret();
-				});
-			}
-
 			if(this.GoogleEnabled()) {
 				services.ConfigureGoogleAuthentication(options => {
 					options.ClientId = this.GoogleClientId();
 					options.ClientSecret = this.GoogleClientSecret();
+					options.CallbackPath = new PathString("/api/v1/client/externallogincallback");
 					options.Scope.Add("profile");
 					options.Scope.Add("email");
 				});
 			}
 
-			if(this.MicrosoftAccountEnabled()) {
-				services.ConfigureMicrosoftAccountAuthentication(options => {
-					options.ClientId = this.MicrosoftAccountClientId();
-					options.ClientSecret = this.MicrosoftAccountClientSecret();
+			services.AddScoped(typeof(DataProtectorTokenProvider<ApplicationUser>));
+			services.AddScoped(typeof(ApplicationUserManager));
+			services.AddScoped(typeof(ApplicationRoleManager));
+			
+			// Remember you need to cast to concrete implements of IClaimsIdentityFactory
+			// For example:
+			//
+			//		var factory = serviceProvider.
+			//			GetRequiredService<IClaimsIdentityFactory<ApplicationUser>>() 
+			//				as ApplicationClaimsIdentityFactory;
+			services.AddScoped(typeof(IClaimsIdentityFactory<ApplicationUser>), typeof(ApplicationClaimsIdentityFactory));
+			
+			// Add SQL Server with EF service to the service container
+			services.AddEntityFramework()
+				.AddSqlServer()
+				.AddDbContext<GreenShelterDbContext>(options => {
+					options.UseSqlServer(this.ConnectionString());
 				});
-			}
-
-			if(this.TwitterEnabled()) {
-				services.ConfigureTwitterAuthentication(options => {
-					options.ConsumerKey = this.TwitterConsumerKey();
-					options.ConsumerSecret = this.TwitterConsumerSecret();
-				});
-			}
-
-        }
+			
+			
+			// Add Identity services to the services container
+            services.AddIdentity<ApplicationUser, ApplicationRole>(this.Configuration())
+				.AddEntityFrameworkStores<GreenShelterDbContext, int>()
+				//.AddTokenProvider(typeof(DataProtectorTokenProvider<ApplicationUser>));
+				.AddDefaultTokenProviders();
+				
+			// Add MVC services to the services container
+            services.AddMvc();			
+		}
     } // end class
 } // end namespace

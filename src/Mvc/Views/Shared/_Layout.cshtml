@@ -21,7 +21,7 @@
     <![endif]-->
   </head>
 
-  <body>
+  <body ng-controller="AppController">
 
     <!-- Static navbar -->
     <nav class="navbar navbar-inverse navbar-default navbar-static-top">
@@ -33,43 +33,47 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Green Shelter</a>
+          <a class="navbar-brand" ng-model="routes" href="#">Green Shelter</a>
         </div>
 		
 		<!--begin .nav-collapse -->
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#/spa">Home</a></li>
+            <li class="active"><a ng-model="routes" href="#/spa">Home</a></li>
             <li class="dropdown">
-              <a href="#/about" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">About <span class="caret"></span></a>
+              <a ng-model="routes" href="#/about" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">About <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="#/about/mission">Mission &amp; History</a></li>
-                <li><a href="#/about/board">Board of Directors</a></li>
-                <li><a href="#/about/employment">Employment</a></li>
-                <li><a href="#/about/faqs">FAQ's</a></li>
+                <li><a ng-model="routes" href="#/about/mission">Mission &amp; History</a></li>
+                <li><a ng-model="routes" href="#/about/board">Board of Directors</a></li>
+                <li><a ng-model="routes" href="#/about/employment">Employment</a></li>
+                <li><a ng-model="routes" href="#/about/faqs">FAQ's</a></li>
               </ul>
             </li>
 			<li class="dropdown">
-              <a href="#/services" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Our Services<span class="caret"></span></a>
+              <a ng-model="routes" href="#/services" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Our Services<span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="#/services/family">Family Services</a></li>
-                <li><a href="#/services/housing">Housing</a></li>
-                <li><a href="#/services/emergency/care">Emergency Care</a></li>
+                <li><a ng-model="routes" href="#/services/family">Family Services</a></li>
+                <li><a ng-model="routes" href="#/services/housing">Housing</a></li>
+                <li><a ng-model="routes" href="#/services/emergency/care">Emergency Care</a></li>
               </ul>
             </li>
 
-            <li><a href="#/contact">Contact</a></li>
+            <li><a ng-model="routes" href="#/contact">Contact</a></li>
           </ul>
 		  		  
-		  <a class="btn btn-default btn-sm navbar-right" ng-controller="AppController" ng-hide="user.authenticated" href="#/client/register" role="button">
+		  <a class="btn btn-default btn-sm navbar-right" ng-hide="user.authenticated" ng-model="routes" href="#/client/register" role="button">
 			<span class="glyphicon glyphicon-register" aria-hidden="true"></span> Register
 		  </a>		
 		  
-		  <a class="btn btn-default btn-sm navbar-right" ng-controller="AppController" ng-hide="user.authenticated" href="#/client/login" role="button">
+		  <a class="btn btn-default btn-sm navbar-right" ng-hide="user.authenticated" ng-model="routes" href="#/client/login" role="button">
 			<span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Login
 		  </a>		
 		  
-		  <a class="btn btn-default btn-sm navbar-right" ng-controller="AppController" ng-show="user.authenticated" href="#/client/register" role="button">
+		  <a class="btn btn-default btn-sm navbar-right" ng-show="user.authenticated" ng-model="routes" href="#/client/profile" role="button">
+			<span class="glyphicon glyphicon-user" aria-hidden="true"></span> Login
+		  </a>
+		  
+		  <a class="btn btn-default btn-sm navbar-right" ng-show="user.authenticated" ng-model="routes" href="#/client/logout" role="button">
 			<span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout
 		  </a>		
 		  
@@ -98,12 +102,14 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="/Scripts/jquery.js"></script>
 	<script src="/Scripts/jquery.validate.js"></script>
-    <script src="/Scripts/bootstrap.js"></script>
+	<script src="/Scripts/bootstrap.js"></script>
     	
 	<!-- Angular core JavaScript -->
 	<script language="javascript" src="/Scripts/angular.js"></script>
 	<script lnaguage="javascript" src="/Scripts/angular-resource.js"></script>
 	<script lnaguage="javascript" src="/Scripts/angular-route.js"></script>
+	<script lnaguage="javascript" src="/Scripts/angular-local-storage.js"></script>
+	<script lnaguage="javascript" src="/Scripts/gs-base.js"></script>
 	<script lnaguage="javascript" src="/Scripts/gs-angular-app.js"></script>
 	<script lnaguage="javascript" src="/Scripts/gs-angular-controllers.js"></script>
 	<script lnaguage="javascript" src="/Scripts/gs-angular-services.js"></script>

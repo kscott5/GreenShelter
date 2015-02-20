@@ -24,7 +24,6 @@ namespace PCSC.GreenShelter {
 		/// Constructor
 		/// </summary>
 		public Startup() {
-			this.WriteInformation(TagName);
 		}
 
         /// <summary>
@@ -43,7 +42,7 @@ namespace PCSC.GreenShelter {
                     template: "{controller}/{action}/{id?}",
                     defaults: new { controller = "Spa", action = "StartPage" });
             });
-			
+
 			GreenShelterDbContext.InitializeDatabaseAsync(app.ApplicationServices, this).Wait();
         }
     } // end class

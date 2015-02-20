@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 
 namespace PCSC.GreenShelter.Models {
     // You can add profile data for the user by adding more properties to your User class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
+	[Table("AspNetUsers")]
     public class ApplicationUser : IdentityUser<int>   {
 		
 		[Key]
@@ -16,6 +17,9 @@ namespace PCSC.GreenShelter.Models {
 		
 		//[ForeignKey("RoleId")]
 		public virtual ApplicationRole Role {get; set;}
+		
+		public virtual string FirstName {get; set; }
+		public virtual string LastName {get; set; }
 		
 		public virtual List<Address> Addresses {get; set;}
 		public virtual List<Organization> Organizations {get; set;}

@@ -29,7 +29,7 @@ namespace PCSC.GreenShelter.Extensions {
 					#endif
 
 					factory.AddConsole();
-					factory.AddConsole((category, logLevel) => logLevel >= LogLevel.Critical && category.Equals("GreenShelter"));
+					factory.AddConsole((category, logLevel) => logLevel >= 0);
 				}
 
 				if(configuration == null) {

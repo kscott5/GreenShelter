@@ -1,24 +1,24 @@
 <div class="row">
     <div class="col-md-8">
-        <section id="loginForm">
+        <section id="loginSection">
 			<form class="form-horizontal">
 			  <div class="form-group">
 				<label for="username" class="col-sm-2 control-label">{{login.label.username}}</label>
 				<div class="col-sm-10">
-				  <input type="text" class="form-control" id="username" name="name" ng-model="login.username" required placeholder="Username">
+				  <input type="text" class="form-control" id="username" name="name" ng-model="user.username" required placeholder="Username">
 				</div>
 			  </div>
 			  <div class="form-group">
 				<label for="password" class="col-sm-2 control-label">{{login.label.password}}</label>
 				<div class="col-sm-10">
-				  <input type="password" class="form-control" id="password" name="password" ng-model="login.password" required placeholder="Password">
+				  <input type="password" class="form-control" id="password" name="password" ng-model="user.password" required placeholder="Password">
 				</div>
 			  </div>
 			  <div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
 				  <div class="checkbox">
 					<label>
-					  <input type="checkbox"> {{login.label.remember_me}}
+					  <input type="checkbox" id="rememberme" name="rememberme" ng-model="user.rememberme"> {{login.label.rememberme}}
 					</label>
 				  </div>
 				</div>
@@ -28,7 +28,7 @@
 				  <button type="submit" class="btn btn-default" ng-click="login.clicked(login)">{{login.label.submit}}</button>
 				</div>
 			  </div>
-			  <input type="hidden" id="token" name="token" ng-model="login.token"/>
+			  <input type="hidden" id="__RequestVerificationToken" name="__RequestVerificationToken" ng-model="user.token" value="{{user.token}}"/>
 			</form>
 		</section>
 	</div>
@@ -45,10 +45,10 @@
 				</div>
                 
 				<div ng-show="login.external.provider.configured">
-					<form class="form-inline">
-						<input type="hidden" id="token" name="token" ng-model="login.token"/>
+					<form class="form-inline" id="externalLoginForm" name="externalLoginForm" method="POST" action="/api/v1/client/externallogin" target="external_login"">
+						<input type="hidden" id="__RequestVerificationToken" name="__RequestVerificationToken" ng-model="login.token" value="{{login.token}}"/>
 						<p>                                
-							<button type="submit" class="btn btn-default" ng-repeat="provider in login.external.provider.types" id="{{provider.AuthenticationType}}" name="provider" value="{{provider.AuthenticationType}}" title="Log in using your {{provider.Caption}} account">{{provider.AuthenticationType}}</button>                                
+							<button type="submit" class="btn btn-default" ng-repeat="provider in login.external.provider.types"  id="authenticationType" name="authenticationType" ng-click="login.external.clicked(login.external.provider.types[$index].Caption)" value="{{provider.AuthenticationType}}" title="Log in using your {{provider.Caption}} account">{{provider.AuthenticationType}}</button>                                
 						</p>
 					</form>
 				</div>

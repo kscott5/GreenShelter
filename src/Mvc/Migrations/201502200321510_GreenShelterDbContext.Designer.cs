@@ -7,9 +7,25 @@ using System;
 namespace mvc.Migrations
 {
     [ContextType(typeof(PCSC.GreenShelter.Models.GreenShelterDbContext))]
-    public class GreenShelterDbContextModelSnapshot : ModelSnapshot
+    public partial class GreenShelterDbContext : IMigrationMetadata
     {
-        public override IModel Model
+        string IMigrationMetadata.MigrationId
+        {
+            get
+            {
+                return "201502200321510_GreenShelterDbContext";
+            }
+        }
+        
+        string IMigrationMetadata.ProductVersion
+        {
+            get
+            {
+                return "7.0.0-beta3-12166";
+            }
+        }
+        
+        IModel IMigrationMetadata.TargetModel
         {
             get
             {
@@ -92,11 +108,9 @@ namespace mvc.Migrations
                         b.Property<DateTime>("CreationDate");
                         b.Property<string>("Email");
                         b.Property<bool>("EmailConfirmed");
-                        b.Property<string>("FirstName");
                         b.Property<int>("Id")
                             .GenerateValueOnAdd();
                         b.Property<DateTime>("LastActive");
-                        b.Property<string>("LastName");
                         b.Property<bool>("LockoutEnabled");
                         b.Property<DateTimeOffset?>("LockoutEnd");
                         b.Property<int?>("ModifiedByUserId");

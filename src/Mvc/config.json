@@ -12,7 +12,7 @@
 			"MaxBatchSize": ""			
 		}
 	},
-	"Athentication": {
+	"Authentication": {
 		"Facebook": { /* https://developers.facebook.com/apps/652388851540226/dashboard/ */
 			"Enabled": "false",
 			"AppId": "",
@@ -33,5 +33,10 @@
 			"ConsumerKey": "",
 			"ConsumerSecret": ""
 		}		
+	},
+	"AntiForgeryOptions" : {
+		"CookieName": "token",
+		"FormFieldName": "token",
+		"RequireSSL": "false"
 	}
 }

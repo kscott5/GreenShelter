@@ -32,13 +32,6 @@ namespace PCSC.GreenShelter.Models {
 		public DbSet<Address> Addresses { get; set; }
 		public DbSet<Organization> Organizations { get; set; }
 		
-		protected override void OnConfiguring(DbContextOptions options) {
-			this.WriteInformation("Configuring DbContext");
-			
-			// TODO: How do I configure DbContextOptions with this information
-			options.UseSqlServer(this.ConnectionString());
-		}
-		
  		public static async Task InitializeDatabaseAsync(IServiceProvider serviceProvider, IGreenShelterApplication application) {
 			application.WriteInformation("Initializing the database asynchronously");
 			
@@ -100,29 +93,18 @@ namespace PCSC.GreenShelter.Models {
         private static async Task CreateAdminUser(IServiceProvider serviceProvider, IGreenShelterApplication application) {
 			application.WriteInformation("Creating the Administrator User asynchronously");
 			
-            const string adminRole = "Administrator";
-
-			var options = new IdentityOptions();
-			OptionsServices.ReadProperties(options, application.Configuration());
+			// Remember to cast to concrete implementation of IClaimsIdentityFactory
+			var claimsIdentityFactory = serviceProvider.GetRequiredService<IClaimsIdentityFactory<ApplicationUser>>() as ApplicationClaimsIdentityFactory;
 			
-			var claimType = options.ClaimsIdentity.UserNameClaimType;
-			
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();            
-			var role = await roleManager.FindByNameAsync(adminRole);
-			
-			if(role == null)
-				throw new Exception("Role not created");
-		
-            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            var user = await userManager.FindByNameAsync(application.DefaultAdminUserName());
+			var user = await claimsIdentityFactory.UserManager.FindByNameAsync(application.DefaultAdminUserName());
             if (user == null) {
-				// TODO: How does EF 7 handle 1-to-1 relationships with Role?
-				//       Is this neccessary?
-                user = new ApplicationUser { UserName = application.DefaultAdminUserName(), Email = application.DefaultAdminUserName(), Role = role };
-                await userManager.CreateAsync(user, application.DefaultAdminPassword());
-                await userManager.AddToRoleAsync(user, adminRole); // TODO: Does this address the 1-to-1 with Role?
-                await userManager.AddClaimAsync(user, new Claim(claimType, application.DefaultAdminUserName()));
-            }
+				user = new ApplicationUser { UserName = application.DefaultAdminUserName(), Email = application.DefaultAdminUserName() };
+				var result = await claimsIdentityFactory.CreateAdminAsync(user, application.DefaultAdminPassword());
+				
+				if(result != IdentityResult.Success) {
+					throw new Exception("Failed to created System Adminsitrator User");
+				}
+			}
         } 
 	} // end class
 } // end namespace
