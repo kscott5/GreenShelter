@@ -65,7 +65,8 @@ module.exports = function (grunt) {
 								"bootstrap/dist/**/*.js",
 								"angular/*.{js,.js.map}",
 								"angular-resource/*.{js,.js.map}",
-								"angular-route/*.{js,.js.map}"
+								"angular-route/*.{js,.js.map}",
+								"angular-local-storage/dist/*.js"
 							],
 							dest: 'src/Mvc/wwwroot/Scripts/',
 							options: { force: true }
@@ -85,7 +86,7 @@ module.exports = function (grunt) {
 							flatten: true,
 							cwd: "bower_components/",
 							src: [
-								"bootstrap/**/*.{woff,svg,eot,ttf}",
+								"bootstrap/**/*.{woff,woff2,svg,eot,ttf}",
 							],
 							dest: 'src/Mvc/wwwroot/fonts/',
 							options: { force: true }
