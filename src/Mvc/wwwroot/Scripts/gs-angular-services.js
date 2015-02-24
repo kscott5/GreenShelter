@@ -2,10 +2,8 @@
 
 / * Angular Green Shelter Services */
 
-var greenShelterServices = angular.module('greenShelterServices', ['ngResource']);
-
-greenShelterServices.factory('Client', ['$resource',
-	function($resource) {
+$gs.services.add('Client', ['$resource', '$http',
+	function($resource, $http) {
 		var action = {
 			'login': $resource('/api/v1/client/login', {}, {
 				post: {	method: 'POST'}
@@ -23,9 +21,6 @@ greenShelterServices.factory('Client', ['$resource',
 			'authtypes': $resource('/api/v1/client/authtypes', {}, {
 				getProviders: {	method: 'GET'}
 			}),
-			'token': $resource('/api/v1/client/token', {}, {
-				getFormToken: { method: 'GET' }
-			}),
 			'external': {
 				'login': $resource('/api/v1/client/externallogin', {}, { 
 					requested: { 
@@ -40,4 +35,16 @@ greenShelterServices.factory('Client', ['$resource',
 		
 		return action;
 	}
-]);
+]); // end Client
+
+$gs.services.add('JSONP', ['$resource', 
+	function($resource){
+		var actions = {
+			'data':	$resource('/scripts/gs-data.json', {}, {
+				get: { method: 'GET' }
+			})
+		};
+		
+		return actions;
+	}
+]); // end JSONP

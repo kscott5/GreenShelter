@@ -30,7 +30,7 @@ module.exports = function (grunt) {
 					'src/Mvc/wwwroot/Content', 
 					'src/Mvc/wwwroot/fonts', 
 					'src/Mvc/wwwroot/Scripts/*.{js,map}', 
-					'!src/Mvc/wwwroot/Scripts/gs-*.js',
+					'!src/Mvc/wwwroot/Scripts/gs-*.{js,json}',
 					'!test/Mvc/wwwroot/',
 					'test/Mvc/wwwroot/*.*',
 					'test/Mvc/wwwroot/Content',

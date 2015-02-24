@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <appSettings>
+	<add key="webpages:Version" value="3.0.0.0" />
+    <add key="webpages:Enabled" value="true" />
+  </appSettings>
+  
+  <system.web>
+	  <machineKey 
+		decryption="AES" 
+		decryptionKey="1A234A131D2F789DE145EFC8E0F23033D8172035F0EF654888103BC79FD844C8" 
+		validation="HMACSHA256" 
+		validationKey="A5F900DDA8A17E532565D17B1F27E0B49476737715EAD1930C2A0795C8B0E9E58C9B503536EE842F85E11B9E6FC60BA31C7DABD54AE65D64CA924B6C5906612A" />  
+  </system.web>
+</configuration>

@@ -56,31 +56,34 @@ namespace PCSC.GreenShelter.Models {
         private static async Task CreateRoles(IServiceProvider serviceProvider, IGreenShelterApplication application) {
 			application.WriteInformation("Creating the Application Roles asynchronously");
 			
+			/*
+				QUESTION: Is this better than registering the options and then calling its action
+				SOLUTION: Time the execution
+			*/
 			var options = new IdentityOptions();
-			OptionsServices.ReadProperties(options, application.Configuration());
+			OptionsServices.ReadProperties(options, AppUtilityHelper.Configuration);
 			
 			var claimType = options.ClaimsIdentity.RoleClaimType;
 			
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
-			
-			var role = await roleManager.FindByNameAsync("Administrator");			
+            var roleManager = serviceProvider.GetService<ApplicationRoleManager>();
+			var role = await roleManager.FindByNameAsync(ApplicationRole.Administrator);			
 			if(role == null) {
-				await roleManager.CreateAsync(new ApplicationRole{Name = "Administrator", Description = "Person for overrall site maintenance and usability"});
-				role = await roleManager.FindByNameAsync("Administrator");
+				await roleManager.CreateAsync(new ApplicationRole{Name = ApplicationRole.Administrator, Description = "Person for overall site maintenance and usability"});
+				role = await roleManager.FindByNameAsync(ApplicationRole.Administrator);
 				await roleManager.AddClaimAsync(role, new Claim(claimType, role.Name));
 			}
 			
-			role = await roleManager.FindByNameAsync("Organization");			
+			role = await roleManager.FindByNameAsync(ApplicationRole.Organization);			
 			if(role == null) {
-				await roleManager.CreateAsync(new ApplicationRole{Name = "Organization", Description = "A business entity responsible for providing services to a client"});
-				role = await roleManager.FindByNameAsync("Organization");
+				await roleManager.CreateAsync(new ApplicationRole{Name = ApplicationRole.Organization, Description = "A business entity responsible for providing services to a client"});
+				role = await roleManager.FindByNameAsync(ApplicationRole.Organization);
 				await roleManager.AddClaimAsync(role, new Claim(claimType, role.Name));
 			}
 			
-			role = await roleManager.FindByNameAsync("Client");			
+			role = await roleManager.FindByNameAsync(ApplicationRole.Client);			
 			if(role == null) {
-				await roleManager.CreateAsync(new ApplicationRole{Name = "Client", Description = "Person receiving services from an organization"});		
-				role = await roleManager.FindByNameAsync("Client");
+				await roleManager.CreateAsync(new ApplicationRole{Name = ApplicationRole.Client, Description = "Person receiving services from an organization"});		
+				role = await roleManager.FindByNameAsync(ApplicationRole.Client);
 				await roleManager.AddClaimAsync(role, new Claim(claimType, role.Name));
 			}
 		}
@@ -93,16 +96,15 @@ namespace PCSC.GreenShelter.Models {
         private static async Task CreateAdminUser(IServiceProvider serviceProvider, IGreenShelterApplication application) {
 			application.WriteInformation("Creating the Administrator User asynchronously");
 			
-			// Remember to cast to concrete implementation of IClaimsIdentityFactory
-			var claimsIdentityFactory = serviceProvider.GetRequiredService<IClaimsIdentityFactory<ApplicationUser>>() as ApplicationClaimsIdentityFactory;
+			var userManager = serviceProvider.GetService<ApplicationUserManager>();
 			
-			var user = await claimsIdentityFactory.UserManager.FindByNameAsync(application.DefaultAdminUserName());
+			var user = await userManager.FindByNameAsync(application.DefaultAdminUserName());
             if (user == null) {
 				user = new ApplicationUser { UserName = application.DefaultAdminUserName(), Email = application.DefaultAdminUserName() };
-				var result = await claimsIdentityFactory.CreateAdminAsync(user, application.DefaultAdminPassword());
+				var result = await userManager.CreateAdminAsync(user, application.DefaultAdminPassword());
 				
 				if(result != IdentityResult.Success) {
-					throw new Exception("Failed to created System Adminsitrator User");
+					throw new Exception("Failed to created System Administrator User");
 				}
 			}
         } 

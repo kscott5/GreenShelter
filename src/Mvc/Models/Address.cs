@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PCSC.GreenShelter.Models {
 	public enum AddressType : int {
-		Home,
-		Office,
-		Other
+		Home = 1,
+		Office = 2,
+		Other = 3
 	};
 	
 	public class Address {

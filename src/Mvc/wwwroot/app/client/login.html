@@ -25,10 +25,9 @@
 			  </div>
 			  <div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
-				  <button type="submit" class="btn btn-default" ng-click="login.clicked(login)">{{login.label.submit}}</button>
+				  <button type="submit" class="btn btn-default" ng-click="login.clicked(user)">{{login.label.submit}}</button>
 				</div>
 			  </div>
-			  <input type="hidden" id="__RequestVerificationToken" name="__RequestVerificationToken" ng-model="user.token" value="{{user.token}}"/>
 			</form>
 		</section>
 	</div>
@@ -37,18 +36,17 @@
             <h4>Use another service to log in.</h4>
             <hr />
             
-				<div ng-hide="login.external.provider.configured">
+				<div ng-hide="external.login.provider.configured">
 					<p>
 						There are no external authentication services configured. See <a href="http://go.microsoft.com/fwlink/?LinkId=313242">this article</a>
 						for details on setting up this ASP.NET application to support logging in via external services.
 					</p>
 				</div>
                 
-				<div ng-show="login.external.provider.configured">
+				<div ng-show="external.login.provider.configured">
 					<form class="form-inline" id="externalLoginForm" name="externalLoginForm" method="POST" action="/api/v1/client/externallogin" target="external_login"">
-						<input type="hidden" id="__RequestVerificationToken" name="__RequestVerificationToken" ng-model="login.token" value="{{login.token}}"/>
 						<p>                                
-							<button type="submit" class="btn btn-default" ng-repeat="provider in login.external.provider.types"  id="authenticationType" name="authenticationType" ng-click="login.external.clicked(login.external.provider.types[$index].Caption)" value="{{provider.AuthenticationType}}" title="Log in using your {{provider.Caption}} account">{{provider.AuthenticationType}}</button>                                
+							<button type="submit" class="btn btn-default" ng-repeat="provider in external.login.provider.types"  id="authenticationType" name="authenticationType" ng-click="external.login.clicked(external.login.provider.types[$index].Caption)" value="{{provider.AuthenticationType}}" title="Log in using your {{provider.Caption}} account">{{provider.AuthenticationType}}</button>                                
 						</p>
 					</form>
 				</div>

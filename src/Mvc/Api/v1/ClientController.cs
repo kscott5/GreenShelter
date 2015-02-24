@@ -17,13 +17,13 @@ namespace PCSC.GreenShelter.Api.v1 {
 	[Route("api/v1/client", Name = "Client")]
 	public class ClientController : Controller, IGreenShelterApplication {
 	
-		public ClientController(SignInManager<ApplicationUser> signInManager) {
+		public ClientController(SignInManager<ApplicationUser> signInManager, ApplicationUserManager userManager) {
            SignInManager = signInManager;
-		   ClaimsFactory = signInManager.ClaimsFactory as ApplicationClaimsIdentityFactory;
+		   UserManager = userManager;
         }
 
         public SignInManager<ApplicationUser> SignInManager { get; private set; }
-		public ApplicationClaimsIdentityFactory ClaimsFactory {get; private set; }
+		public ApplicationUserManager UserManager {get; private set;}
 		
 		/// <summary>
 		/// Describe name for the class implementing <cref="IGreenShelterApplication"/> interface
@@ -102,10 +102,10 @@ namespace PCSC.GreenShelter.Api.v1 {
                     return View("ExternalLoginFailure");
                 }
                 var user = new ApplicationUser { UserName = email, Email = email };
-                var result = await SignInManager.UserManager.CreateAsync(user);
+                var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
-                    result = await SignInManager.UserManager.AddLoginAsync(user, info);
+                    result = await UserManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false);
@@ -129,6 +129,7 @@ namespace PCSC.GreenShelter.Api.v1 {
                 return RedirectToAction("StartPage", "SPA");
             }
         }
+		
         [HttpGet]
 		[AllowAnonymous]
         [Route("AuthTypes", Name="AuthTypes")]
@@ -160,13 +161,16 @@ namespace PCSC.GreenShelter.Api.v1 {
 						
 			var response = new ApiResponse();
 			
-			try {				
-				var user = await SignInManager.UserManager.FindByNameAsync(model.UserName);				
-				var result = await SignInManager.PasswordSignInAsync(user, model.Password, false, false);
+			try {
+				SignInManager.SignOut();
+				var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
 				
 				response.Code = 200;
 				if(result == SignInResult.Success) {
-					response.Data = new { id = user.Id, username  = user.UserName, result = result};
+					var user = await SignInManager.UserManager.FindByNameAsync(model.UserName);
+					//var identity = await SignInManager.CreateUserIdentityAsync(user);
+					
+					response.Data = new { /*identity = identity,*/ id = user.Id, UserName  = user.UserName, firstname = user.FirstName, lastname = user.LastName};
 					response.Description = "Login was successful";
 				} else {
 					response.Data = result;
@@ -174,6 +178,7 @@ namespace PCSC.GreenShelter.Api.v1 {
 				}
 			} catch(Exception ex) {
 				response.Code = 401;
+				this.Context.Response.StatusCode = 401;
 				response.Description = "Login was unsuccessful";
 				
 				this.WriteError(response.Description, ex);
@@ -193,7 +198,7 @@ namespace PCSC.GreenShelter.Api.v1 {
 			try {
 				var user = new ApplicationUser { UserName = model.UserName, Email = model.UserName };
 				
-                var result = await ClaimsFactory.CreateClientAsync(user, model.Password);
+                var result = await UserManager.CreateClientAsync(user, model.Password);
 				
 				response.Code = 200;
                 if (result.Succeeded) {
@@ -220,7 +225,7 @@ namespace PCSC.GreenShelter.Api.v1 {
 			
 			try {
 				response.Code = 200;
-				var user = await ClaimsFactory.UserManager.FindByIdAsync(id);
+				var user = await SignInManager.UserManager.FindByIdAsync(id);
 				if(user != null) {
 					response.Data = new { address = "", organization = ""};
 					response.Description = "Retreiving me was successful";			

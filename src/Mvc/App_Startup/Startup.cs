@@ -32,9 +32,11 @@ namespace PCSC.GreenShelter {
 		public void Configure(IApplicationBuilder app) {
 			this.WriteInformation("\tConfigure");
 			
+			app.UseErrorPage(ErrorPageOptions.ShowAll);
+						
 			this.ConfigureAuthenticiation(app);
 			 
-            // Add MVC to the request pipeline
+			 // Add MVC to the request pipeline
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

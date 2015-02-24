@@ -5,6 +5,7 @@ using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Diagnostics;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Routing;
 using Microsoft.AspNet.Security;
@@ -33,85 +34,54 @@ namespace PCSC.GreenShelter
 		/// </summary>
 		public void ConfigureServices(IServiceCollection services) {
 			this.WriteInformation("\tConfigure Services");
+			
+			/**********************************************************
+			NOTE: 	The order in which you register the service and the
+					options used by that services is important. 
+					
+					For instance, the following method will register the 
+					Mvc related services registers the MvcOptionSetup 
+					which contains the AntiForgeryOptions.
 
-			// Configure options for Identity Manager
-			services.Configure<IdentityOptions>(options => {
-				options.User = new UserOptions { 
-					RequireUniqueEmail = true
-				};
-			
-				options.Password = new PasswordOptions { 
-					RequiredLength = 6, 
-					RequireNonLetterOrDigit = true, 
-					RequireDigit = true, 
-					RequireLowercase = true,
-					RequireUppercase = true
-				};
+					Once the AddMvc methods finishes, you can then create 
+					a new AntiForgeryOptions and change the CookieName and 
+					FormFieldName.
+					
+					The same holds true for any service such as Identity 
+					and AddIdentity.
+					
+					Once the AddIdentity method finishes, you can then
+					create a new CookieAuthenticationOptions for
+					ApplicationCookieAuthenticationType and change the
+					LoginPath and LogoutPath.
 
-				options.ClaimsIdentity = new ClaimsIdentityOptions {
-					RoleClaimType = ClaimTypes.Role,
-					UserNameClaimType = ClaimTypes.Name,
-					UserIdClaimType = ClaimTypes.NameIdentifier
-				};
-            });
-			
-			// Configure options for cookie authentication
-			services.Configure<CookieAuthenticationOptions>(options => {
-				options.AuthenticationType = IdentityOptions.ApplicationCookieAuthenticationType;
-				options.AuthenticationMode = AuthenticationMode.Active;
-				options.CookieName = IdentityOptions.ApplicationCookieAuthenticationType;
-
-				options.LoginPath = new PathString("/#client/login");
-				options.LogoutPath = new PathString("/#client/logout");
-			});
-
-			services.ConfigureCookieAuthentication(options => {
-				options.AuthenticationType = IdentityOptions.ApplicationCookieAuthenticationType;
-				options.AuthenticationMode = AuthenticationMode.Active;
-				options.CookieName = IdentityOptions.ApplicationCookieAuthenticationType;
-
-				options.LoginPath = new PathString("/#client/login");
-				options.LogoutPath = new PathString("/#client/logout");
-			});
-			
-			if(this.GoogleEnabled()) {
-				services.ConfigureGoogleAuthentication(options => {
-					options.ClientId = this.GoogleClientId();
-					options.ClientSecret = this.GoogleClientSecret();
-					options.CallbackPath = new PathString("/api/v1/client/externallogincallback");
-					options.Scope.Add("profile");
-					options.Scope.Add("email");
-				});
-			}
-
-			services.AddScoped(typeof(DataProtectorTokenProvider<ApplicationUser>));
-			services.AddScoped(typeof(ApplicationUserManager));
-			services.AddScoped(typeof(ApplicationRoleManager));
-			
-			// Remember you need to cast to concrete implements of IClaimsIdentityFactory
-			// For example:
-			//
-			//		var factory = serviceProvider.
-			//			GetRequiredService<IClaimsIdentityFactory<ApplicationUser>>() 
-			//				as ApplicationClaimsIdentityFactory;
-			services.AddScoped(typeof(IClaimsIdentityFactory<ApplicationUser>), typeof(ApplicationClaimsIdentityFactory));
-			
-			// Add SQL Server with EF service to the service container
-			services.AddEntityFramework()
-				.AddSqlServer()
-				.AddDbContext<GreenShelterDbContext>(options => {
-					options.UseSqlServer(this.ConnectionString());
-				});
-			
-			
-			// Add Identity services to the services container
-            services.AddIdentity<ApplicationUser, ApplicationRole>(this.Configuration())
-				.AddEntityFrameworkStores<GreenShelterDbContext, int>()
-				//.AddTokenProvider(typeof(DataProtectorTokenProvider<ApplicationUser>));
-				.AddDefaultTokenProviders();
-				
-			// Add MVC services to the services container
+					Review the Startup.cs and Startup_Authentication.cs
+					for examples
+			**********************************************************/			
+			// Register MVC with the application services
             services.AddMvc();			
+						
+			// Register the required EF objects with the application services
+			services.AddEntityFramework()
+				.AddDbContext<GreenShelterDbContext>(options => { options.UseSqlServer(this.ConnectionString()); })
+				.AddSqlServer();
+
+			// Register the required Identity objects with the application services
+			services.AddIdentity<ApplicationUser,ApplicationRole>(AppUtilityHelper.Configuration)
+				.AddEntityFrameworkStores<GreenShelterDbContext, int>();
+							
+			// Register the GoogleAuthenticationOptions with the application services
+			services.ConfigureGoogleAuthentication();
+							
+			// Register the authorization objects with the application services
+			//services.AddAuthorization(AppUtilityHelper.Configuration);
+			
+			services.AddScoped(typeof(IUserTokenProvider<>), typeof(DataProtectorTokenProvider<>));
+			services.AddScoped(typeof(ApplicationUserManager), typeof(ApplicationUserManager));
+			services.AddScoped(typeof(ApplicationUserStore), typeof(ApplicationUserStore));
+			services.AddScoped(typeof(ApplicationRoleManager));
+			services.AddScoped(typeof(ApplicationRoleStore));
+
 		}
     } // end class
 } // end namespace

@@ -1,0 +1,48 @@
+ { 
+	"addresstypes": [
+		{ "name": "Home", "value": "1" },
+		{ "name": "Office", "value": "2" },
+		{ "name": "Other", "value": "3" }
+	],
+	"phonetypes": [
+		{ "name": "Home", "value": "1" },
+		{ "name": "Mobile", "value": "2" },
+		{ "name": "Other", "value": "3" }
+	],
+	"states": [
+		{ "name": "Alabama", "value": "AL" },
+		{ "name": "Alaska", "value": "AK" },
+		{ "name": "Arizona", "value": "AZ" },
+		{ "name": "California", "value": "CA" },
+		{ "name": "Colorado", "value": "CO" },
+		{ "name": "Florida", "value": "FL" },
+		{ "name": "Hawaii", "value": "HI" },
+		{ "name": "Idaho", "value": "ID" },
+		{ "name": "Illinois", "value": "IL" },
+		{ "name": "Indiana", "value": "IN" },
+		{ "name": "Iowa", "value": "IA" },
+		{ "name": "Kentucky", "value": "KY" },
+		{ "name": "Louisiana", "value": "LA" },
+		{ "name": "Maine", "value": "MA" },
+		{ "name": "Michigan", "value": "MI" },
+		{ "name": "Mississippi", "value": "MI" },
+		{ "name": "Missouri", "value": "MO" },
+		{ "name": "Montana", "value": "MT" },
+		{ "name": "Nebraska", "value": "NE" },
+		{ "name": "New Mexico", "value": "NM" },
+		{ "name": "New York", "value": "NY" },
+		{ "name": "North Carolina", "value": "NC" },
+		{ "name": "North Dakota", "value": "ND" },
+		{ "name": "Ohio", "value": "OH" },
+		{ "name": "Oklahoma", "value": "OK" },
+		{ "name": "Pennsylvania", "value": "PE" },
+		{ "name": "South Carolina", "value": "SC" },
+		{ "name": "South Dakota", "value": "SD" },
+		{ "name": "Texas", "value": "TX" },
+		{ "name": "Utah", "value": "UT" },
+		{ "name": "Virginia", "value": "VA" },
+		{ "name": "Washington", "value": "WA" },
+		{ "name": "West Virginia", "value": "WV" },
+		{ "name": "Wisconsin", "value": "WI" }
+	]
+}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="greenShelterApp">
+<html lang="en" ng-app="gsApp">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,7 +22,7 @@
   </head>
 
   <body ng-controller="AppController">
-
+	@Html.AntiForgeryToken()
     <!-- Static navbar -->
     <nav class="navbar navbar-inverse navbar-default navbar-static-top">
       <div class="container">

@@ -1,35 +1,11 @@
 'use strict';
-var $gs = {};
 
 /*
-	Adds angular modules for Green Shelter application
+	Initialize Green Shelter $gs variable
 */
-$gs.angularApp = (function($, module){
-/* Angular GreenShelter Application Module */
-
-	return module('greenShelterApp', [
-		'ngRoute',
-		'LocalStorageModule',
-		'greenShelterControllers',
-		'greenShelterServices'
-	]);	
-})($, angular.module);
-
-/*
-	Adds angular modules for Green Shelter controllers
-*/
-$gs.angularControllers = (function($, module){
-/* Angular GreenShelter Controllers Module */
-
-	return { 
-		add: module('greenShelterControllers', []).controller 
-	};	
-})($, angular.module);
-
-/*
-	Creates constants for 
-*/
-$gs.routes = (function($) {
+var $gs = (function($, angular){
+	var self = this;
+	
 	var gsRoutes = {
 		about: [
 			{ area: 'about', name: 'index', whenUrl: '/about', templateUrl: '/app/about/index.html', controller: 'AboutController' },
@@ -61,13 +37,31 @@ $gs.routes = (function($) {
 	};
 	
 	return {
-		array: [
-			gsRoutes.about, 
-			gsRoutes.client, 
-			gsRoutes.contact, 
-			gsRoutes.home, 
-			gsRoutes.services
-		],
-		collection: gsRoutes
-	};
-})($);
+		token: $('input[name=token]').attr('value'),
+		routes: {
+			array: [
+				gsRoutes.about, 
+				gsRoutes.client, 
+				gsRoutes.contact, 
+				gsRoutes.home, 
+				gsRoutes.services
+			],
+			collection: gsRoutes
+		},
+		app: angular.module('gsApp', [
+				'ngRoute',
+				'LocalStorageModule',
+				'gsControllers',
+				'gsServices'
+		]),
+		controllers: { 
+			add: angular.module('gsControllers', []).controller 
+		},
+		filters: {
+			add: angular.module('gsFilters', []).filter
+		},
+		services: {
+			add: angular.module('gsServices', ['ngResource']).factory
+		}
+	};	
+})($, window.angular);

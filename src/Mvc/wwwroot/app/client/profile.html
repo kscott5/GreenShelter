@@ -1,11 +1,12 @@
 <div class="row">
-    <div class="col-md-8">
-        <section id="nameSection">
+    <div class="col-md-10">
+        <section id="generalSection">
+			<h3>{{profile.label.generalsection}}</h3>
 			<form class="form-horizontal">
 			  <div class="form-group">
 				<label for="username" class="col-sm-2 control-label">{{profile.label.username}}</label>
 				<div class="col-sm-10">
-				  <input type="text" class="form-control" id="username" name="name" ng-model="user.username" required placeholder="Username">
+				  <input type="email" class="form-control" id="username" name="username" ng-model="user.username" required placeholder="Email">
 				</div>
 			  </div>
 			  <div class="form-group">
@@ -20,26 +21,81 @@
 				  <input type="text" class="form-control" id="lastname" name="lastname" ng-model="user.lastname" required placeholder="{{profile.label.lastname}}">
 				</div>
 			  </div>
-			  <div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-				  <div class="checkbox">
-					<label>
-					  <input type="checkbox" id="rememberme" name="rememberme" ng-model="profile.rememberme"> {{profile.label.rememberme}}
-					</label>
-				  </div>
-				</div>
-			  </div>
-			  <div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-				  <button type="submit" class="btn btn-default" ng-click="profile.clicked(login)">{{profile.label.submit}}</button>
-				</div>
-			  </div>
-			  <input type="hidden" id="__RequestVerificationToken" name="__RequestVerificationToken" ng-model="profile.token" value="{{profile.token}}"/>
 			</form>
 		</section>
 	</div>
-	<div class="col-md-4">
-        <section id="socialLoginForm">
+	<div class="col-md-10">
+        <section id="addressSection">
+			<h3>{{profile.label.addresssection}}</h3>
+			<form class="form-horizontal">
+			    <div class="form-group">
+					<label for="street1" class="col-sm-2 control-label">{{profile.label.street1}}</label>
+					<div class="col-sm-10">
+					  <input type="text" class="form-control" id="street1" name="street1" ng-model="profile.street1" placeholder="Ex. 2323 Curtis Street">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="street2" class="col-sm-2 control-label">{{profile.label.street2}}</label>
+					<div class="col-sm-10">
+					  <input type="text" class="form-control" id="street2" name="street2" ng-model="profile.street2" placeholder="Ex. Apt 1 or Suite 100">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="city" class="col-sm-2 control-label">{{profile.label.city}}</label>
+					<div class="col-sm-10">
+					  <input type="text" class="form-control" id="city" name="city" ng-model="profile.city" placeholder="Ex. Denver">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="statecode" class="col-sm-2 control-label">{{profile.label.statecode}}</label>
+					<div class="col-sm-10">
+					  <select class="form-control" id="statecode" name="statecode" ng-model="statecode">
+						<option ng-repeat="state in states" value="{{state.value}}">{{state.name}}</option> 
+					  </select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="zipcode" class="col-sm-2 control-label">{{profile.label.zipcode}}</label>
+					<div class="col-sm-10">
+					  <input type="text" class="form-control" id="zipcode" name="zipcode" ng-model="profile.zipcode" placeholder="Ex. 80205">
+					</div>
+				</div>
+				<div class="form-inline">
+					<div class="col-sm-10">
+						<div class="radio radio-inline" ng-repeat="addresstype in addresstypes">
+							<input type="radio" class="" radiogroup="addresstype" class="form-control" id="addresstype" name="addresstype" value="{{addresstype.name}}"> 
+								<label>{{addresstype.name}}</label>
+							</input>
+						</div>
+					</div>
+				</div>
+			</form>
         </section>
     </div>
+	<div class="col-md-10">
+        <section id="phoneSection">
+			<h3>{{profile.label.phonesection}}</h3>
+			<form class="form-horizontal">
+			    <div class="form-group">
+					<label for="phonenumber" class="col-sm-2 control-label">{{profile.label.phonenumber}}</label>
+					<div class="col-sm-10">
+					  <input type="text" class="form-control" id="phonenumber" name="phonenumber" ng-model="profile.phonenumber" placeholder="Ex. 123-456-7890">
+					</div>
+				</div>
+				<div class="form-inline">
+					<div class="col-sm-10">
+						<div class="radio radio-inline" ng-repeat="phonetype in phonetypes">
+							<input type="radio" class="" radiogroup="phonetype" class="form-control" id="phonetype" name="phonetype" value="{{phonetype.name}}"> 
+								<label>{{phonetype.name}}</label>
+							</input>
+						</div>
+					</div>
+				</div>
+			</form>
+        </section>
+    </div>
+	<div class="col-md-10">
+	  <button type="submit" class="btn btn-default" ng-click="prfile.clicked(login)">{{profile.label.submit}}</button>
+	</div>
+    <input type="hidden" id="token" name="token" ng-model="user.token" value="{{user.token}}"/>
 </div>
