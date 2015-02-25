@@ -43,9 +43,8 @@ $gs.controllers.add('AppController', ['$scope', '$log', 'Client',
 		
 		$scope.routes = $gs.routes.collection;
 			
-		Client.authtypes.getProviders().$promise.then(
+		Client.getAuthtypes(
 			function(success) {
-				$log.debug(success);
 				$log.debug('Retreived ' + success.Data.length + ' external login providers');
 				
 				$scope.external.login.provider.configured = success.Data.length > 0;
@@ -72,13 +71,15 @@ $gs.controllers.add('LoginController', ['$scope', '$location', '$log', 'Client',
 	function($scope, $location, $log, Client) {
 		$scope.login = { 
 			'label': {
+				'title': 'Account Login',
 				'username': 'Username',
 				'password': 'Password',
 				'submit': 'Login',
 				'rememberme': 'Remember Me'
 			}, // end label
 			'clicked': function(user) {
-				$("#loginSection form").validate({
+				var form = $("#loginSection form");
+				form.validate({
 					rules : {
 						username: {
 							required: true
@@ -87,25 +88,27 @@ $gs.controllers.add('LoginController', ['$scope', '$location', '$log', 'Client',
 							required: true
 						}
 					}, // end rules
-					submitHandler: function(form) {
-						$log.debug('Preparing to log-in to site' + user.username);
-				
-						Client.login.post({username: user.username, password: user.password, rememberme: user.rememberme, token: $gs.token}).$promise.then(
-							function(success){
-								$log.debug(success.Description);
-								$log.debug(success.Data)
-								
-								$scope.user.username = success.Data.username;
-								$scope.user.authenticated = success.Data.authenticated;
-								$scope.user.firstname = success.Data.firstname;
-								$scope.user.lastname = success.Data.lastname
-								
-								$location.path('/client/profile');
-							},
-							function(error) {
-								$log.debug(error.Description);
-							}
-						);	
+					submitHandler: function() {
+						if(form.valid()) {
+							$log.debug('Preparing to log-in to site' + user.username);
+							
+							Client.login({username: user.username, password: user.password, rememberme: user.rememberme, token: $gs.token},
+								function(success){
+									$log.debug(success.Description);
+									$log.debug(success.Data)
+									
+									$scope.user.username = success.Data.username;
+									$scope.user.authenticated = success.Data.authenticated;
+									$scope.user.firstname = success.Data.firstname;
+									$scope.user.lastname = success.Data.lastname
+									
+									$location.path('/client/profile');
+								},
+								function(error) {
+									$log.debug(error.Description);
+								}
+							);
+						} // end form.valid
 					} // end submitHandler
 				}); // end validate
 			}, // end clicked
@@ -121,6 +124,8 @@ $gs.controllers.add('ProfileController', ['$scope', '$log', '$location', 'JSONP'
 
 		$scope.profile = {
 			label: {
+				title: 'Profile',
+				
 				generalsection: 'General Information',
 				username: 'Username',
 				firstname: 'First Name',
@@ -132,9 +137,11 @@ $gs.controllers.add('ProfileController', ['$scope', '$log', '$location', 'JSONP'
 				city: 'City',
 				statecode: 'State',
 				zipcode: 'Zip',
+				addresstype: 'Type',
 				
 				phonesection: 'Contact Information',
 				phonenumber: 'Phone',
+				phonetype: 'Type',
 				
 				submit: 'Save'
 			},
@@ -151,21 +158,41 @@ $gs.controllers.add('ProfileController', ['$scope', '$log', '$location', 'JSONP'
 			addresstype: '',
 			
 			phonenumber: '',
-			phonenumbertype: '',
 			
 			clicked: function(profile){
+				var addressInfo = { 
+					street1: profile.street1, street2: profile.street2, 
+					city: profile.city, state: profile.state, 
+					countrycode: profile.countrycode, zipcode: profile.zipcode, 
+					addresstype: profile.addresstype
+				};
 				
-			}
+				var data = { 
+					id: $scope.user.id, username: profile.username, 
+					lastname: profile.lastname, address: addressinfo, 
+					token: $user.token,  phonenumber: profile.phonenumber, 
+					phonetype: profile.phonetype 
+				};
+				
+				Client.updateMe(data,
+					function(success){
+						$log.debug(success);
+					},
+					function(error){
+						$log.debug(error);
+					}
+				); // end profile update
+			} // end clicked
 		}; // end profile
 		
-		JSONP.data.get().$promise.then(
+		JSONP.getAppData(
 			function(success) {
 				$scope.addresstypes = success.addresstypes;
 				$scope.phonetypes = success.phonetypes;
 				$scope.states = success.states;
 			},
 			function(error){
-				
+				$log.debug(error);
 			}
 		); // end JSONP
 	} // end function
@@ -182,6 +209,7 @@ $gs.controllers.add('RegisterController', ['$scope', '$log', 'Client',
 	function($scope, $log, Client) {
 		$scope.registration = { 
 			'label': {
+				'title': 'New Registration',
 				'username': 'Email',
 				'password': 'Password',
 				'confirmpassword': 'Confirm Password',
@@ -191,9 +219,12 @@ $gs.controllers.add('RegisterController', ['$scope', '$log', 'Client',
 			'username': '',
 			'password': '',
 			'confirmpassword': '',
-			'token': 'TODO: Get AntiForgeryToken from server',
+			'ssnoPart1': '',
+			'ssnoPart2': '',
+			'ssnoPart3': '',
 			'clicked': function(registration) {
-				$("#registerSection form").validate({
+				var registerForm = $("#registerSection form");
+				registerForm.validate({
 					rules : {
 						username : {
 							required: true
@@ -204,11 +235,23 @@ $gs.controllers.add('RegisterController', ['$scope', '$log', 'Client',
 						confirmpassword: {
 							equalTo: "#password"
 						},
-						ssno: {
+						ssnoPart1: {
 							required: true,
 							digits: true,
-							maxlength: 9,
-							minlength: 9
+							maxlength: 3,
+							minlength: 3
+						},
+						ssnoPart2: {
+							required: true,
+							digits: true,
+							maxlength: 2,
+							minlength: 2
+						},
+						ssnoPart3: {
+							required: true,
+							digits: true,
+							maxlength: 4,
+							minlength: 4
 						},
 						messages: {
 							username: {
@@ -223,16 +266,24 @@ $gs.controllers.add('RegisterController', ['$scope', '$log', 'Client',
 						}
 					}, // end rules
 					submitHandler: function(form) {
-						$log.debug('Preparing register new user');
-				
-						Client.register.post({username: registration.username, password: registration.password, confirmpassword: registration.confirmpassword, ssno: registration.ssno}).$promise.then(
-							function(success){
-								$log.debug(success);
-							},
-							function(error) {
-								$log.debug(error);
-							}
-						);	
+						if(registerForm.valid()) {
+							$log.debug('Preparing register new user');
+					
+							var data = {
+								username: registration.username, password: registration.password, 
+								confirmpassword: registration.confirmpassword, 
+								ssno: registration.ssnoPart1+registration.ssnoPart2+registration.ssnoPart3
+							};
+							
+							Client.register(data,
+								function(success){
+									$log.debug(success);
+								},
+								function(error) {
+									$log.debug(error);
+								}
+							);	
+						} // end if form valid
 					} // end submitHandler
 				}); // end validate
 			} // end clicked
