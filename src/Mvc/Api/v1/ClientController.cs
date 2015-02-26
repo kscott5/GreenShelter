@@ -196,7 +196,7 @@ namespace PCSC.GreenShelter.Api.v1 {
 			var response = new ApiResponse ();
 			
 			try {
-				var user = new ApplicationUser { UserName = model.UserName, Email = model.UserName };
+				var user = new ApplicationUser { UserName = model.UserName, Email = model.UserName, SSNo = model.SSNo };
 				
                 var result = await UserManager.CreateClientAsync(user, model.Password);
 				
