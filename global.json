@@ -1,3 +1,4 @@
 {
+	"projects": [ "%project:Directory/src/Mvc/project.json", "%project:Directory%/test/Mvc/project.json"],
     "sources": ["%project:Directory%/src/Mvc", "%project:Directory%/test/Mvc"]
 }
