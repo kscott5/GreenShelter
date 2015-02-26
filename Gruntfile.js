@@ -27,13 +27,19 @@ module.exports = function (grunt) {
 				options: { force: false },
 				bower: [
 					'!src/Mvc/wwwroot/*.html', 
-					'src/Mvc/wwwroot/Content', 
+					'src/Mvc/wwwroot/Content/*.css', 
+					'!src/Mvc/wwwroot/Content/gs-*.css', 
+					'!src/Mvc/wwwroot/Content/main.css', 
+					'!src/Mvc/wwwroot/Content/prettyPhoto.css', 
 					'src/Mvc/wwwroot/fonts', 
 					'src/Mvc/wwwroot/Scripts/*.{js,map}', 
 					'!src/Mvc/wwwroot/Scripts/gs-*.{js,json}',
 					'!test/Mvc/wwwroot/',
 					'test/Mvc/wwwroot/*.*',
-					'test/Mvc/wwwroot/Content',
+					'test/Mvc/wwwroot/Content/*.css',
+					'!test/Mvc/wwwroot/Content/gs-*.css', 
+					'!test/Mvc/wwwroot/Content/main.css', 
+					'!src/Mvc/wwwroot/Content/prettyPhoto.css', 
 					'test/Mvc/wwwroot/fonts',
 					'test/Mvc/wwwroot/Scripts/*.{js,map}', 
 					'!test/Mvc/wwwroot/Scripts/gs-*-test.js'
@@ -66,7 +72,9 @@ module.exports = function (grunt) {
 								"angular/*.{js,.js.map}",
 								"angular-resource/*.{js,.js.map}",
 								"angular-route/*.{js,.js.map}",
-								"angular-local-storage/dist/*.js"
+								"angular-local-storage/dist/*.js",
+								"wowjs/dist/*.js",
+								"isotope/dist/*.js"
 							],
 							dest: 'src/Mvc/wwwroot/Scripts/',
 							options: { force: true }
@@ -76,7 +84,9 @@ module.exports = function (grunt) {
 							flatten: true,
 							cwd: "bower_components/",
 							src: [
-								"bootstrap/dist/**/*.css",
+								"bootstrap/dist/css/*.css",
+								"font-awesome-bower/css/*.css",
+								"animate-css/*.css"
 							],
 							dest: 'src/Mvc/wwwroot/Content/',
 							options: { force: true }
@@ -86,7 +96,8 @@ module.exports = function (grunt) {
 							flatten: true,
 							cwd: "bower_components/",
 							src: [
-								"bootstrap/**/*.{woff,woff2,svg,eot,ttf}",
+								"bootstrap/dist/fonts/*.{woff,woff2,svg,eot,ttf}",
+								"font-awesome-bower/fonts/*.{woff,woff2,svg,eot,ttf}"
 							],
 							dest: 'src/Mvc/wwwroot/fonts/',
 							options: { force: true }
