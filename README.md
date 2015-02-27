@@ -66,4 +66,4 @@ jquery
 jquery-validation
 
 
-![alt Screen Shoot](http://github.com/kscott5/GreenShelter/src/Mvc/wwwroot/images/screenshot1.jpg)
+![alt Screen Shoot](https://raw.githubusercontent.com/kscott5/GreenShelter/master/src/Mvc/wwwroot/images/screenshot1.jpg)
