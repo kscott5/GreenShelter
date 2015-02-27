@@ -4,7 +4,9 @@ Green Shelter is an ASP.NET vNext MVC website that provides basic content, clien
 
 This application is based on the ASP.NET vNext that includes documentation, samples and getting started instruction at the [Home](https://github.com/aspnet/home) repo.
 
-The project demonstrates a few features such as Identity (customization and configuration), Entity Framework 7 (configuration and migration), and external login providers (Facebook, Google and MSN) provided via the ASP.NET vNext framework, and commonly used javascript libraries such as AngularJS, Grunt and Bower.
+The project demonstrates a few features such as Identity (customization and configuration), Entity Framework 7 (configuration and migration), and external login providers (Facebook, Google and MSN) provided via the ASP.NET vNext framework, and commonly used javascript libraries such as AngularJS, Grunt and Bower. The goal is to create an API that would also allow the mobile application to perform many of the same tasks. 
+
+![alt Screen Shoot](https://raw.githubusercontent.com/kscott5/GreenShelter/master/src/Mvc/wwwroot/images/screenshot1.jpg)
 
 Identity 
 ---------
@@ -65,5 +67,3 @@ font-awesome
 jquery
 jquery-validation
 
-
-![alt Screen Shoot](https://raw.githubusercontent.com/kscott5/GreenShelter/master/src/Mvc/wwwroot/images/screenshot1.jpg)
