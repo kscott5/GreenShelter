@@ -185,11 +185,13 @@ $gs.controllers.add('ProfileController', ['$scope', '$log', '$location', 'JSONP'
 			} // end clicked
 		}; // end profile
 		
-		JSONP.getAppData(
+		Client.getMe(profile.username, 
 			function(success) {
-				$scope.addresstypes = success.addresstypes;
-				$scope.phonetypes = success.phonetypes;
-				$scope.states = success.states;
+				$log.debug(success.Description);
+				
+				$profile.firstname = success.Data.FirstName;
+				$profile.lastname = success.Data.LastName;
+				$profile.
 			},
 			function(error){
 				$log.debug(error);

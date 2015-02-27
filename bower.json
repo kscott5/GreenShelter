@@ -28,7 +28,10 @@
     "font-awesome-bower": "~4.3.0",
     "animate-css": "~3.2.1",
     "wowjs": "~1.0.3",
-    "isotope": "~2.1.1"
+    "isotope": "~2.1.1",
+    "html5shiv": "~3.7.2",
+    "respond": "~1.4.2",
+    "jquery-prettyPhoto": "*"
   },
   "devDependencies": {}
 }

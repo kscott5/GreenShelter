@@ -1,38 +1,48 @@
-<div class="row">
-    <div class="col-md-8">
-        <section id="registerSection">
-			<form class="form-horizontal">
-			  <div class="form-group">
-				<label for="username" class="col-sm-2 control-label">{{registration.label.username}}</label>
-				<div class="col-sm-10">
-				  <input type="email" class="form-control" id="username" name="username" ng-model="registration.username" required placeholder="Email">
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label for="password" class="col-sm-2 control-label">{{registration.label.password}}</label>
-				<div class="col-sm-10">
-				  <input type="password" class="form-control" id="password" name="password" ng-model="registration.password" required placeholder="Password">
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label for="confirmpassword" class="col-sm-2 control-label">{{registration.label.confirmpassword}}</label>
-				<div class="col-sm-10">
-				  <input type="password" class="form-control" id="confirmpassword" name="confirmpassword" ng-model="registration.ConfirmPassword" required placeholder="Password">
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label for="ssno" class="col-sm-2 control-label">{{registration.label.ssno}}</label>
-				<div class="col-sm-10">
-				  <input type="password" class="form-control" id="ssno" name="ssno" ng-model="registration.ssno" required placeholder="Social Security No">
-				</div>
-			  </div>
-			  <div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-				  <button type="submit" class="btn btn-default" ng-click="registration.clicked(registration)">{{registration.label.submit}}</button>
-				</div>
-			  </div>
-			  <input type="hidden" id="token" name="token" ng-model="registration.token" value="{{registration.token}}"/>
-			</form>
-		</section>
+<section id="register" class="container">
+	<h2>{{registration.label.title}}</h2>
+	<div class="row">
+		<div class="col-md-8">
+			<section id="registerSection">
+				<form class="form-horizontal">
+				  <div class="form-group">
+					<label for="username" class="col-sm-2 control-label">{{registration.label.username}}</label>
+					<div class="col-sm-10">
+					  <input type="email" class="form-control" id="username" name="username" ng-model="registration.username" required placeholder="Email">
+					</div>
+				  </div>
+				  <div class="form-group">
+					<label for="password" class="col-sm-2 control-label">{{registration.label.password}}</label>
+					<div class="col-sm-10">
+					  <input type="password" class="form-control" id="password" name="password" ng-model="registration.password" required placeholder="Password">
+					</div>
+				  </div>
+				  <div class="form-group">
+					<label for="confirmpassword" class="col-sm-2 control-label">{{registration.label.confirmpassword}}</label>
+					<div class="col-sm-10">
+					  <input type="password" class="form-control" id="confirmpassword" name="confirmpassword" ng-model="registration.ConfirmPassword" required placeholder="Password">
+					</div>
+				  </div>
+				  <div class="form-group form-inline">
+					<label for="ssno" class="col-sm-2 control-label">{{registration.label.ssno}}</label>
+					<div class="col-sm-10">
+					  <input type="text" class="form-control input-width-md text-center" id="ssnoPart1" name="ssnoPart1" ng-model="registration.ssnoPart1" equired placeholder="xxx">
+					  <span>-</span>
+					  <input type="text" class="form-control input-width-sm text-center" id="ssnoPart1" name="ssnoPart1" ng-model="registration.ssnoPart1" required placeholder="xx">
+					  <span>-</span>
+					  <input type="text" class="form-control input-width-md text-center" id="ssnoPart3" name="ssnoPart3" ng-model="registration.ssnoPart3" required placeholder="xxx">
+					</div>
+				  </div>
+				  <div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+					  <button type="submit" class="btn btn-default" ng-click="registration.clicked(registration)">{{registration.label.submit}}</button>
+					</div>
+				  </div>
+				  <input type="hidden" id="token" name="token" ng-model="registration.token" value="{{registration.token}}"/>
+				</form>
+			</section>
+		</div>
 	</div>
-</div>
+</section><!--/#register-->
+<script>
+	$gs.init();
+</script>

@@ -1,55 +1,61 @@
-<div class="row">
-    <div class="col-md-8">
-        <section id="loginSection">
-			<form class="form-horizontal">
-			  <div class="form-group">
-				<label for="username" class="col-sm-2 control-label">{{login.label.username}}</label>
-				<div class="col-sm-10">
-				  <input type="text" class="form-control" id="username" name="name" ng-model="user.username" required placeholder="Username">
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label for="password" class="col-sm-2 control-label">{{login.label.password}}</label>
-				<div class="col-sm-10">
-				  <input type="password" class="form-control" id="password" name="password" ng-model="user.password" required placeholder="Password">
-				</div>
-			  </div>
-			  <div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-				  <div class="checkbox">
-					<label>
-					  <input type="checkbox" id="rememberme" name="rememberme" ng-model="user.rememberme"> {{login.label.rememberme}}
-					</label>
+<section class="container">
+	<h2>{{login.label.title}}</h2>
+	<div class="row">
+		<div class="col-md-8">
+			<section id="loginSection">
+				<form class="form-horizontal">
+				  <div class="form-group">
+					<label for="username" class="col-sm-2 control-label">{{login.label.username}}</label>
+					<div class="col-sm-10">
+					  <input type="text" class="form-control" id="username" name="name" ng-model="user.username" required placeholder="Username">
+					</div>
 				  </div>
-				</div>
-			  </div>
-			  <div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-				  <button type="submit" class="btn btn-default" ng-click="login.clicked(user)">{{login.label.submit}}</button>
-				</div>
-			  </div>
-			</form>
-		</section>
-	</div>
-	<div class="col-md-4">
-        <section id="socialLoginForm">
-            <h4>Use another service to log in.</h4>
-            <hr />
-            
-				<div ng-hide="external.login.provider.configured">
-					<p>
-						There are no external authentication services configured. See <a href="http://go.microsoft.com/fwlink/?LinkId=313242">this article</a>
-						for details on setting up this ASP.NET application to support logging in via external services.
-					</p>
-				</div>
-                
-				<div ng-show="external.login.provider.configured">
-					<form class="form-inline" id="externalLoginForm" name="externalLoginForm" method="POST" action="/api/v1/client/externallogin" target="external_login"">
-						<p>                                
-							<button type="submit" class="btn btn-default" ng-repeat="provider in external.login.provider.types"  id="authenticationType" name="authenticationType" ng-click="external.login.clicked(external.login.provider.types[$index].Caption)" value="{{provider.AuthenticationType}}" title="Log in using your {{provider.Caption}} account">{{provider.AuthenticationType}}</button>                                
+				  <div class="form-group">
+					<label for="password" class="col-sm-2 control-label">{{login.label.password}}</label>
+					<div class="col-sm-10">
+					  <input type="password" class="form-control" id="password" name="password" ng-model="user.password" required placeholder="Password">
+					</div>
+				  </div>
+				  <div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+					  <div class="checkbox">
+						<label>
+						  <input type="checkbox" id="rememberme" name="rememberme" ng-model="user.rememberme"> {{login.label.rememberme}}
+						</label>
+					  </div>
+					</div>
+				  </div>
+				  <div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+					  <button type="submit" class="btn btn-default" ng-click="login.clicked(user)">{{login.label.submit}}</button>
+					</div>
+				  </div>
+				</form>
+			</section>
+		</div>
+		<div class="col-md-4">
+			<section id="socialLoginForm">
+				<h4>Use another service to log in.</h4>
+				<hr />
+				
+					<div ng-hide="external.login.provider.configured">
+						<p>
+							There are no external authentication services configured. See <a href="http://go.microsoft.com/fwlink/?LinkId=313242">this article</a>
+							for details on setting up this ASP.NET application to support logging in via external services.
 						</p>
-					</form>
-				</div>
-        </section>
-    </div>
-</div>
+					</div>
+					
+					<div ng-show="external.login.provider.configured">
+						<form class="form-inline" id="externalLoginForm" name="externalLoginForm" method="POST" action="/api/v1/client/externallogin" target="external_login"">
+							<p>                                
+								<button type="submit" class="btn btn-default" ng-repeat="provider in external.login.provider.types"  id="authenticationType" name="authenticationType" ng-click="external.login.clicked(external.login.provider.types[$index].Caption)" value="{{provider.AuthenticationType}}" title="Log in using your {{provider.Caption}} account">{{provider.AuthenticationType}}</button>                                
+							</p>
+						</form>
+					</div>
+			</section>
+		</div>
+	</div>
+</section>
+<script>
+	$gs.init();
+</script>

@@ -51,3 +51,19 @@ This allow execution of *k ef migration add GreenShelterDbContext*
 
 External Providers
 -------
+
+Javacript Library downloaded with Bower and installed using Grunt.
+--------
+Below is a list of packages used by this application. 
+
+angular
+angular-resource
+angular-route
+animate
+boostrap
+font-awesome
+jquery
+jquery-validation
+
+
+![alt Screen Shoot](http://github.com/kscott5/GreenShelter/wwwroot/images/screen1.jpg)

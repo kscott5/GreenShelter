@@ -227,7 +227,7 @@ namespace PCSC.GreenShelter.Api.v1 {
 				response.Code = 200;
 				var user = await SignInManager.UserManager.FindByIdAsync(id);
 				if(user != null) {
-					response.Data = new { address = "", organization = ""};
+					response.Data = user;
 					response.Description = "Retreiving me was successful";			
 				} else {
 					response.Description = "Failed to retrieve me";			

@@ -20,7 +20,7 @@ namespace PCSC.GreenShelter.Models {
 		/// </summary>
 		public ApplicationUserManager(ApplicationUserStore store) : base(store) {
 		}
-
+		
 		/// <summary>
 		///     Create a user with specific role access
 		/// </summary>
@@ -29,6 +29,11 @@ namespace PCSC.GreenShelter.Models {
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
 		private async Task<IdentityResult> CreateUserAsync(ApplicationUser user, string roleName, CancellationToken cancellationToken = default(CancellationToken)) {
+			if(user != null && string.IsNullOrEmpty(user.SSNo)) {
+				// TODO: Create a separate Hasher for Social Security Number
+				user.SSNo = PasswordHasher.HashPassword(user, user.SSNo);
+			}
+			
 			var result = await this.CreateAsync(user);
 			if(result != IdentityResult.Success)
 				return result;

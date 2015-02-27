@@ -6,18 +6,15 @@
 module.exports = function (grunt) {
     /// <param name="grunt" type="grunt" />
 
-	grunt.loadNpmTasks('grunt-karma');   
-    grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
-    //grunt.loadNpmTasks('grunt-contrib-jshint');
-    //grunt.loadNpmTasks('grunt-contrib-qunit');
-    //grunt.loadNpmTasks('grunt-contrib-concat');
 
     grunt.initConfig({
         staticFilePattern: '**/*.{js,css,map,html,htm,ico,jpg,jpeg,png,gif,eot,svg,ttf,woff}',
         pkg: grunt.file.readJSON('package.json'),
+			// TODO: Uglify whatever I can...
 			uglify: {
 				options: {
 					banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
@@ -27,38 +24,41 @@ module.exports = function (grunt) {
 				options: { force: false },
 				bower: [
 					'!src/Mvc/wwwroot/*.html', 
+					'!src/Mvc/wwwroot/images',
 					'src/Mvc/wwwroot/Content/*.css', 
 					'!src/Mvc/wwwroot/Content/gs-*.css', 
-					'!src/Mvc/wwwroot/Content/main.css', 
-					'!src/Mvc/wwwroot/Content/prettyPhoto.css', 
+					'!src/Mvc/wwwroot/Content/responsive.css', 
 					'src/Mvc/wwwroot/fonts', 
+					'src/Mvc/wwwroot/images/prettyPhoto',
 					'src/Mvc/wwwroot/Scripts/*.{js,map}', 
 					'!src/Mvc/wwwroot/Scripts/gs-*.{js,json}',
-					'!test/Mvc/wwwroot/',
-					'test/Mvc/wwwroot/*.*',
-					'test/Mvc/wwwroot/Content/*.css',
-					'!test/Mvc/wwwroot/Content/gs-*.css', 
-					'!test/Mvc/wwwroot/Content/main.css', 
-					'!src/Mvc/wwwroot/Content/prettyPhoto.css', 
-					'test/Mvc/wwwroot/fonts',
-					'test/Mvc/wwwroot/Scripts/*.{js,map}', 
-					'!test/Mvc/wwwroot/Scripts/gs-*-test.js'
+					'!src/Mvc/wwwroot/Scripts/modernizr.js',  // JavaScript library that detects HTML5 and CSS3 features in the user’s browser. https://github.com/Modernizr/Modernizr
+					'test/Mvc/wwwroot'
 				],
-			},
-			karma: {
-				unit: {
-					configFile: 'karma.conf.js',
-					background: false, 
-					singleRun: false
-				}
-			},
+			}, // end clean
+			// wwwrootcopy: {
+				// bower: {
+					// files: [
+						// {   // src/Mvc
+							// expand: true,
+							// flatten: false,
+							// cwd: "src/Mvc/wwwroot",
+							// src: [
+								// "**/*.*"
+							// ],
+							// dest: 'test/Mvc/wwwroot/',
+							// options: { force: true }
+						// }
+					// ]
+				// } // end bower
+			// }, // end wwwrootCopy
 			copy: {
 				// This is to work around an issue with the dt-angular bower package https://github.com/dt-bower/dt-angular/issues/4
 				fix: {
 					files: {
 						"bower_components/jquery/jquery.d.ts": ["bower_components/dt-jquery/jquery.d.ts"]
 					}
-				},
+				}, // end fix
 				bower: {
 					files: [
 						{   // JavaScript
@@ -66,30 +66,52 @@ module.exports = function (grunt) {
 							flatten: true,
 							cwd: "bower_components/",
 							src: [
-								"jquery/dist/*.{js,map}",
-								"jquery.validation/dist/*.{js,map}",
-								"bootstrap/dist/**/*.js",
-								"angular/*.{js,.js.map}",
-								"angular-resource/*.{js,.js.map}",
-								"angular-route/*.{js,.js.map}",
-								"angular-local-storage/dist/*.js",
-								"wowjs/dist/*.js",
-								"isotope/dist/*.js"
+								"html5shiv/dist/html5shiv.min.js",
+								"respond/dist/html5shiv.min.js",
+								
+								"jquery/dist/*.min.{js,map}",
+								"jquery.validation/dist/jquery.validate.min.js",
+								"isotope/dist/isotope.pkgd.min.js",
+								"jquery-prettyPhoto/js/jquery.prettyPhoto.js",
+								"bootstrap/dist/js/bootstrap.min.js",
+								
+								"angular/angular.min.{js,js.map}",
+								"angular-local-storage/dist/angular-local-storage.min.js",
+								"angular-resource/angular-resource.min.{js,js.map}",
+								"angular-route/angular-route.min.{js,js.map}",
+								
+								"wowjs/dist/wow.min.js" // Javascript CSS animation library that triggers animate.css by default
 							],
 							dest: 'src/Mvc/wwwroot/Scripts/',
-							options: { force: true }
+							options: { force: true },
+							rename: function(dest, src) {
+								if(src.indexOf('.pkgd.') > 0)
+									src = src.replace('.pkgd.', '.');
+								
+								if(src.indexOf('isotope') == 0)
+									src = src.replace('isotope.', 'jquery.isotope.');
+								
+								return dest + src;
+							}
 						},
 						{   // CSS
 							expand: true,
 							flatten: true,
 							cwd: "bower_components/",
 							src: [
-								"bootstrap/dist/css/*.css",
-								"font-awesome-bower/css/*.css",
-								"animate-css/*.css"
+								"bootstrap/dist/css/bootstrap.min.css",
+								"font-awesome-bower/css/font-awesome.css", // Iconic font and CSS framework with over 519 pictographic icons
+								"animate-css/animate.min.css", // Cross-browser CSS animations library that's wow.js default animation CSS
+								"jquery-prettyPhoto/css/prettyPhoto.css"
 							],
 							dest: 'src/Mvc/wwwroot/Content/',
-							options: { force: true }
+							options: { force: true },
+							rename: function(dest, src) {
+								if(src.indexOf('prettyPhoto.css') == 0)
+									src = 'jquery.'.concat(src);
+								
+								return dest + src;
+							}
 						},
 						{   // Fonts
 							expand: true,
@@ -103,22 +125,17 @@ module.exports = function (grunt) {
 							options: { force: true }
 						}
 					]
-				}
-			},
+				} // end bower
+			}, // end copy
 			watch: {
 				dev: {
 					files: ['bower_components/<%= staticFilePattern %>', 'Client/<%= staticFilePattern %>'],
 					tasks: ['dev']
-				},
-				karma: { //run unit tests with karma (server needs to be already running)
-					files: ['src/Mvc/wwwroot/Scripts/**/*.js', 'test/Mvc/wwwroot/Scripts/**/*.js'],
-					exclude: ['src/Mvc/wwwroot/Scripts/**/*.min.js'],
-					tasks: ['karma:unit:run'] //NOTE the :run flag
 				}
 			}
 	});
 
     grunt.registerTask('dev', ['clean', 'copy']);
+	grunt.registerTask('test', ['dev', 'wwwrootcopy']);
     grunt.registerTask('default', ['dev']);
-	grunt.registerTask('jstest', ['karma']);
 };
