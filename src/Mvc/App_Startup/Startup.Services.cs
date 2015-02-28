@@ -81,7 +81,8 @@ namespace PCSC.GreenShelter
 			services.AddScoped(typeof(ApplicationUserStore), typeof(ApplicationUserStore));
 			services.AddScoped(typeof(ApplicationRoleManager));
 			services.AddScoped(typeof(ApplicationRoleStore));
-
+			services.AddScoped(typeof(ApplicationSignInManager), typeof(ApplicationSignInManager));
+			
 		}
     } // end class
 } // end namespace
