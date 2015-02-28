@@ -36,9 +36,19 @@ var $gs = (function($, angular){
 		]
 	};
 	
-
+	/**
+	* @description
+	*
+	* This function will ensure the headers nav-bar correctly highlights the
+	* active or select nav-bar-item
+	*
+	*/
 	function initNavBar() {
+		// NOTE: animate.css is magically creating carousel with help from bootstrap.js
 		var allNavObjs = $('.nav nav-bar li');
+		
+		console.log('TODO: initNavBar fix logic');
+		return;
 		
 		allNavObjs.each(function() {
 			var navObj = $(this), parent = null;
@@ -57,8 +67,9 @@ var $gs = (function($, angular){
 			}
 		});
 	}
+		
 	return {
-		token: $('input[name=token]').attr('value'),
+		token: $('input[name=__RequestVerificationToken]').attr('value'),
 		routes: {
 			array: [
 				gsRoutes.about, 
@@ -86,9 +97,12 @@ var $gs = (function($, angular){
 		},
 		
 		init: function(data) {
-			// NOTE: animate.css is magically creating carousel with help from bootstrap.js
+			// This is wrapper function for template based initialization, and
+			// the function call below. The function should check for any
+			// specific template related DOM object to ensure initialization is 
+			// for the intended page.
 			
-			// TODO: Add any initialization functions here 
-		}
+			initNavBar();
+		},
 	};	
 })($, window.angular);

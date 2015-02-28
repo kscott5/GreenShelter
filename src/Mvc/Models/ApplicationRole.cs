@@ -12,6 +12,7 @@ using Microsoft.AspNet.Identity;
 	public class ApplicationRole : IdentityRole<int> {
 		public static readonly string Administrator = "Administrator";
 		public static readonly string Organization = "Organization";
+		public static readonly string Volunteer = "Volunteer";
 		public static readonly string Client = "Client";
 		
 		[Key]

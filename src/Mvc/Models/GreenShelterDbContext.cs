@@ -80,6 +80,13 @@ namespace PCSC.GreenShelter.Models {
 				await roleManager.AddClaimAsync(role, new Claim(claimType, role.Name));
 			}
 			
+			role = await roleManager.FindByNameAsync(ApplicationRole.Volunteer);			
+			if(role == null) {
+				await roleManager.CreateAsync(new ApplicationRole{Name = ApplicationRole.Volunteer, Description = "A person who serves the organization and clients without payment"});
+				role = await roleManager.FindByNameAsync(ApplicationRole.Volunteer);
+				await roleManager.AddClaimAsync(role, new Claim(claimType, role.Name));
+			}
+			
 			role = await roleManager.FindByNameAsync(ApplicationRole.Client);			
 			if(role == null) {
 				await roleManager.CreateAsync(new ApplicationRole{Name = ApplicationRole.Client, Description = "Person receiving services from an organization"});		

@@ -6,6 +6,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNet.Identity;
 
 namespace PCSC.GreenShelter.Models {
+	public enum PhoneNumberType : int {
+		Home = 0,
+		Mobile = 1,
+		Other = 2
+	};
+	
     // You can add profile data for the user by adding more properties to your User class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
 	[Table("AspNetUsers")]
     public class ApplicationUser : IdentityUser<int>   {
@@ -15,6 +21,8 @@ namespace PCSC.GreenShelter.Models {
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public override int Id {get; set;}
 		
+		public virtual string GuidId {get; set;}
+		
 		//[ForeignKey("RoleId")]
 		public virtual ApplicationRole Role {get; set;}
 		
@@ -23,6 +31,8 @@ namespace PCSC.GreenShelter.Models {
 		
 		public virtual List<Address> Addresses {get; set;}
 		public virtual List<Organization> Organizations {get; set;}
+		
+		public virtual PhoneNumberType PhoneNumberType {get; set;}
 		
 		public virtual string SSNo { get; set; }
 		public virtual bool Active {get; set;}

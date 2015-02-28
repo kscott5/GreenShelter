@@ -49,7 +49,7 @@ $gs.services.add('Client', ['$resource', '$http',
 					// Then you can remove the function parameters
 					$resource('/api/v1/client/externallogin', {}, {
 						requested: { method: 'GET', headers: {'Content-Type': 'application/json; charset=utf-8;' } } 
-					}).requested(data).$promise.then(successHandler,errorHandler);
+					}).requested(data).$promise.then(successHandler,errorHandler).catch(errorHander);
 				} // end login
 			} // end external
 		}; // end actions
@@ -58,10 +58,10 @@ $gs.services.add('Client', ['$resource', '$http',
 	}
 ]); // end Client
 
-$gs.services.add('JSONP', ['$resource', 
+$gs.services.add('Application', ['$resource', 
 	function($resource){
 		var actions = {
-			'getAppData': function(successHandler,errorHandler) {
+			'getGSJsonData': function(successHandler,errorHandler) {
 				$resource('/scripts/gs-data.json', {}, {
 					get: { method: 'GET' }
 				}).get().$promise.then(successHandler,errorHandler);

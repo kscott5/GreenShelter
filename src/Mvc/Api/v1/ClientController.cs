@@ -16,13 +16,13 @@ namespace PCSC.GreenShelter.Api.v1 {
     [Authorize]
 	[Route("api/v1/client", Name = "Client")]
 	public class ClientController : Controller, IGreenShelterApplication {
-	
-		public ClientController(SignInManager<ApplicationUser> signInManager, ApplicationUserManager userManager) {
+		
+		public ClientController(ApplicationSignInManager signInManager, ApplicationUserManager userManager) {
            SignInManager = signInManager;
 		   UserManager = userManager;
         }
 
-        public SignInManager<ApplicationUser> SignInManager { get; private set; }
+        public ApplicationSignInManager SignInManager { get; private set; }
 		public ApplicationUserManager UserManager {get; private set;}
 		
 		/// <summary>
@@ -143,7 +143,7 @@ namespace PCSC.GreenShelter.Api.v1 {
 				response.Description = "Retreiving authtypes was successful";
 				response.Data = SignInManager.GetExternalAuthenticationTypes().ToList();				
 			} catch(Exception ex) {
-				response.Code = 401;
+				response.Code = 400;
 				response.Description = "Retreiving authtypes was unsuccessful";
 				
 				this.WriteError(response.Description, ex);
@@ -158,28 +158,35 @@ namespace PCSC.GreenShelter.Api.v1 {
 		[Route("Login", Name="Login")]
 		public async Task<JsonResult> Login([FromBody] Login model) {
 			this.WriteInformation("Login UserName: {0}: Remember Me: {1}", model.UserName, model.RememberMe);
-						
-			var response = new ApiResponse();
+			
+			var response = new ApiResponse{Code = 400};
+			this.Context.Response.StatusCode = response.Code;
 			
 			try {
 				SignInManager.SignOut();
-				var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
 				
-				response.Code = 200;
-				if(result == SignInResult.Success) {
-					var user = await SignInManager.UserManager.FindByNameAsync(model.UserName);
-					//var identity = await SignInManager.CreateUserIdentityAsync(user);
-					
-					response.Data = new { /*identity = identity,*/ id = user.Id, UserName  = user.UserName, firstname = user.FirstName, lastname = user.LastName};
-					response.Description = "Login was successful";
-				} else {
-					response.Data = result;
+				var result = await SignInManager.SignInAsync(model.UserName, model.Password, model.RememberMe);
+				if(result != IdentityResult.Success) {
+					response.Data = result.Errors;
 					response.Description = "Login was unsuccessful";
+					return new JsonResult(response);
 				}
+				
+				var isAuthenticated = this.Context.User.Identity.IsAuthenticated;
+				if(!isAuthenticated) {
+					response.Description = string.Format("Could not authenticate the username: {0}", model.UserName);
+					return new JsonResult(response);
+				}
+				
+				var guidIdClaim = this.Context.User.FindFirst(ApplicationClaimsType.GuidId);
+				var userNameClaim = this.Context.User.FindFirst(ApplicationClaimsType.UserName);
+				
+				response.Data =  new { IsAuthenticated = isAuthenticated, GuidId = guidIdClaim.Value };				
+				response.Description = "Login was successful";
+				
+				this.Context.Response.StatusCode = response.Code = 200;
 			} catch(Exception ex) {
-				response.Code = 401;
-				this.Context.Response.StatusCode = 401;
-				response.Description = "Login was unsuccessful";
+				response.Description = "Exception: Login was unsuccessful";
 				
 				this.WriteError(response.Description, ex);
 			}
@@ -196,20 +203,24 @@ namespace PCSC.GreenShelter.Api.v1 {
 			var response = new ApiResponse ();
 			
 			try {
-				var user = new ApplicationUser { UserName = model.UserName, Email = model.UserName, SSNo = model.SSNo };
+				SignInManager.SignOut();
 				
-                var result = await UserManager.CreateClientAsync(user, model.Password);
+				var user = new ApplicationUser { UserName = model.UserName, Email = model.UserName, SSNo = model.SSNo };
+                var result = await SignInManager.RegisterClientAsync(user, model.Password);
 				
 				response.Code = 200;
-                if (result.Succeeded) {
+                bool isAuthenticated = this.Context.User.Identity.IsAuthenticated;
+				if(result == IdentityResult.Success && isAuthenticated) {
+					var guidIdClaim = this.Context.User.FindFirst(ApplicationClaimsType.GuidId);
+					
+					response.Data =  new { IsAuthenticated = isAuthenticated, GuidId = guidIdClaim.Value };
 					response.Description = string.Format("{0} registered successfully", model.UserName);
-					response.Data = model.UserName; // What should we pass back
 				} else {
 					response.Description = string.Format("{0} registration failed", model.UserName);
 					response.Data= result.Errors;
 				}
 			} catch(Exception ex) {
-				response.Code = 401;
+				response.Code = 400;
 				response.Description = string.Format("Failed to register new user {0}", model.UserName);
 				this.WriteError(response.Description, ex);
 			}
@@ -218,24 +229,23 @@ namespace PCSC.GreenShelter.Api.v1 {
 		
 		[HttpGet]
 		[Route("Me", Name="Me")]
-		public async Task<JsonResult> Me(string id) {
-			this.WriteInformation("Me id: {0}", id);
+		public async Task<JsonResult> Me(string guidId) {
+			this.WriteInformation("Me id: {0}", guidId);
 			
-			var response = new ApiResponse();
+			var response = new ApiResponse { Code = 400};
+			this.Context.Response.StatusCode = response.Code;
 			
 			try {
-				response.Code = 200;
-				var user = await SignInManager.UserManager.FindByIdAsync(id);
+				var user = await UserManager.FindByGuidIdAsync(guidId);
 				if(user != null) {
 					response.Data = user;
-					response.Description = "Retreiving me was successful";			
+					response.Description = "Retrieved my profile successful";			
+					this.Context.Response.StatusCode = response.Code = 200;
 				} else {
-					response.Description = "Failed to retrieve me";			
+					response.Description = "Failed to retrieve your profile information";
 				}
 			} catch(Exception ex) {
-				response.Code = 401;
-				response.Description = "Failed to retrieve me";	
-				
+				response.Description = "Failed to retrieve me";					
 				this.WriteError(response.Description, ex);
 			}
 		
@@ -255,7 +265,7 @@ namespace PCSC.GreenShelter.Api.v1 {
 				response.Code = 200;
 				response.Description = "Updating me was successful";			
 			} catch(Exception ex) {
-				response.Code = 401;
+				response.Code = 400;
 				response.Description = "Updating me was unsuccessful";
 				
 				this.WriteError(response.Description, ex);

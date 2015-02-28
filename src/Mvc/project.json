@@ -39,7 +39,7 @@
     "System.Linq": "4.0.0-*",
     "Microsoft.Framework.CodeGenerators.Mvc": "1.0.0-*",
     "Microsoft.Framework.OptionsModel": "1.0.0-*",
-	"Microsoft.AspNet.Http.Extensions": "1.0.0-*"
+	"Microsoft.AspNet.Http.Extensions": "1.0.0-*" 
   },
   "commands": {
     "ef": "EntityFramework.Commands",

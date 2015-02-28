@@ -1,3 +1,4 @@
+using System;
 using System.Security.Claims;
 
 using System.Threading;
@@ -29,10 +30,16 @@ namespace PCSC.GreenShelter.Models {
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
 		private async Task<IdentityResult> CreateUserAsync(ApplicationUser user, string roleName, CancellationToken cancellationToken = default(CancellationToken)) {
-			if(user != null && string.IsNullOrEmpty(user.SSNo)) {
+			if(user != null && !string.IsNullOrEmpty(user.SSNo)) {
 				// TODO: Create a separate Hasher for Social Security Number
-				user.SSNo = PasswordHasher.HashPassword(user, user.SSNo);
+				try {
+						user.SSNo = PasswordHasher.HashPassword(user, user.SSNo); 
+				} catch(Exception ex) {
+					throw new Exception("Error trying to encrypt the SS #", ex);
+				}
 			}
+
+			user.GuidId = Guid.NewGuid().ToString("N");
 			
 			var result = await this.CreateAsync(user);
 			if(result != IdentityResult.Success)
@@ -55,6 +62,10 @@ namespace PCSC.GreenShelter.Models {
 			if(result != IdentityResult.Success)
 				return result;
 
+			result = await this.AddClaimAsync(user, new Claim(ApplicationClaimsType.GuidId, user.GuidId));
+			if(result != IdentityResult.Success)
+				return result;
+			
 			return result;
 		}		
 		
@@ -67,6 +78,17 @@ namespace PCSC.GreenShelter.Models {
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
 		private async Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password, string roleName, CancellationToken cancellationToken = default(CancellationToken)) {
+			if(user != null && !string.IsNullOrEmpty(user.SSNo)) {
+				// TODO: Create a separate Hasher for Social Security Number
+				try {
+						user.SSNo = PasswordHasher.HashPassword(user, user.SSNo); 
+				} catch(Exception ex) {
+					throw new Exception("Error trying to encrypt the SS #", ex);
+				}
+			}
+
+			user.GuidId = Guid.NewGuid().ToString("N");
+			
 			var result = await this.CreateAsync(user, password);
 			if(result != IdentityResult.Success)
 				return result;
@@ -88,6 +110,10 @@ namespace PCSC.GreenShelter.Models {
 			if(result != IdentityResult.Success)
 				return result;
 
+			result = await this.AddClaimAsync(user, new Claim(ApplicationClaimsType.GuidId, user.GuidId));
+			if(result != IdentityResult.Success)
+				return result;
+			
 			return result;
 		}
 		
@@ -143,6 +169,31 @@ namespace PCSC.GreenShelter.Models {
 		}
 		
 		/// <summary>
+		///     Create a volunteer user
+		/// </summary>
+		/// <param name="user"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public virtual async Task<IdentityResult> CreateVolunteerAsync(ApplicationUser user, CancellationToken cancellationToken = default(CancellationToken)) {
+			this.WriteInformation("Creating Volunteer User Async");
+			
+			return await this.CreateUserAsync(user, ApplicationRole.Volunteer, cancellationToken);
+		}
+		
+		/// <summary>
+		///     Create a volunteer user and associates it with the given password
+		/// </summary>
+		/// <param name="user"></param>
+		/// <param name="password"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public virtual async Task<IdentityResult> CreateVolunteerAsync(ApplicationUser user, string password, CancellationToken cancellationToken = default(CancellationToken)) {
+			this.WriteInformation("Creating Volunteer User Async");
+			
+			return await this.CreateUserAsync(user, password, ApplicationRole.Volunteer, cancellationToken);
+		}
+		
+		/// <summary>
 		///     Create a client user
 		/// </summary>
 		/// <param name="user"></param>
@@ -166,5 +217,9 @@ namespace PCSC.GreenShelter.Models {
 			
 			return await this.CreateUserAsync(user, password, ApplicationRole.Client, cancellationToken);
 		}
+		
+		public virtual async Task<ApplicationUser> FindByGuidIdAsync(string guidId, CancellationToken cancellationToken = default(CancellationToken)) {
+			return await this.FindByGuidIdAsync(guidId, cancellationToken);
+		} 
     } // end class
 } // end namespace

@@ -93,6 +93,7 @@ namespace mvc.Migrations
                         b.Property<string>("Email");
                         b.Property<bool>("EmailConfirmed");
                         b.Property<string>("FirstName");
+                        b.Property<string>("GuidId");
                         b.Property<int>("Id")
                             .GenerateValueOnAdd();
                         b.Property<DateTime>("LastActive");
@@ -106,6 +107,7 @@ namespace mvc.Migrations
                         b.Property<string>("PasswordHash");
                         b.Property<string>("PhoneNumber");
                         b.Property<bool>("PhoneNumberConfirmed");
+                        b.Property<int>("PhoneNumberType");
                         b.Property<int?>("RoleId");
                         b.Property<string>("SSNo");
                         b.Property<string>("SecurityStamp");

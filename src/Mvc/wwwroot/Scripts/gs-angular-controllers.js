@@ -2,60 +2,38 @@
 
 / * Angular Green Shelter Controllers */
 
-$gs.controllers.add('AppController', ['$scope', '$log', 'Client', 
-	function($scope, $log, Client) {
+/**
+* @description
+*
+* AppController provides global scope variable access
+* to all controllers defined by the application. Use
+* this to provide two-way data bind on user authentication
+* or messaging
+*/
+$gs.controllers.add('AppController', ['$scope', '$log', 'Application', 'Client', 
+	function($scope, $log, Application, Client) {
 		$log.debug('App Controller');
 		
+		$scope.messages = [];
+		
+		// NOTE: AngularJS documentation first states use services to share
+		//		 code and state cross controllers. Then states that controllers 
+		//		 can be nested to provide an inheritance effect allowing the
+		// 		 controllers to share scope information, etc...
+		//
+		//		 1001 different ways to do things!!!!
+		// 		 https://docs.angularjs.org/guide/controller
+		
 		$scope.user = {
+			guidid: '',
 			username: '',
-			password: '',
-			confirmpassword: '',
-			
+			email: '',
 			firstname: '',
 			lastname: '',
-			
-			rememberme: false,
-			authenticated: false
+			isauthenticated: false
 		};
 		
-		$scope.external = {
-			'login': {
-				'provider': {
-					'configured': true,
-					'types': [
-						// TODO: Replace this list with list from server
-						{ 'AuthenticationType': 'Google', 'Caption': 'Google'},
-						{ 'AuthenticationType': 'Facebook', 'Caption': 'Facebook'},
-						{ 'AuthenticationType': 'Twitter', 'Caption': 'Twitter'},
-						{ 'AuthenticationType': 'MSN', 'Caption': 'MSN'}
-					]
-				},
-				'clicked': function(provider) {
-					$log.debug('Preparing to log-in using external provider type index: ' + provider);
-		
-					var myForm = $('#externalLoginForm');
-					myForm.attr('target', "external_login");
-					var myWindow = window.open('', 'external_login', 'width=200px,heigh=200px,resizable=yes');
-					externalLoginForm.submit();
-				} // end clicked
-			} // end login
-		}; // end external
-		
 		$scope.routes = $gs.routes.collection;
-			
-		Client.getAuthtypes(
-			function(success) {
-				$log.debug('Retreived ' + success.Data.length + ' external login providers');
-				
-				$scope.external.login.provider.configured = success.Data.length > 0;
-				$scope.external.login.provider.types = success.Data;
-			},
-			function(error) {
-				$log.debug('Failed retreiving external login providers. [Error: ' + error.Description + ']');
-				$scope.external.login.provider.configured = false;
-				$scope.external.login.provider.types = [];
-			}
-		);
 	}
 ]);
 
@@ -69,56 +47,79 @@ $gs.controllers.add('HomeController', ['$scope', '$location',
 
 $gs.controllers.add('LoginController', ['$scope', '$location', '$log', 'Client', 
 	function($scope, $location, $log, Client) {
-		$scope.login = { 
-			'label': {
+		$scope.loginForm = {
+			data: { token: $gs.token},
+			label: {
 				'title': 'Account Login',
 				'username': 'Username',
 				'password': 'Password',
 				'submit': 'Login',
 				'rememberme': 'Remember Me'
 			}, // end label
-			'clicked': function(user) {
-				var form = $("#loginSection form");
-				form.validate({
-					rules : {
-						username: {
-							required: true
-						},
-						password: {
-							required: true
-						}
-					}, // end rules
-					submitHandler: function() {
-						if(form.valid()) {
-							$log.debug('Preparing to log-in to site' + user.username);
+			clicked: function() {				
+				$log.debug('Preparing to log-in to site' + $scope.loginForm.username);
+				
+				Client.login($scope.loginForm.data,
+					function(success){
+						$log.debug(success);
+						
+						if(($scope.user.isauthenticated = success.Data.IsAuthenticated)) {
+							$scope.user.guidid = success.Data.GuidId;
 							
-							Client.login({username: user.username, password: user.password, rememberme: user.rememberme, token: $gs.token},
-								function(success){
-									$log.debug(success.Description);
-									$log.debug(success.Data)
-									
-									$scope.user.username = success.Data.username;
-									$scope.user.authenticated = success.Data.authenticated;
-									$scope.user.firstname = success.Data.firstname;
-									$scope.user.lastname = success.Data.lastname
-									
-									$location.path('/client/profile');
-								},
-								function(error) {
-									$log.debug(error.Description);
-								}
-							);
-						} // end form.valid
-					} // end submitHandler
-				}); // end validate
+							$location.path('/client/profile');
+						}
+					},
+					function(error) {
+						$log.debug(error);
+						
+						if(error.data.Data != null) {
+							$.each(error.data.Data, function(index, value) {
+								$log.debug(value.Description);
+							});
+						}
+					}
+				);
+	
 			}, // end clicked
 		}; // end $scope.login
+		
+		$scope.external = {
+			'login': {
+				'provider': {
+					'configured': true,
+					'types': []
+				},
+				'clicked': function(provider) {
+					$log.debug('Preparing to log-in using external provider type index: ' + provider);
+		
+					var myForm = $('#externalLoginForm');
+					myForm.attr('target', "external_login");
+					var myWindow = window.open('', 'external_login', 'width=200px,heigh=200px,resizable=yes');
+					externalLoginForm.submit();
+				} // end clicked
+			} // end login
+		}; // end external
+		
+		Client.getAuthtypes(
+			function(success) {
+				$log.debug('Retreived ' + success.Data.length + ' external login providers');
+				
+				$scope.external.login.provider.configured = success.Data.length > 0;
+				$scope.external.login.provider.types = success.Data;
+			},
+			function(error) {
+				$log.debug('Failed retreiving external login providers. [Error: ' + error.Description + ']');
+				$scope.external.login.provider.configured = false;
+				$scope.external.login.provider.types = [];
+			}
+		);
 	} // end function
+	
 ]); // end LoginController
 
-$gs.controllers.add('ProfileController', ['$scope', '$log', '$location', 'JSONP',
-	function($scope, $log, $location, JSONP) {
-		if(!$scope.user.authenticated) {
+$gs.controllers.add('ProfileController', ['$scope', '$log', '$location', 'Client',
+	function($scope, $log, $location, Client) {
+		if(!$scope.user.isauthenticated) {
 			$log.debug('TODO: Redirect to login');
 		}
 
@@ -185,18 +186,39 @@ $gs.controllers.add('ProfileController', ['$scope', '$log', '$location', 'JSONP'
 			} // end clicked
 		}; // end profile
 		
-		Client.getMe(profile.username, 
+		Application.getGSJsonData(
+			function(success){
+				$log.debug(success);
+				$scope.addresstypes = success.addresstypes;
+				$scope.states = success.statetypes;
+				$scope.phonetypes = success.phonetypes;
+			},
+			function(error) {
+				$log.debug(error);
+			}
+		);
+		
+		Client.getMe($scope.user.guidid, 
 			function(success) {
-				$log.debug(success.Description);
+				$log.debug(success);
 				
 				$profile.firstname = success.Data.FirstName;
 				$profile.lastname = success.Data.LastName;
-				$profile.
+				if(success.Addresses && success.Addresses.length > 0) { 
+					var address = success.Addresses[success.Addresses.length-1];
+					$profile.street1 = address.Street1;
+					$profile.street2 = address.Street2;
+					$profile.city = address.City;
+					$profile.statecode = address.StateCode;
+					$profile.zipcode = address.ZipCode;
+					$profile.phonenumber = address.PhoneNumber;
+					$profile.phonetype = address.PhoneType;
+				}
 			},
 			function(error){
 				$log.debug(error);
 			}
-		); // end JSONP
+		); // end Client.getMe
 	} // end function
 ]); // end ProfileController
 
