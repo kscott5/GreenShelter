@@ -23,7 +23,7 @@ $gs.services.add('Client', ['$resource', '$http',
 				// Use arguments. arguments.length == 1 or arguments.length == 2 
 				// Then you can remove the function parameters
 				
-				$resource('/api/v1/client/me', {}, {
+				$resource('/api/v1/client/me/:guidid', {}, {
 					get: { method: "GET" }
 				}).get(data).$promise.then(successHandler,errorHandler);
 			},

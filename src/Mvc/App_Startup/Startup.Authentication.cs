@@ -7,6 +7,7 @@ using Microsoft.AspNet.Security.Google;
 using Microsoft.AspNet.StaticFiles;
 
 using Microsoft.Framework.DependencyInjection;
+using Microsoft.Framework.Logging;
 using Microsoft.Framework.OptionsModel;
 
 using PCSC.GreenShelter.Extensions;
@@ -19,19 +20,17 @@ namespace PCSC.GreenShelter {
 		/// For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
 		/// </summary>
         public void ConfigureAuthenticiation(IApplicationBuilder app) {
-			this.WriteInformation("\tConfigure Authentication");
-
 		   	// Retrieve the Options Manager for CoookieAuthenticationOptions
 			var cookieOptionManager = app.ApplicationServices
 				.GetService(typeof(IOptions<CookieAuthenticationOptions>)) as OptionsManager<CookieAuthenticationOptions>;
 			
 			// Retrieve the Options for Application Cookie Authentication 
 			var cookieAuthOptions = cookieOptionManager.GetNamedOptions(IdentityOptions.ApplicationCookieAuthenticationType) as CookieAuthenticationOptions;
-						
+			
 			// Update the Cookie Authentication Options LoginPath and LogoutPath
 			cookieAuthOptions.LoginPath = new PathString("/#client/login");
 			cookieAuthOptions.LogoutPath = new PathString("/#client/logout");
-
+			
 			// Add mappings to static files
 			// This should be include in the master branch
 			var staticFileOptions = new StaticFileOptions();

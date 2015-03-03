@@ -10,6 +10,7 @@ using Microsoft.Framework.OptionsModel;
 
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Framework.Logging;
 
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Infrastructure;
@@ -32,17 +33,17 @@ namespace PCSC.GreenShelter.Models {
 		public DbSet<Address> Addresses { get; set; }
 		public DbSet<Organization> Organizations { get; set; }
 		
- 		public static async Task InitializeDatabaseAsync(IServiceProvider serviceProvider, IGreenShelterApplication application) {
-			application.WriteInformation("Initializing the database asynchronously");
+ 		public static async Task InitializeDatabaseAsync(IServiceProvider serviceProvider) {
+			AppUtilityHelper.Logger.WriteInformation("Initializing the database asynchronously");
 			
             using (var db = serviceProvider.GetRequiredService<GreenShelterDbContext>()) {
 				var sqlServerDatabase = db.Database.AsSqlServer();
 				
                 if (sqlServerDatabase != null) {
-					application.WriteInformation("Sql Server Database ensured created");
+					AppUtilityHelper.Logger.WriteInformation("Sql Server Database ensured created");
 					
-					await CreateRoles(serviceProvider, application);
-                    await CreateAdminUser(serviceProvider, application);
+					await CreateRoles(serviceProvider);
+                    await CreateAdminUser(serviceProvider);
                 }
             } // end using
         } // end InitializeDatabaseAsync		
@@ -53,8 +54,8 @@ namespace PCSC.GreenShelter.Models {
         /// <param name="serviceProvider"></param>
 		/// <param name="application"></param>
         /// <returns></returns>
-        private static async Task CreateRoles(IServiceProvider serviceProvider, IGreenShelterApplication application) {
-			application.WriteInformation("Creating the Application Roles asynchronously");
+        private static async Task CreateRoles(IServiceProvider serviceProvider) {
+			AppUtilityHelper.Logger.WriteInformation("Creating the Application Roles asynchronously");
 			
 			/*
 				QUESTION: Is this better than registering the options and then calling its action
@@ -100,15 +101,15 @@ namespace PCSC.GreenShelter.Models {
         /// </summary>
         /// <param name="serviceProvider"></param>
         /// <returns></returns>
-        private static async Task CreateAdminUser(IServiceProvider serviceProvider, IGreenShelterApplication application) {
-			application.WriteInformation("Creating the Administrator User asynchronously");
+        private static async Task CreateAdminUser(IServiceProvider serviceProvider) {
+			AppUtilityHelper.Logger.WriteInformation("Creating the Administrator User asynchronously");
 			
 			var userManager = serviceProvider.GetService<ApplicationUserManager>();
 			
-			var user = await userManager.FindByNameAsync(application.DefaultAdminUserName());
+			var user = await userManager.FindByNameAsync(AppUtilityHelper.Configuration.DefaultAdminUserName());
             if (user == null) {
-				user = new ApplicationUser { UserName = application.DefaultAdminUserName(), Email = application.DefaultAdminUserName() };
-				var result = await userManager.CreateAdminAsync(user, application.DefaultAdminPassword());
+				user = new ApplicationUser { UserName = AppUtilityHelper.Configuration.DefaultAdminUserName(), Email = AppUtilityHelper.Configuration.DefaultAdminUserName() };
+				var result = await userManager.CreateAdminAsync(user, AppUtilityHelper.Configuration.DefaultAdminPassword());
 				
 				if(result != IdentityResult.Success) {
 					throw new Exception("Failed to created System Administrator User");

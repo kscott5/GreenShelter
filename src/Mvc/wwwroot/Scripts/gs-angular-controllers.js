@@ -47,6 +47,10 @@ $gs.controllers.add('HomeController', ['$scope', '$location',
 
 $gs.controllers.add('LoginController', ['$scope', '$location', '$log', 'Client', 
 	function($scope, $location, $log, Client) {
+		if($scope.user.isauthenticated) {
+			$location.path('/client/profile');
+		}
+		
 		$scope.loginForm = {
 			data: { token: $gs.token},
 			label: {
@@ -117,10 +121,10 @@ $gs.controllers.add('LoginController', ['$scope', '$location', '$log', 'Client',
 	
 ]); // end LoginController
 
-$gs.controllers.add('ProfileController', ['$scope', '$log', '$location', 'Client',
-	function($scope, $log, $location, Client) {
+$gs.controllers.add('ProfileController', ['$scope', '$log', '$location', 'Application', 'Client',
+	function($scope, $log, $location, Application, Client) {
 		if(!$scope.user.isauthenticated) {
-			$log.debug('TODO: Redirect to login');
+			document.location.hash = '/client/login?returnurl=/#/client/profile';
 		}
 
 		$scope.profile = {
@@ -197,22 +201,22 @@ $gs.controllers.add('ProfileController', ['$scope', '$log', '$location', 'Client
 				$log.debug(error);
 			}
 		);
-		
-		Client.getMe($scope.user.guidid, 
+		$log.debug($scope.user.guidid);
+		Client.getMe({ guidid: $scope.user.guidid }, 
 			function(success) {
 				$log.debug(success);
 				
-				$profile.firstname = success.Data.FirstName;
-				$profile.lastname = success.Data.LastName;
+				$scope.profile.firstname = success.Data.FirstName;
+				$scope.profile.lastname = success.Data.LastName;
 				if(success.Addresses && success.Addresses.length > 0) { 
 					var address = success.Addresses[success.Addresses.length-1];
-					$profile.street1 = address.Street1;
-					$profile.street2 = address.Street2;
-					$profile.city = address.City;
-					$profile.statecode = address.StateCode;
-					$profile.zipcode = address.ZipCode;
-					$profile.phonenumber = address.PhoneNumber;
-					$profile.phonetype = address.PhoneType;
+					$scope.profile.street1 = address.Street1;
+					$scope.profile.street2 = address.Street2;
+					$scope.profile.city = address.City;
+					$scope.profile.statecode = address.StateCode;
+					$scope.profile.zipcode = address.ZipCode;
+					$scope.profile.phonenumber = address.PhoneNumber;
+					$scope.profile.phonetype = address.PhoneType;
 				}
 			},
 			function(error){

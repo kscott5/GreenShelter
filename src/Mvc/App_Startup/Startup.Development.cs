@@ -24,8 +24,7 @@ namespace PCSC.GreenShelter
 		/// </summary>
 		public void ConfigureDevelopment(IApplicationBuilder app,  ILoggerFactory loggerFactory)
         {
-			this.WriteInformation("\tConfigure Development");
-			//loggerFactory.AddConsole();
+			loggerFactory.AddConsole();
 			
             //Display custom error page in production when error occurs
             //During development use the ErrorPage middleware to display error information in the browser

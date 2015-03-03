@@ -30,8 +30,6 @@ namespace PCSC.GreenShelter {
 		/// 
 		/// </summary>
 		public void Configure(IApplicationBuilder app) {
-			this.WriteInformation("\tConfigure");
-			
 			app.UseErrorPage(ErrorPageOptions.ShowAll);
 						
 			this.ConfigureAuthenticiation(app);
@@ -45,7 +43,7 @@ namespace PCSC.GreenShelter {
                     defaults: new { controller = "Spa", action = "StartPage" });
             });
 
-			GreenShelterDbContext.InitializeDatabaseAsync(app.ApplicationServices, this).Wait();
+			GreenShelterDbContext.InitializeDatabaseAsync(app.ApplicationServices).Wait();
         }
     } // end class
 } // end namespace

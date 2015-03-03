@@ -18,8 +18,6 @@ namespace PCSC.GreenShelter.Controllers
 		public string TagName { get { return "SpaController"; } }
 
 		public IActionResult StartPage() {
-			this.WriteInformation("StartPage");
-
 			return View();
 		}
 

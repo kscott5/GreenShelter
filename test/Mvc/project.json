@@ -1,20 +1,17 @@
 {
+  "exclude": "*.bk",
   "dependencies": {
     "Microsoft.Framework.ConfigurationModel": "1.0.0-*",
-    "Microsoft.Framework.ConfigurationModel.Json": "1.0.0-*",
     "Microsoft.Framework.Logging": "1.0.0-*",
-    "Microsoft.Framework.Logging.Console": "1.0.0-*",
-    "xunit.runner.kre": "1.0.0-*"
+    "xunit.runner.kre": "1.0.0-*",
+    "Moq": "4.2.1502.0911"
   },
   "commands": {
-    "xunit-test": "xunit.runner.kre",
     "test": "xunit.runner.kre"
   },
   "frameworks": {
     "aspnet50": {
-      "dependencies": {
-        "Microsoft.Framework.Logging.NLog": "1.0.0-*"
-      }
+      "dependencies": {}
     }
   }
 }

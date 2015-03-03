@@ -33,8 +33,6 @@ namespace PCSC.GreenShelter
 		/// Configure middleware services
 		/// </summary>
 		public void ConfigureServices(IServiceCollection services) {
-			this.WriteInformation("\tConfigure Services");
-			
 			/**********************************************************
 			NOTE: 	The order in which you register the service and the
 					options used by that services is important. 
@@ -63,7 +61,7 @@ namespace PCSC.GreenShelter
 						
 			// Register the required EF objects with the application services
 			services.AddEntityFramework()
-				.AddDbContext<GreenShelterDbContext>(options => { options.UseSqlServer(this.ConnectionString()); })
+				.AddDbContext<GreenShelterDbContext>(options => { options.UseSqlServer(AppUtilityHelper.Configuration.ConnectionString()); })
 				.AddSqlServer();
 
 			// Register the required Identity objects with the application services

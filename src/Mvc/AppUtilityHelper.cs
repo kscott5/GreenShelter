@@ -4,7 +4,7 @@ using Microsoft.Framework.Logging;
 using Microsoft.Framework.Logging.Console;
 
 namespace PCSC.GreenShelter {
-	internal class AppUtilityHelper {
+	public class AppUtilityHelper {
 		
 		public static IConfiguration Configuration {get; private set;} 
 		public static ILogger Logger {get; private set;}
