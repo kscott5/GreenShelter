@@ -8,7 +8,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Green Shelter @ViewBag.Title</title>
+    <Title>Green Shelter @ViewBag.Title</Title>
 
 	<!-- core CSS -->
     <link href="/Content/bootstrap.min.css" rel="stylesheet">
@@ -37,54 +37,54 @@
 		<nav class="navbar navbar-inverse" role="banner">
             <div class="container">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <button type="button" class="navbar-toggle" Data-toggle="collapse" Data-target=".navbar-collapse">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" ng-model="routes" href="#/"><img src="/images/logo.png" alt="logo"></a>
+                    <a class="navbar-brand" ng-model="Routes" href="#/"><img src="/images/logo.png" alt="logo"></a>
                 </div>
 				
                 <div class="collapse navbar-collapse navbar-right">
                     <ul class="nav navbar-nav">
-                        <li id="home" class="active"><a ng-model="routes" href="#/spa">Home</a></li>
+                        <li id="home" class="active"><a ng-model="Routes" href="#/spa">Home</a></li>
 						<li id="about" class="dropdown">
-						  <a ng-model="routes" href="#/about" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">About <i class="fa fa-angle-down"></i></span></a>
+						  <a ng-model="Routes" href="#/about" class="dropdown-toggle" Data-toggle="dropdown" role="button" aria-expanded="false">About <i class="fa fa-angle-down"></i></span></a>
 						  <ul class="dropdown-menu" role="menu">
-							<li><a ng-model="routes" gs-parent="about" href="#/about/mission">Mission &amp; History</a></li>
-							<li><a ng-model="routes" gs-parent="about" href="#/about/board">Board of Directors</a></li>
-							<li><a ng-model="routes" gs-parent="about" href="#/about/employment">Employment</a></li>
-							<li><a ng-model="routes" gs-parent="about" href="#/about/faqs">FAQ's</a></li>
+							<li><a ng-model="Routes" gs-parent="about" href="#/about/mission">Mission &amp; History</a></li>
+							<li><a ng-model="Routes" gs-parent="about" href="#/about/board">Board of Directors</a></li>
+							<li><a ng-model="Routes" gs-parent="about" href="#/about/employment">Employment</a></li>
+							<li><a ng-model="Routes" gs-parent="about" href="#/about/faqs">FAQ's</a></li>
 						  </ul>
 						</li>
 						<li id="services" class="dropdown">
-						  <a ng-model="routes" href="#/services" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Our Services <i class="fa fa-angle-down"></i></a>
+						  <a ng-model="Routes" href="#/services" class="dropdown-toggle" Data-toggle="dropdown" role="button" aria-expanded="false">Our Services <i class="fa fa-angle-down"></i></a>
 						  <ul class="dropdown-menu" role="menu">
-							<li><a ng-model="routes" gs-parent="services" href="#/services/family">Family Services</a></li>
-							<li><a ng-model="routes" gs-parent="services" href="#/services/housing">Housing</a></li>
-							<li><a ng-model="routes" gs-parent="services" href="#/services/emergency/care">Emergency Care</a></li>
+							<li><a ng-model="Routes" gs-parent="services" href="#/services/family">Family Services</a></li>
+							<li><a ng-model="Routes" gs-parent="services" href="#/services/housing">Housing</a></li>
+							<li><a ng-model="Routes" gs-parent="services" href="#/services/emergency/care">Emergency Care</a></li>
 						  </ul>
 						</li>
 
-						<li><a ng-model="routes" href="#/contact">Contact Us</a></li>
-						<li ng-hide="user.isauthenticated">
-							<a ng-model="routes" href="#/client/register">
-								<i class="fa fa-user-plus fa-lg"></i> Register
+						<li><a ng-model="Routes" href="#/contact">Contact Us</a></li>
+						<li ng-hide="User.IsAuthenticated">
+							<a ng-model="Routes" href="#/client/register">
+								<i class="fa fa-User-plus fa-lg"></i> Register
 							</a>
 						</li>
-						<li ng-hide="user.isauthenticated">
-							<a ng-model="routes" href="#/client/login"">
+						<li ng-model="User" ng-hide="User.IsAuthenticated">
+							<a ng-model="Routes" href="#/client/login"">
 								<i class="fa fa-sign-in fa-lg"></i> Login
 							</a>
 						</li>
-						<li ng-show="user.isauthenticated">
-							<a ng-model="routes" href="#/client/profile">
-								<i class="fa fa-user-plus fa-lg"></i> Profile
+						<li  ng-model="User" ng-show="User.IsAuthenticated">
+							<a ng-model="Routes" href="#/client/Profile">
+								<i class="fa fa-User-plus fa-lg"></i> Profile
 							</a>
 						</li>
-						<li ng-show="user.isauthenticated">
-							<a ng-model="routes" href="#/client/logout">
+						<li  ng-model="User" ng-show="User.IsAuthenticated">
+							<a ng-model="Routes" href="#/client/logout">
 								<i class="fa fa-sign-out fa-lg"></i> Logout
 							</a>
 						</li>
@@ -129,14 +129,11 @@
     
 	<!-- Angular core JavaScript -->
 	<script language="javascript" src="/Scripts/angular.min.js"></script>
-	<script lnaguage="javascript" src="/Scripts/angular-resource.min.js"></script>
-	<script lnaguage="javascript" src="/Scripts/angular-route.min.js"></script>
-	<script lnaguage="javascript" src="/Scripts/angular-local-storage.min.js"></script>
+	<script language="javascript" src="/Scripts/angular-resource.min.js"></script>
+	<script language="javascript" src="/Scripts/angular-route.min.js"></script>
+	<script language="javascript" src="/Scripts/angular-local-storage.min.js"></script>
 	
 	<!-- Green Shelter JavaScript -->
-	<script lnaguage="javascript" src="/Scripts/gs-main.js"></script>
-	<script lnaguage="javascript" src="/Scripts/gs-angular-app.js"></script>
-	<script lnaguage="javascript" src="/Scripts/gs-angular-controllers.js"></script>
-	<script lnaguage="javascript" src="/Scripts/gs-angular-services.js"></script>
+	<script language="javascript" src="/Scripts/gs-main.js"></script>
   </body>
 </html>

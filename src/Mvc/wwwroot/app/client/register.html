@@ -1,40 +1,40 @@
 <section id="register" class="container">
-	<h2>{{registration.label.title}}</h2>
+	<h2>{{RegistrationForm.Label.Title}}</h2>
 	<div class="row">
 		<div class="col-md-8">
 			<section id="registerSection">
 				<form class="form-horizontal">
 				  <div class="form-group">
-					<label for="username" class="col-sm-2 control-label">{{registration.label.username}}</label>
+					<Label for="UserName" class="col-sm-2 control-Label">{{RegistrationForm.Label.UserName}}</Label>
 					<div class="col-sm-10">
-					  <input type="email" class="form-control" id="username" name="username" ng-model="registration.username" required placeholder="Email">
+					  <input type="Email" class="form-control" id="UserName" name="UserName" ng-model="RegistrationForm.Data.UserName" required placeholder="Email">
 					</div>
 				  </div>
 				  <div class="form-group">
-					<label for="password" class="col-sm-2 control-label">{{registration.label.password}}</label>
+					<Label for="Password" class="col-sm-2 control-Label">{{RegistrationForm.Label.Password}}</Label>
 					<div class="col-sm-10">
-					  <input type="password" class="form-control" id="password" name="password" ng-model="registration.password" required placeholder="Password">
+					  <input type="Password" class="form-control" id="PasswordHash" name="PasswordHash" ng-model="RegistrationForm.Data.PasswordHash" required placeholder="Password">
 					</div>
 				  </div>
 				  <div class="form-group">
-					<label for="confirmpassword" class="col-sm-2 control-label">{{registration.label.confirmpassword}}</label>
+					<Label for="ConfirmPassword" class="col-sm-2 control-Label">{{RegistrationForm.Label.ConfirmPassword}}</Label>
 					<div class="col-sm-10">
-					  <input type="password" class="form-control" id="confirmpassword" name="confirmpassword" ng-model="registration.ConfirmPassword" required placeholder="Password">
+					  <input type="Password" class="form-control" id="ConfirmPassword" name="ConfirmPassword" ng-model="RegistrationForm.Data.ConfirmPassword" required placeholder="Password">
 					</div>
 				  </div>
 				  <div class="form-group form-inline">
-					<label for="ssno" class="col-sm-2 control-label">{{registration.label.ssno}}</label>
+					<Label for="SSNo" class="col-sm-2 control-Label">{{RegistrationForm.Label.SSNo}}</Label>
 					<div class="col-sm-10">
-					  <input type="text" class="form-control input-width-md text-center" id="ssnoPart1" name="ssnoPart1" ng-model="registration.ssnoPart1" equired placeholder="xxx">
+					  <input type="text" class="form-control input-width-md text-center" id="SSNoPart1" name="SSNoPart1" ng-model="RegistrationForm.SSNoPart1" equired placeholder="xxx">
 					  <span>-</span>
-					  <input type="text" class="form-control input-width-sm text-center" id="ssnoPart1" name="ssnoPart1" ng-model="registration.ssnoPart1" required placeholder="xx">
+					  <input type="text" class="form-control input-width-sm text-center" id="SSNoPart1" name="SSNoPart1" ng-model="RegistrationForm.SSNoPart1" required placeholder="xx">
 					  <span>-</span>
-					  <input type="text" class="form-control input-width-md text-center" id="ssnoPart3" name="ssnoPart3" ng-model="registration.ssnoPart3" required placeholder="xxx">
+					  <input type="text" class="form-control input-width-md text-center" id="SSNoPart3" name="SSNoPart3" ng-model="RegistrationForm.SSNoPart3" required placeholder="xxx">
 					</div>
 				  </div>
 				  <div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-					  <button type="submit" class="btn btn-default" ng-click="registration.clicked(registration)">{{registration.label.submit}}</button>
+					  <button type="Submit" class="btn btn-default" ng-click="RegistrationForm.Clicked()">{{RegistrationForm.Label.Submit}}</button>
 					</div>
 				  </div>
 				</form>

@@ -36,12 +36,12 @@ namespace PCSC.GreenShelter.Api.v1 {
 		[AllowAnonymous]
 		//[ValidateAntiForgeryToken]
         [Route("ExternalLogin", Name="ExternalLogin")]
-        public IActionResult ExternalLogin(string authenticationType, string returnUrl = null) {		
+        public IActionResult ExternalLogin(string AuthenticationType, string returnUrl = null) {		
             // Request a redirect to the external login provider
             var redirectUrl = Url.Action("externallogincallback", "client", new { ReturnUri = returnUrl });
 
-            var properties = SignInManager.ConfigureExternalAuthenticationProperties(authenticationType, redirectUrl);
-            return new ChallengeResult(authenticationType, properties);
+            var properties = SignInManager.ConfigureExternalAuthenticationProperties(AuthenticationType, redirectUrl);
+            return new ChallengeResult(AuthenticationType, properties);
         }
 
         [HttpGet]
@@ -54,7 +54,7 @@ namespace PCSC.GreenShelter.Api.v1 {
                 return RedirectToAction("StartPage", "SPA");
             }
 
-            // Sign in the user with this external login provider if the user already has a login
+            // Sign in the User with this external login provider if the User already has a login
             var result = await SignInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey,
                 isPersistent: false);
             if (result.Succeeded)
@@ -71,12 +71,12 @@ namespace PCSC.GreenShelter.Api.v1 {
             }
             else
             {
-                // If the user does not have an account, then prompt the user to create an account
+                // If the User does not have an account, then prompt the User to create an account
                 ViewBag.ReturnUrl = returnUrl;
                 ViewBag.LoginProvider = info.LoginProvider;
-                // REVIEW: handle case where email not in claims?
-                var email = info.ExternalIdentity.FindFirst(ClaimTypes.Email);
-                return View("ExternalLoginConfirmation", email );
+                // REVIEW: handle case where Email not in claims?
+                var Email = info.ExternalIdentity.FindFirst(ClaimTypes.Email);
+                return View("ExternalLoginConfirmation", Email );
             }
         }
 
@@ -84,29 +84,29 @@ namespace PCSC.GreenShelter.Api.v1 {
         [AllowAnonymous]
         //[ValidateAntiForgeryToken]
 		[Route("ExternalLoginConfirmation", Name="ExternalLoginConfirmation")]
-        public async Task<IActionResult> ExternalLoginConfirmation(string email, string returnUrl = null)
+        public async Task<IActionResult> ExternalLoginConfirmation(string Email, string returnUrl = null)
         {
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("profile", "api/v1/client");
+                return RedirectToAction("Profile", "api/v1/client");
             }
 
             if (ModelState.IsValid)
             {
-                // Get the information about the user from the external login provider
+                // Get the information about the User from the external login provider
                 var info = await SignInManager.GetExternalLoginInfoAsync();
                 if (info == null)
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = email, Email = email };
-                var result = await UserManager.CreateAsync(user);
+                var User = new ApplicationUser { UserName = Email, Email = Email };
+                var result = await UserManager.CreateAsync(User);
                 if (result.Succeeded)
                 {
-                    result = await UserManager.AddLoginAsync(user, info);
+                    result = await UserManager.AddLoginAsync(User, info);
                     if (result.Succeeded)
                     {
-                        await SignInManager.SignInAsync(user, isPersistent: false);
+                        await SignInManager.SignInAsync(User, isPersistent: false);
                         return RedirectToLocal(returnUrl);
                     }
                 }
@@ -152,27 +152,27 @@ namespace PCSC.GreenShelter.Api.v1 {
 		//[AllowAnonymous]
 		//[ValidateAntiForgeryToken]
 		[Route("Login", Name="Login")]
-		public async Task<JsonResult> Login([FromBody] Login model, string returnUrl = null) {
+		public async Task<JsonResult> Login([FromBody] ApplicationUser model, string returnUrl = null) {
 			var response = new ApiResponse{Code = 400};
 			this.Context.Response.StatusCode = response.Code;
 			
 			try {
-				var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
+				var result = await SignInManager.PasswordSignInAsync(model.UserName, model.PasswordHash, isPersistent: false, shouldLockout: false);
 				if(result != SignInResult.Success) {
 					response.Data = result;
-					response.Description = "Invalid username and/or password";
+					response.Description = "Invalid UserName and/or Password";
 					return new JsonResult(response);
 				}
 				
 				var user = await UserManager.FindByNameAsync(model.UserName);
-				response.Data =  new { IsAuthenticated = true, GuidId = user.GuidId, returnUrl = returnUrl };				
+				response.Data =  user.CreateData(true, returnUrl);
 				response.Description = "Login was successful";
 				
 				this.Context.Response.StatusCode = response.Code = 200;
 				
 				// SignInManager.SignOut();
 				
-				// var result = await SignInManager.SignInAsync(model.UserName, model.Password, model.RememberMe);
+				// var result = await SignInManager.SignInAsync(model.UserName, model.Password, false);
 				// if(result != IdentityResult.Success) {
 					// response.Data = result.Errors;
 					// response.Description = "Login was unsuccessful";
@@ -185,12 +185,12 @@ namespace PCSC.GreenShelter.Api.v1 {
 					 
 				// var isAuthenticated = this.Context.User.Identity.IsAuthenticated;
 				// if(!isAuthenticated) {
-					// response.Description = string.Format("Could not authenticate the username: {0}", model.UserName);
+					// response.Description = string.Format("Could not authenticate the UserName: {0}", model.UserName);
 					// return new JsonResult(response);
 				// }
 				
 				// var guidIdClaim = this.Context.User.FindFirst(ApplicationClaimsType.GuidId);
-				// var userNameClaim = this.Context.User.FindFirst(ApplicationClaimsType.UserName);
+				// var UserNameClaim = this.Context.User.FindFirst(ApplicationClaimsType.UserName);
 				
 				// response.Data =  new { IsAuthenticated = isAuthenticated, GuidId = guidIdClaim.Value };				
 				// response.Description = "Login was successful";
@@ -208,14 +208,14 @@ namespace PCSC.GreenShelter.Api.v1 {
 		[HttpPost]
 		//[AllowAnonymous]
 		[Route("Register", Name="Register")]
-		public async Task<JsonResult> Register([FromBody] Registration model) {
+		public async Task<JsonResult> Register([FromBody] ApplicationUser model) {
 			var response = new ApiResponse ();
 			
 			try {
 				SignInManager.SignOut();
 				
-				var user = new ApplicationUser { UserName = model.UserName, Email = model.UserName, SSNo = model.SSNo };
-                var result = await SignInManager.RegisterClientAsync(user, model.Password);
+				var User = new ApplicationUser { UserName = model.UserName, Email = model.UserName, SSNo = model.SSNo };
+                var result = await SignInManager.RegisterClientAsync(User, model.PasswordHash);
 				
 				response.Code = 200;
                 bool isAuthenticated = this.Context.User.Identity.IsAuthenticated;
@@ -225,19 +225,35 @@ namespace PCSC.GreenShelter.Api.v1 {
 					response.Data =  new { IsAuthenticated = isAuthenticated, GuidId = guidIdClaim.Value };
 					response.Description = string.Format("{0} registered successfully", model.UserName);
 				} else {
-					response.Description = string.Format("{0} registration failed", model.UserName);
+					response.Description = string.Format("{0} Registration failed", model.UserName);
 					response.Data= result.Errors;
 				}
 			} catch(Exception ex) {
 				response.Code = 400;
-				response.Description = string.Format("Failed to register new user {0}", model.UserName);
+				response.Description = string.Format("Failed to register new User {0}", model.UserName);
 				AppUtilityHelper.Logger.WriteError(response.Description, ex);
 			}
 			return new JsonResult(response);
 		}
 		
-		[Route("Me/{guidid?}", Name="Me")]
-		public async Task<JsonResult> Me(string guidId) {
+		[Route("Me/{guidId?}", Name="Me")]
+		public async Task<JsonResult> Me(string guidId, [FromBody] ApplicationUser model = null) {
+			var method = this.Context.Request.Method.Trim().ToUpper();
+			switch(method) {
+				case "GET": return await GetMe(guidId);
+				case "POST": return await PostMe(guidId, model);
+				default:
+					var response = new ApiResponse {
+						Code = 401,
+						Description = string.Format("Http verb {0} not supported. Try using GET or POST", method)
+					};
+					
+					this.Context.Response.StatusCode = response.Code;
+					return new JsonResult(response);
+			}
+		} // end Me
+		
+		private async Task<JsonResult> GetMe(string guidId) {
 			var response = new ApiResponse { Code = 400};
 			this.Context.Response.StatusCode = response.Code;
 			
@@ -246,12 +262,11 @@ namespace PCSC.GreenShelter.Api.v1 {
 					var user = await UserManager.FindByGuidIdAsync(guidId);
 					
 					if(user != null) {
-						
-						response.Data = new { FirstName = user.FirstName, LastName = user.LastName, PhoneNumber = user.PhoneNumber}  ;
-						response.Description = "Retrieved my profile successful";			
+						response.Data = user.CreateData();
+						response.Description = "Retrieved my Profile successful";			
 						this.Context.Response.StatusCode = response.Code = 200;
 					} else {
-						response.Description = "Failed to retrieve your profile information";
+						response.Description = "Failed to retrieve your Profile information";
 					}
 				}
 			} catch(Exception ex) {
@@ -260,6 +275,50 @@ namespace PCSC.GreenShelter.Api.v1 {
 			}
 		
 			return  new JsonResult(response);
-		}
+		} // end GetMe
+		
+		private async Task<JsonResult> PostMe(string guidId, ApplicationUser model) {
+			var response = new ApiResponse { Code = 400};
+			this.Context.Response.StatusCode = response.Code;
+			
+			try {
+				if(!string.IsNullOrEmpty(guidId) && guidId.Equals(model.GuidId)) {
+					var user = await UserManager.FindByGuidIdAsync(guidId);
+					
+					user.FirstName = model.FirstName;
+					user.LastName = model.LastName;;
+					user.PhoneNumber = model.PhoneNumber;
+					
+					// TODO: Use a Binding Filter for PhoneNumberType
+					PhoneNumberType phoneNumberType;
+					if(!string.IsNullOrEmpty(model.PhoneNumber) && Enum.TryParse<PhoneNumberType>(model.PhoneNumberType.ToString(), true, out phoneNumberType)) {
+						user.PhoneNumberType = phoneNumberType;
+					}
+					
+					user.Addresses = new List<Address>();
+					if(model.Addresses != null) {
+						foreach(var address in model.Addresses) {
+							// TODO: Check State value to Data integrity
+							// TODO: Use a Binding Filter for AddressType
+							user.Addresses.Add(address);							
+						}
+					}
+					
+					//TODO: Update the Profile via UserManager
+					
+					response.Data = user.CreateData();
+					response.Description = "TODO: Update the User Profile via UserManager";			
+					this.Context.Response.StatusCode = response.Code = 200;
+				} else {
+					response.Description = "Failed to retrieve your Profile information";
+				}
+			} catch(Exception ex) {
+				response.Description = "Failed to retrieve me";					
+				AppUtilityHelper.Logger.WriteError(response.Description, ex);
+			}
+		
+			return  new JsonResult(response);
+		} // end PostMe
+
 	} // end class
 } // end namespace
