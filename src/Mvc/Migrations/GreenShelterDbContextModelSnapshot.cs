@@ -89,6 +89,7 @@ namespace mvc.Migrations
                         b.Property<bool>("Active");
                         b.Property<string>("ConcurrencyStamp")
                             .ConcurrencyToken();
+                        b.Property<string>("ConfirmedPassword");
                         b.Property<DateTime>("CreationDate");
                         b.Property<string>("Email");
                         b.Property<bool>("EmailConfirmed");
