@@ -1,7 +1,42 @@
 namespace PCSC.GreenShelter.Models {
 	/// <summary>
-	///  Authentication Credentials for External Authentication Providers
+	///  Authentication Credentials for External Authentication Providers.
 	/// </summary>
+	/// <remarks>
+	/// This class is create by reading the AuthenticationCredentials section 
+	//  contained in JSON configuration file for your application or config.json.
+	/// Below is an example of the AuthenticationCredentials section.
+	///
+	///	"AuthenticationCredentials": {
+	///		"Facebook": { 
+	///			"Enabled": "false",
+	///			"AppId": "",
+	///			"AppSecret": ""
+	///		},
+	///		"Google": { /* https://console.developers.google.com */
+	///			"Enabled": "true",
+	///			"ClientId": "204805279074-lbqt4u5iq7uqjbthdkqb1b8sgqsl3ugc.apps.googleusercontent.com",
+	///			"ClientSecret": "pDfENoR3XWlsw0VFOukYdmwG",
+	///			"CallbackPath": "/api/v1/client/externalcallback",
+	///			"Scope": "profile,email"
+	///		},
+	///		"MicrosoftAccount": { /* https://account.live.com/developers/applications/index */
+	///			"Enabled": "false",
+	///			"ClientId": "",
+	///			"ClientSecret": ""
+	///		},
+	///		"Twitter": { /* https://dev.twitter.com/rest/tools/console, https://apps.twitter.com/ */
+	///			"Enabled": "false",
+	///			"ConsumerKey": "",
+	///			"ConsumerSecret": ""
+	///		}		
+	///	}
+	///
+	/// Use ConfigureGoogleAuthentication and UseGoogleAuthentication extension methods located in
+	///	the <see cref="GreenShelterGoogleProviderExtensions"/> class. These methods can be accessed
+	/// during the application's start-up ConfigureService and Configure methods located in 
+	//	<see cref="Startup"/>.
+	/// </remarks>
 	public class AuthenticationCredentialOptions {	
 		public static readonly string Key = "AuthenticationCredentials";
 		
