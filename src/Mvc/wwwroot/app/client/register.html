@@ -4,10 +4,22 @@
 		<div class="col-md-8">
 			<section id="registerSection">
 				<form class="form-horizontal">
+					 <div class="form-group">
+						<Label for="FirstName" class="col-sm-2 control-Label">{{RegistrationForm.Label.FirstName}}</Label>
+						<div class="col-sm-10">
+						  <input type="text" class="form-control" id="FirstName" name="FirstName" ng-model="RegistrationForm.Data.FirstName" placeholder="{{RegistrationForm.Label.FirstName}}">
+						</div>
+					 </div>
+					 <div class="form-group">
+						<Label for="LastName" class="col-sm-2 control-Label">{{RegistrationForm.Label.LastName}}</Label>
+						<div class="col-sm-10">
+						  <input type="text" class="form-control" id="LastName" name="LastName" ng-model="RegistrationForm.Data.LastName" required placeholder="{{RegistrationForm.Label.LastName}}">
+						</div>
+					 </div>
 				  <div class="form-group">
 					<Label for="UserName" class="col-sm-2 control-Label">{{RegistrationForm.Label.UserName}}</Label>
 					<div class="col-sm-10">
-					  <input type="Email" class="form-control" id="UserName" name="UserName" ng-model="RegistrationForm.Data.UserName" required placeholder="Email">
+					  <input type="Email" class="form-control" id="UserName" name="UserName" ng-model="RegistrationForm.Data.UserName" required placeholder="youremail@address.com">
 					</div>
 				  </div>
 				  <div class="form-group">
@@ -25,11 +37,11 @@
 				  <div class="form-group form-inline">
 					<Label for="SSNo" class="col-sm-2 control-Label">{{RegistrationForm.Label.SSNo}}</Label>
 					<div class="col-sm-10">
-					  <input type="text" class="form-control input-width-md text-center" id="SSNoPart1" name="SSNoPart1" ng-model="RegistrationForm.SSNoPart1" equired placeholder="xxx">
+					  <input type="text" class="form-control input-width-md text-center" id="SSNoPart1" name="SSNoPart1" ng-model="RegistrationForm.SSNoPart1" minlength="3" maxlength="3" pattern="\d{3}" required placeholder="xxx">
 					  <span>-</span>
-					  <input type="text" class="form-control input-width-sm text-center" id="SSNoPart1" name="SSNoPart1" ng-model="RegistrationForm.SSNoPart1" required placeholder="xx">
+					  <input type="text" class="form-control input-width-sm text-center" id="SSNoPart2" name="SSNoPart2" ng-model="RegistrationForm.SSNoPart2" minlength="2" maxlength="2" pattern="\d{2}" required placeholder="xx">
 					  <span>-</span>
-					  <input type="text" class="form-control input-width-md text-center" id="SSNoPart3" name="SSNoPart3" ng-model="RegistrationForm.SSNoPart3" required placeholder="xxx">
+					  <input type="text" class="form-control input-width-md text-center" id="SSNoPart3" name="SSNoPart3" ng-model="RegistrationForm.SSNoPart3" minlength="4" maxlength="4" pattern="\d{4}" required placeholder="xxx">
 					</div>
 				  </div>
 				  <div class="form-group">

@@ -180,7 +180,15 @@ $(document).ready(
 						UserName: '',
 						FirstName: '',
 						LastName: '',
-						IsAuthenticated: false
+						IsAuthenticated: false,
+						update: function(user) {
+							$log.debug('Updating User Information');
+							$scope.User.GuidId = user.GuidId;
+							$scope.User.UserName = user.UserName;
+							$scope.User.FirstName = user.FirstName;
+							$scope.User.LastName = user.LastName;
+							$scope.User.IsAuthenticated = user.IsAuthenticated;
+						}
 					};
 
 					$scope.Routes = self.Routes.Collection;
@@ -216,11 +224,8 @@ $(document).ready(
 								function(success){
 									$log.debug(success);
 									
-									if(($scope.User.IsAuthenticated=success.Data.IsAuthenticated)) {
-										$scope.User.GuidId = success.Data.GuidId;
-										$scope.User.UserName = success.Data.UserName;
-										$scope.User.FirstName = success.Data.FirstName;
-										$scope.User.LastName = success.Data.LastName;
+									if(success.Data.IsAuthenticated) {
+										$scope.$parent.User.update(success.Data);
 										
 										$location.path('/client/Profile');
 									}
@@ -285,6 +290,7 @@ $(document).ready(
 
 			this.controllers.add('ProfileController', ['$scope', '$log', '$location', 'Application', 'Client',
 				function($scope, $log, $location, Application, Client) {
+					$log.debug('ProfileController');
 					
 					if(!$scope.User.IsAuthenticated) {
 						document.location.hash = '/client/login?returnurl=/#/client/Profile';
@@ -363,95 +369,123 @@ $(document).ready(
 				} // end function
 			]); // end ProfileController
 
-			this.controllers.add('LogoutController', ['$scope', '$location',
-				function($scope, $location) {
+			this.controllers.add('LogoutController', ['$scope', '$log', '$location', 'Client',
+				function($scope, $log, $location, Client) {
 					
-					// TODO: Clear session
+					Client.logout(
+						function(success){
+							$log.debug(success.Description);
+							
+							$scope.$parent.User.update(success.Data);
+							$location.path('/');
+						},
+						function(error){
+							$log.debug(error.Description);
+						}
+					);
+					
 				}
 			]); // end LogoutController
 
-			this.controllers.add('RegisterController', ['$scope', '$log', 'Client',
-				function($scope, $log, Client) {
-					$scope.RegistrationForm = { 
-						Label: {
+			this.controllers.add('RegisterController', ['$scope', '$log', '$location', 'Client', function($scope, $log, $location, Client) {
+				function RegistrationForm() {
+					var self = this;
+					
+					self.Label = {
 							Title: 'New Registration',
+							FirstName: 'First Name',
+							LastName: 'Last Name',
 							UserName: 'Email',
 							Password: 'Password',
 							ConfirmPassword: 'Confirm Password',
 							SSNo: 'SS #',
 							Submit: 'Register'
-						},
-						Data: {
+					};
+					
+					self.Data = {
+							FirstName: '',
+							LastName: '',
 							UserName: '',
 							PasswordHash: '',
 							ConfirmPassword: '',
-							SSNo: $scope.RegistrationForm.SSNoPart1+$scope.RegistrationForm.SSNoPart2+$scope.RegistrationForm.SSNoPart3
-						},
-						SSNoPart1: '',
-						SSNoPart2: '',
-						SSNoPart3: '',
-						Clicked: function() {
-							var registerForm = $("#registerSection form");
-							registerForm.validate({
-								rules : {
-									UserName : {
-										required: true
-									},
-									PasswordHash: {
-										required: true
+							SSNo: '',
+							updateSSNo: function() {self.Data.SSNo = self.SSNoPart1+self.SSNoPart2+self.SSNoPart3; }
+					};
+					
+					self.SSNoPart1 = '';
+					self.SSNoPart2 = '';
+					self.SSNoPart3 = '';
+					
+					self.Clicked = function() {
+						var registerForm = $("#registerSection form");
+						registerForm.validate({
+							rules : {
+								UserName : {
+									required: true
+								},
+								PasswordHash: {
+									required: true
+								},
+								ConfirmPassword: {
+									equalTo: "#PasswordHash"
+								},
+								SSNoPart1: {
+									required: true,
+									digits: true,
+									maxlength: 3,
+									minlength: 3
+								},
+								SSNoPart2: {
+									required: true,
+									digits: true,
+									maxlength: 2,
+									minlength: 2
+								},
+								SSNoPart3: {
+									required: true,
+									digits: true,
+									maxlength: 4,
+									minlength: 4
+								},
+								Message: {
+									UserName: {
+										required: "Required input"
 									},
 									ConfirmPassword: {
-										equalTo: "#PasswordHash"
+										equalTo: $.validator.format("The value you enter doesn't match {0}")
 									},
-									SSNoPart1: {
-										required: true,
-										digits: true,
-										maxlength: 3,
-										minlength: 3
-									},
-									SSNoPart2: {
-										required: true,
-										digits: true,
-										maxlength: 2,
-										minlength: 2
-									},
-									SSNoPart3: {
-										required: true,
-										digits: true,
-										maxlength: 4,
-										minlength: 4
-									},
-									Message: {
-										UserName: {
-											required: "Required input"
+									digits: "0..9 are the only valid values",
+									maxlength: $.validator.format("Maximum length is {0}"),
+									minlength: $.validator.format("Minimum length is {0}"),
+								}
+							}, // end rules
+							submitHandler: function() {
+								if(registerForm.valid()) {
+									$log.debug('Preparing register new User');
+							
+									self.Data.updateSSNo();
+									
+									Client.register(self.Data,
+										function(success){
+											$log.debug(success.Description);
+											$scope.$parent.User.update(success.Data);
+											
+											$location.path("/client/profile");
 										},
-										ConfirmPassword: {
-											equalTo: $.validator.format("The value you enter doesn't match {0}")
-										},
-										digits: "0..9 are the only valid values",
-										maxlength: $.validator.format("Maximum length is {0}"),
-										minlength: $.validator.format("Minimum length is {0}"),
-									}
-								}, // end rules
-								submitHandler: function() {
-									if(registerForm.valid()) {
-										$log.debug('Preparing register new User');
-								
-										Client.register(RegistrationForm.Data,
-											function(success){
-												$log.debug(success);
-											},
-											function(error) {
-												$log.debug(error);
-											}
-										);	
-									} // end if form valid
-								} // end submitHandler
-							}); // end validate
-						} // end Clicked
-					}; // end $scope.Registration
-				} // end function
-			]); // end RegisterController
+										function(error) {
+											$log.debug(error);
+										}
+									);	
+								} // end if form valid
+							} // end submitHandler
+						}); // end validate
+					} // end Clicked
+					
+					return self;
+				} // end RegistrationForm
+
+				$scope.RegistrationForm = new RegistrationForm();
+			}]); // end RegisterController
 				
 			this.controllers.add('AboutController', ['$scope', '$routeParams',
 				function($scope, $routeParams) {
