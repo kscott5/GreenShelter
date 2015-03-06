@@ -169,33 +169,6 @@ namespace PCSC.GreenShelter.Api.v1 {
 				response.Description = "Login was successful";
 				
 				this.Context.Response.StatusCode = response.Code = 200;
-				
-				// SignInManager.SignOut();
-				
-				// var result = await SignInManager.SignInAsync(model.UserName, model.Password, false);
-				// if(result != IdentityResult.Success) {
-					// response.Data = result.Errors;
-					// response.Description = "Login was unsuccessful";
-					// return new JsonResult(response);
-				// }
-				
-				// AppUtilityHelper.Logger.WriteInformation("AuthenticationType: {0}, IsAuthenticated: {1}", 
-					// ClaimsPrincipal.Current.Identity.AuthenticationType,
-					// ClaimsPrincipal.Current.Identity.IsAuthenticated);
-					 
-				// var isAuthenticated = this.Context.User.Identity.IsAuthenticated;
-				// if(!isAuthenticated) {
-					// response.Description = string.Format("Could not authenticate the UserName: {0}", model.UserName);
-					// return new JsonResult(response);
-				// }
-				
-				// var guidIdClaim = this.Context.User.FindFirst(ApplicationClaimsType.GuidId);
-				// var UserNameClaim = this.Context.User.FindFirst(ApplicationClaimsType.UserName);
-				
-				// response.Data =  new { IsAuthenticated = isAuthenticated, GuidId = guidIdClaim.Value };				
-				// response.Description = "Login was successful";
-				
-				// this.Context.Response.StatusCode = response.Code = 200;
 			} catch(Exception ex) {
 				response.Description = "Exception: Login was unsuccessful";
 				
@@ -209,27 +182,26 @@ namespace PCSC.GreenShelter.Api.v1 {
 		//[AllowAnonymous]
 		[Route("Register", Name="Register")]
 		public async Task<JsonResult> Register([FromBody] ApplicationUser model) {
-			var response = new ApiResponse ();
+			var response = new ApiResponse { Code = 400	};
+			this.Context.Response.StatusCode = response.Code;
 			
 			try {
 				SignInManager.SignOut();
 				
-				var User = new ApplicationUser { UserName = model.UserName, Email = model.UserName, SSNo = model.SSNo };
-                var result = await SignInManager.RegisterClientAsync(User, model.PasswordHash);
-				
-				response.Code = 200;
-                bool isAuthenticated = this.Context.User.Identity.IsAuthenticated;
-				if(result == IdentityResult.Success && isAuthenticated) {
+				var result = await SignInManager.RegisterClientAsync(model, model.PasswordHash);
+				if(result == IdentityResult.Success) {
 					var guidIdClaim = this.Context.User.FindFirst(ApplicationClaimsType.GuidId);
+					model.GuidId = guidIdClaim.Value;
 					
-					response.Data =  new { IsAuthenticated = isAuthenticated, GuidId = guidIdClaim.Value };
+					response.Code = 200;
+					response.Data =  model.CreateData(true);
 					response.Description = string.Format("{0} registered successfully", model.UserName);
+					this.Context.Response.StatusCode = response.Code;
 				} else {
 					response.Description = string.Format("{0} Registration failed", model.UserName);
 					response.Data= result.Errors;
 				}
 			} catch(Exception ex) {
-				response.Code = 400;
 				response.Description = string.Format("Failed to register new User {0}", model.UserName);
 				AppUtilityHelper.Logger.WriteError(response.Description, ex);
 			}
@@ -262,7 +234,7 @@ namespace PCSC.GreenShelter.Api.v1 {
 					var user = await UserManager.FindByGuidIdAsync(guidId);
 					
 					if(user != null) {
-						response.Data = user.CreateData();
+						response.Data = user.CreateData(true);
 						response.Description = "Retrieved my Profile successful";			
 						this.Context.Response.StatusCode = response.Code = 200;
 					} else {
