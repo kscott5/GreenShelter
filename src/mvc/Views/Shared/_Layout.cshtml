@@ -1,0 +1,182 @@
+<html lang="en" ng-app="gsApp">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <Title>Green Shelter @ViewBag.Title</Title>
+    
+        <environment names="Development">
+            <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+            <link rel="stylesheet" href="~/lib/bootstrap-touch-carousel/dist/css/bootstrap-touch-carousel.css" />
+            <link rel="stylesheet" href="~/css/site.css" />
+        </environment>
+        <environment names="Staging,Production">
+            <link rel="stylesheet" href="//ajax.aspnetcdn.com/ajax/bootstrap/3.0.0/css/bootstrap.min.css"
+                  asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+                  asp-fallback-test-class="hidden" asp-fallback-test-property="visibility" asp-fallback-test-value="hidden" />
+            <link rel="stylesheet" href="//ajax.aspnetcdn.com/ajax/bootstrap-touch-carousel/0.8.0/css/bootstrap-touch-carousel.css"
+                  asp-fallback-href="~/lib/bootstrap-touch-carousel/css/bootstrap-touch-carousel.css"
+                  asp-fallback-test-class="carousel-caption" asp-fallback-test-property="display" asp-fallback-test-value="none" />
+            <link rel="stylesheet" href="~/css/site.css" asp-file-version="true" />
+        </environment>
+        
+        <link rel="shortcut icon" href="/images/ico/favicon.ico"/>
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/ico/apple-touch-icon-144-precomposed.png"/>
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/ico/apple-touch-icon-114-precomposed.png"/>
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/ico/apple-touch-icon-72-precomposed.png"/>
+        <link rel="apple-touch-icon-precomposed" href="/images/ico/apple-touch-icon-57-precomposed.png"/>
+        
+    </head>
+    <body ng-controller="AppController">
+	   @Html.AntiForgeryToken()
+
+        <header id="header" name="header">
+            <nav class="navbar navbar-inverse" role="banner">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" Data-toggle="collapse" Data-target=".navbar-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" ng-model="Routes" href="#/"><img src="/images/logo.png" alt="logo"></a>
+                    </div>
+                    
+                    <div class="collapse navbar-collapse navbar-right">
+                        <ul class="nav navbar-nav">
+                            <li id="home" class="active"><a ng-model="Routes" href="#/spa">Home</a></li>
+                            <li id="about" class="dropdown">
+                            <a ng-model="Routes" href="#/about" class="dropdown-toggle" Data-toggle="dropdown" role="button" aria-expanded="false">About <i class="fa fa-angle-down"></i></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a ng-model="Routes" gs-parent="about" href="#/about/mission">Mission &amp; History</a></li>
+                                <li><a ng-model="Routes" gs-parent="about" href="#/about/board">Board of Directors</a></li>
+                                <li><a ng-model="Routes" gs-parent="about" href="#/about/employment">Employment</a></li>
+                                <li><a ng-model="Routes" gs-parent="about" href="#/about/faqs">FAQ's</a></li>
+                            </ul>
+                            </li>
+                            <li id="services" class="dropdown">
+                            <a ng-model="Routes" href="#/services" class="dropdown-toggle" Data-toggle="dropdown" role="button" aria-expanded="false">Our Services <i class="fa fa-angle-down"></i></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a ng-model="Routes" gs-parent="services" href="#/services/family">Family Services</a></li>
+                                <li><a ng-model="Routes" gs-parent="services" href="#/services/housing">Housing</a></li>
+                                <li><a ng-model="Routes" gs-parent="services" href="#/services/emergency/care">Emergency Care</a></li>
+                            </ul>
+                            </li>
+    
+                            <li><a ng-model="Routes" href="#/contact">Contact Us</a></li>
+                            <li ng-hide="User.IsAuthenticated">
+                                <a ng-model="Routes" href="#/client/register">
+                                    <i class="fa fa-User-plus fa-lg"></i> Register
+                                </a>
+                            </li>
+                            <li ng-model="User" ng-hide="User.IsAuthenticated">
+                                <a ng-model="Routes" href="#/client/login"">
+                                    <i class="fa fa-sign-in fa-lg"></i> Login
+                                </a>
+                            </li>
+                            <li  ng-model="User" ng-show="User.IsAuthenticated">
+                                <a ng-model="Routes" href="#/client/Profile">
+                                    <i class="fa fa-User-plus fa-lg"></i> Profile
+                                </a>
+                            </li>
+                            <li  ng-model="User" ng-show="User.IsAuthenticated">
+                                <a ng-model="Routes" href="#/client/logout">
+                                    <i class="fa fa-sign-out fa-lg"></i> Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        
+        <!-- Main Container--> 
+        <main id="main" name="main">
+        @RenderBody()      
+        </main> 
+                 
+        <footer id="footer" class="midnight-blue navbar-fixed-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <p>&copy; @DateTime.Now.Year Green Shelter. All Rights Reserved.</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <ul class="pull-right">
+                            <li><a href="#/">Home</a></li>
+                            <li><a href="#/about">About Us</a></li>
+                            <li><a href="#/faqs">Faq</a></li>
+                            <li><a href="#/contact">Contact Us</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>       
+    
+        <environment names="Development">
+            <script src="~/lib/jquery/dist/jquery.js"></script>
+            <script src="~/lib/jquery-validation/jquery-validate.js"></script>
+            <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+            <script src="~/lib/hammer.js/hammer.js"></script>
+            <script src="~/lib/bootstrap-touch-carousel/dist/js/bootstrap-touch-carousel.js"></script>
+            <script src="~/lib/angular/angular.js"></script>
+            <script src="~/lib/angular-route/angular-route.js"></script>
+            <script src="~/lib/angular-resource/angular-resource.js"></script>
+            <script src="~/lib/angular-local-storage/dist/angular-local-storage.js"></script>
+            <script src="~/js/site.js"></script>
+        </environment>
+        <environment names="Staging,Production">
+            <script src="//ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"
+                    asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                    asp-fallback-test="window.jQuery">
+            </script>
+            
+            <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/jquery.validate.min.js"
+                    asp-fallback-src="~/lib/jquery-validation/jquery-validate.js"
+                    asp-fallack-test="">
+            </script>
+            
+            <script src="//ajax.aspnetcdn.com/ajax/bootstrap/3.0.0/bootstrap.min.js"
+                    asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                    asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+            </script>
+            <script src="//ajax.aspnetcdn.com/ajax/hammer.js/2.0.4/hammer.min.js"
+                    asp-fallback-src="~/lib/hammer.js/hammer.js"
+                    asp-fallback-test="window.Hammer">
+            </script>
+            <script src="//ajax.aspnetcdn.com/ajax/bootstrap-touch-carousel/0.8.0/js/bootstrap-touch-carousel.js"
+                    asp-fallback-src="~/lib/bootstrap-touch-carousel/dist/js/bootstrap-touch-carousel.js"
+                    asp-fallback-test="window.Hammer && window.Hammer.Instance">
+            </script>
+            
+            <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular.min.js"
+                    asp-fallback-src="~/lib/angular/angular.min.js"
+                    asp-fallback-test="window.angular">
+            </script>
+            
+            <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular-resource.min.js"
+                    asp-fallback-src="~/lib/angular-resource/angular-resource.min.js"
+                    asp-fallback-test="window.angular.module('ngResource')">
+            </script>
+            
+            <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular-route.min.js"
+                    asp-fallback-src="~/lib/angular-route/angular-route.min.js"
+                    asp-fallback-test="window.angular.module('ngRoute')">
+            </script>
+            
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-local-storage/0.2.2/angular-local-storage.min.js"
+                    asp-fallback-src="~/lib/angular-local-storage/dist/angular-local-storage.min.js"
+                    asp-fallback-test="window.$gs && window.$gs.services && window.$gs.controllers">
+            </script>
+            
+            <script src="~/js/site.js" asp-file-version="true"></script>
+        </environment>
+
+        @RenderSection("scripts", required: false)
+    </body>
+</html>

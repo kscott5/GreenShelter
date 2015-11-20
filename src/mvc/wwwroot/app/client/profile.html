@@ -1,0 +1,100 @@
+<section class="container">
+	<h2>{{ProfileForm.Label.Title}}</h2>
+	<div class="row">
+		<section id="ProfileSection">
+			<div class="col-md-10">
+				<section id="generalSection">
+					<h4>{{ProfileForm.Label.GeneralSection}}</h4>
+					<form class="form-horizontal">
+					  <div class="form-group">
+						<Label for="FirstName" class="col-sm-2 control-Label">{{ProfileForm.Label.FirstName}}</Label>
+						<div class="col-sm-10">
+						  <input type="text" class="form-control" id="FirstName" name="FirstName" ng-model="ProfileForm.Data.FirstName" placeholder="{{ProfileForm.Label.FirstName}}">
+						</div>
+					  </div>
+					  <div class="form-group">
+						<Label for="LastName" class="col-sm-2 control-Label">{{ProfileForm.Label.LastName}}</Label>
+						<div class="col-sm-10">
+						  <input type="text" class="form-control" id="LastName" name="LastName" ng-model="ProfileForm.Data.LastName" required placeholder="{{ProfileForm.Label.LastName}}">
+						</div>
+					  </div>
+					</form>
+				</section>
+			</div>
+			<div class="col-md-10">
+				<section id="addressSection">
+					<h4>{{ProfileForm.Label.AddressSection}}</h4>
+					<form class="form-horizontal">
+						<div class="form-group">
+							<Label for="Street1" class="col-sm-2 control-Label">{{ProfileForm.Label.Street1}}</Label>
+							<div class="col-sm-10">
+							  <input type="text" class="form-control" id="Street1" name="Street1" ng-model="ProfileForm.Data.Addresses[0].Street1" placeholder="Ex. 2323 Curtis Street">
+							</div>
+						</div>
+						<div class="form-group">
+							<Label for="Street2" class="col-sm-2 control-Label">{{ProfileForm.Label.Street2}}</Label>
+							<div class="col-sm-10">
+							  <input type="text" class="form-control" id="Street2" name="Street2" ng-model="ProfileForm.Data.Addresses[0].Street2" placeholder="Ex. Apt 1 or Suite 100">
+							</div>
+						</div>
+						<div class="form-group">
+							<Label for="City" class="col-sm-2 control-Label">{{ProfileForm.Label.City}}</Label>
+							<div class="col-sm-10">
+							  <input type="text" class="form-control" id="City" name="City" ng-model="ProfileForm.Data.Addresses[0].City" placeholder="Ex. Denver">
+							</div>
+						</div>
+						<div class="form-group">
+							<Label for="State" class="col-sm-2 control-Label">{{ProfileForm.Label.State}}</Label>
+							<div class="col-sm-10">
+							  <select class="form-control" id="State" name="State" ng-model="ProfileForm.Data.Addresses[0].StateCode" ng-options="State.Value as State.Name for State in StateCodes">
+								<option value="">-- choose a state --</option>
+							  </select>
+							</div>
+						</div>
+						<div class="form-group">
+							<Label for="ZipCode" class="col-sm-2 control-Label">{{ProfileForm.Label.ZipCode}}</Label>
+							<div class="col-sm-10">
+							  <input type="text" class="form-control" id="ZipCode" name="ZipCode" ng-model="ProfileForm.Data.Addresses[0].ZipCode" placeholder="Ex. 80205">
+							</div>
+						</div>
+						<div class="form-group">
+							<Label for="AddressType" class="col-sm-2 control-Label">{{ProfileForm.Label.AddressType}}</Label>
+							<div class="col-sm-10">
+								<Label class="radio-inline" ng-repeat="AddressType in AddressTypes">
+									<input type="radio" radiogroup="AddressType" id="AddressType" name="AddressType" ng-model="ProfileForm.Data.Addresses[0].AddressType" value="{{AddressType.Name}}"> {{AddressType.Name}}
+								</Label>
+							</div>
+						</div>
+					</form>
+				</section>
+			</div>
+			<div class="col-md-10">
+				<section id="phoneSection">
+					<h4>{{ProfileForm.Label.PhoneSection}}</h4>
+					<form class="form-horizontal">
+						<div class="form-group">
+							<Label for="PhoneNumber" class="col-sm-2 control-Label">{{ProfileForm.Label.PhoneNumber}}</Label>
+							<div class="col-sm-10">
+							  <input type="text" class="form-control" id="PhoneNumber" name="PhoneNumber" ng-model="ProfileForm.Data.PhoneNumber" placeholder="Ex. 123-456-7890">
+							</div>
+						</div>
+						<div class="form-group">
+							<Label for="PhoneNumberType" class="col-sm-2 control-Label">{{ProfileForm.Label.PhoneNumberType}}</Label>
+							<div class="col-sm-10">
+								<Label class="radio-inline" ng-repeat="PhoneNumberType in PhoneNumberTypes">
+									<input type="radio" radiogroup="PhoneNumberType" id="PhoneNumberType" name="PhoneNumberType" ng-model="ProfileForm.Data.PhoneNumberType" value="{{PhoneNumberType.Name}}"> {{PhoneNumberType.Name}}
+								</Label>						
+							</div>
+						</div>
+					</form>
+				</section>
+			</div>
+			<div class="col-md-10">
+			  <button type="Submit" class="btn btn-default" ng-click="ProfileForm.Clicked()">{{ProfileForm.Label.Submit}}</button>
+			</div>
+		</section>
+	</div>
+</section>
+<script>
+	$gs.init();
+</script>
