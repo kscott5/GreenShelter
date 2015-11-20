@@ -4,25 +4,14 @@ Green Shelter is an ASP.NET vNext MVC website that provides basic content, clien
 
 This application is based on the ASP.NET vNext that includes documentation, samples and getting started instruction at the [Home](https://github.com/aspnet/home) repo.
 
-The project demonstrates a few features such as Identity (customization and configuration), Entity Framework 7 (configuration and migration), and external login providers (Facebook, Google and MSN) provided via the ASP.NET vNext framework, and commonly used javascript libraries such as AngularJS, Grunt and Bower. The goal is to create an API that would also allow the mobile application to perform many of the same tasks. 
+The project demonstrates a few features such as Identity (customization and configuration), Entity Framework 7 (configuration and migration), and external login providers (Facebook, Google and MSN) provided via the ASP.NET vNext framework, and commonly used javascript libraries such as AngularJS, Gulp and Bower. The goal is to create an API that would also allow the mobile application to perform many of the same tasks. 
 
-![alt Screen Shoot](https://raw.githubusercontent.com/kscott5/GreenShelter/master/wwwroot/images/screenshot1.jpg)
+![alt Screen Shoot](https://raw.githubusercontent.com/kscott5/GreenShelter/master/src/mvc/wwwroot/images/screenshot1.jpg)
 
 Identity 
 ---------
 #### Customization
-Most of the cusomization occurs by extendend IdentityDbContext, IdentityUser, IdentityRole, UserStore and RoleStore classes. This was done to override the base functionality related to the Id property and its underline type. Basicly, I wanted to integer Id key for better index. Review any class marked with either User or Role found in code in src/Mvc/Models folders.
-
-#### Configuration
-Configuring the new custom Identity class requires override a few base services method located in [Startup.Services.cs](./App_Startup/Startup.Services.cs) class. 
-```c#
-...
-	// Add Identity services to the services container
-	services.AddIdentity<ApplicationUser, ApplicationRole>(this.Configuration())
-		.AddEntityFrameworkStores<GreenShelterDbContext, int>()
-		.AddTokenProvider(typeof(DataProtectorTokenProvider<ApplicationUser>));
-...
-```				
+Most of the cusomization occurs by extendend IdentityDbContext, IdentityUser and IdentityRole classes. This was done to override the base functionality related to the Id property and its underline type. Basicly, I wanted to integer Id key for better index. Review any class marked with either User or Role found in code in src/mvc/Models folders.
 
 This is IMPORTANT because I extended ALL Identity class to include int for TKey which is reflected in the code snippet above.
 
@@ -41,7 +30,7 @@ Simply, you can add the following lines of JSON text to the project.json depende
     "EntityFramework.Core": "7.0.0-*",
     "EntityFramework.Relational": "7.0.0-*",
     "EntityFramework.InMemory": "7.0.0-*",
-    "EntityFramework.SqlServer": "7.0.0-*"
+    "EntityFramework.Sqlite": "7.0.0-*"
   },
   "commands": {
 	"ef": "EntityFramework.Commands"
@@ -49,33 +38,25 @@ Simply, you can add the following lines of JSON text to the project.json depende
 ...
 ```
 
-This allow execution of *k ef migration add GreenShelterDbContext*
-
-NOTE: You could download SQL Server 2014 or LocalDB for windows, but for Linux using MySQL (not SQLite).
- 
+This allow execution of *dnx ef migration add GreenShelterDbContext*
 
 External Providers
 -------
 
-Javacript Library downloaded with Bower and installed using Grunt.
+Javacript Library downloaded with Bower and installed using Gulp.
 --------
-Below is a list of packages used by this application. 
+Below is a some of the packages used by this application. 
 
 angular
 angular-resource
 angular-route
-animate
-boostrap
-font-awesome
-jquery
-jquery-validation
 
 
 Here are some command-line scripts you could run.
 
-npm install --save-dev bower grunt grunt-cli grunt-contrib-uglify grunt-contrib-watch grunt-contrib-copy grunt-contrib-clean
+npm install
 bower install
-grunt 
+gulp 
 
 NOTE: 
 --------
