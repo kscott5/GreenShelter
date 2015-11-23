@@ -1,16 +1,24 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Diagnostics.Entity;
 using Microsoft.AspNet.Hosting;
+using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
 using Microsoft.Dnx.Runtime;
-using Microsoft.Framework.Configuration;
-using Microsoft.Framework.DependencyInjection;
-using Microsoft.Framework.Logging;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.EnvironmentVariables;
+using Microsoft.Extensions.Configuration.Json;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
+using Microsoft.Extensions.Logging.TraceSource;
+using Microsoft.Extensions.PlatformAbstractions;
 
 using PCSC.GreenShelter;
 using PCSC.GreenShelter.Models;
@@ -19,24 +27,15 @@ namespace PCSC.GreenShelter
 {
     public class Startup : IGreenShelterApplication
     {
-        private IConfigurationRoot configuration;
+        private IConfiguration configuration;
         private ILogger logger;
         
         public string TagName { get {return "Startup"; } }
         
         public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv, ILoggerFactory loggerFactory)
         {
-            loggerFactory.MinimumLevel = LogLevel.Information;
-            loggerFactory.AddConsole();
-            loggerFactory.AddDebug();
-
-            this.logger = loggerFactory.CreateLogger(this.TagName);        
-            this.logger.LogDebug(".ctor: Environment->{0}", env.EnvironmentName);
-            
             // Setup configuration sources.
             var builder = new ConfigurationBuilder()
-                .SetBasePath(appEnv.ApplicationBasePath)
-                .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
             if (env.IsDevelopment())
@@ -47,21 +46,27 @@ namespace PCSC.GreenShelter
             }
             builder.AddEnvironmentVariables();
             this.configuration = builder.Build();
+            
+            var sourceSwitch = new SourceSwitch("GreenShelter") { Level = SourceLevels.All };          
+            loggerFactory.AddTraceSource(sourceSwitch, new ConsoleTraceListener());
+            loggerFactory.AddTraceSource(sourceSwitch, new TextWriterTraceListener("./GreenShelter.log"));
+
+            this.logger = loggerFactory.CreateLogger(this.TagName);        
+            this.logger.LogInformation(".ctor: Environment->{0}", env.EnvironmentName);
+            
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            this.logger.LogDebug("ConfigureServices");
+            this.logger.LogInformation("ConfigureServices");
+            
+            var connectionString = this.configuration["Data:DefaultConnection:ConnectionString"];
+            this.logger.LogDebug("Connection String: {0}", connectionString);
             
             services.AddInstance(this.configuration);
             
-            // Add Entity Framework services to the services container.
-            services.AddEntityFramework()
-                .AddSqlite()
-                .AddDbContext<GreenShelterDbContext>(options =>
-                    options.UseSqlite(this.configuration["Data:DefaultConnection:ConnectionString"]));
-
+                        
             // Add Identity services to the services container.
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<GreenShelterDbContext,int>()
@@ -82,7 +87,8 @@ namespace PCSC.GreenShelter
         // Configure is called after ConfigureServices is called.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            this.logger.LogDebug("Configure");
+            this.logger.LogInformation("Configure");
+            
             // Configure the HTTP request pipeline.
 
             // Add the platform handler to the request pipeline.
@@ -92,7 +98,12 @@ namespace PCSC.GreenShelter
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage(DatabaseErrorPageOptions.ShowAll);
+                app.UseDatabaseErrorPage((DatabaseErrorPageOptions options) => options = new DatabaseErrorPageOptions { 
+                    ShowExceptionDetails = true,
+                    ListMigrations = true,
+                    EnableMigrationCommands = true,
+                    MigrationsEndPointPath = new PathString("/Migrations")
+                });
             }
             else
             {
@@ -106,30 +117,6 @@ namespace PCSC.GreenShelter
 
             // Add cookie-based authentication to the request pipeline.
             app.UseIdentity();
-
-            // Add and configure the options for authentication middleware to the request pipeline.
-            // You can add options for middleware as shown below.
-            // For more information see http://go.microsoft.com/fwlink/?LinkID=532715
-            //app.UseFacebookAuthentication(options =>
-            //{
-            //    options.AppId = Configuration["Authentication:Facebook:AppId"];
-            //    options.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-            //});
-            //app.UseGoogleAuthentication(options =>
-            //{
-            //    options.ClientId = Configuration["Authentication:Google:ClientId"];
-            //    options.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
-            //});
-            //app.UseMicrosoftAccountAuthentication(options =>
-            //{
-            //    options.ClientId = Configuration["Authentication:MicrosoftAccount:ClientId"];
-            //    options.ClientSecret = Configuration["Authentication:MicrosoftAccount:ClientSecret"];
-            //});
-            //app.UseTwitterAuthentication(options =>
-            //{
-            //    options.ConsumerKey = Configuration["Authentication:Twitter:ConsumerKey"];
-            //    options.ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"];
-            //});
 
             // Add MVC to the request pipeline.
             app.UseMvc(routes =>

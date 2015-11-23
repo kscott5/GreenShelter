@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.Framework.Logging;
+using Microsoft.Extensions.Logging;
 
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Infrastructure;

@@ -1,13 +1,12 @@
 using System;
-using System.Security;
-using System.Security.Claims;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
-using Microsoft.Framework.Logging;
+using Microsoft.Extensions.Logging;
 
 using PCSC.GreenShelter;
 using PCSC.GreenShelter.Models;
