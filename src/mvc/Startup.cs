@@ -17,7 +17,7 @@ using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
-using Microsoft.Extensions.Logging.TraceSource;
+using Microsoft.Extensions.Logging.Debug;
 using Microsoft.Extensions.PlatformAbstractions;
 
 using PCSC.GreenShelter;
@@ -27,46 +27,49 @@ namespace PCSC.GreenShelter
 {
     public class Startup : IGreenShelterApplication
     {
-        private IConfiguration configuration;
-        private ILogger logger;
+        private IConfigurationRoot configuration;
         
         public string TagName { get {return "Startup"; } }
         
-        public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv, ILoggerFactory loggerFactory)
+        public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
         {
             // Setup configuration sources.
             var builder = new ConfigurationBuilder()
+                .SetBasePath(appEnv.ApplicationBasePath)
+                .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
-            if (env.IsDevelopment())
-            {
-                // This reads the configuration keys from the secret store.
-                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets();
-            }
             builder.AddEnvironmentVariables();
-            this.configuration = builder.Build();
-            
-            var sourceSwitch = new SourceSwitch("GreenShelter") { Level = SourceLevels.All };          
-            loggerFactory.AddTraceSource(sourceSwitch, new ConsoleTraceListener());
-            loggerFactory.AddTraceSource(sourceSwitch, new TextWriterTraceListener("./GreenShelter.log"));
-
-            this.logger = loggerFactory.CreateLogger(this.TagName);        
-            this.logger.LogInformation(".ctor: Environment->{0}", env.EnvironmentName);
-            
+            this.configuration = builder.Build();             
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            this.logger.LogInformation("ConfigureServices");
+            var loggingConfiguration = this.configuration.GetSection("Logging");
+            var loggerSettings = new ConfigurationConsoleLoggerSettings(loggingConfiguration);
+           
+            // NOTE: Wasn't sure if needed
+            // Add configuration console logger settings to services container
+            services.AddInstance(loggerSettings);
             
-            var connectionString = this.configuration["Data:DefaultConnection:ConnectionString"];
-            this.logger.LogDebug("Connection String: {0}", connectionString);
+            // Create new logger factory
+            var loggerFactory = new LoggerFactory();
+            loggerFactory.AddConsole(loggerSettings);
+            loggerFactory.AddDebug((string name, LogLevel level) => { 
+                LogLevel result;
+                return loggerSettings.TryGetSwitch(name, out result) && level >= level;
+            });
             
-            services.AddInstance(this.configuration);
+            // Add logger factory to services containter
+            services.AddInstance(loggerFactory);
+
+            // Add Entity Framework services to the services container.
+            services.AddEntityFramework()
+                .AddSqlite()
+                .AddDbContext<GreenShelterDbContext>(options =>
+                    options.UseSqlite(this.configuration["Data:DefaultConnection:ConnectionString"]));
             
-                        
             // Add Identity services to the services container.
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<GreenShelterDbContext,int>()
@@ -74,21 +77,11 @@ namespace PCSC.GreenShelter
 
             // Add MVC services to the services container.
             services.AddMvc();
-
-            // Uncomment the following line to add Web API services which makes it easier to port Web API 2 controllers.
-            // You will also need to add the Microsoft.AspNet.Mvc.WebApiCompatShim package to the 'dependencies' section of project.json.
-            //services.AddWebApiConventions();
-
-            // Register application services.
-            //services.AddTransient<IEmailSender, AuthMessageSender>();
-            //services.AddTransient<ISmsSender, AuthMessageSender>();
         }
 
         // Configure is called after ConfigureServices is called.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            this.logger.LogInformation("Configure");
-            
             // Configure the HTTP request pipeline.
 
             // Add the platform handler to the request pipeline.
@@ -124,9 +117,6 @@ namespace PCSC.GreenShelter
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Spa}/{action=StartPage}/{id?}");
-
-                // Uncomment the following line to add a route for porting Web API 2 controllers.
-                routes.MapWebApiRoute("DefaultApi", "api/v1/{controller}/{id?}");
             });
         }
     }
