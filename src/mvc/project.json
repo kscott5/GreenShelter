@@ -6,6 +6,7 @@
     "defaultNamespace": "PCSC.GreenShelter"
   },
   "dependencies": {
+    "EntityFramework.Core": "7.0.0-*",
     "EntityFramework.Commands": "7.0.0-*",
     "EntityFramework.SQLite": "7.0.0-*",
     "Microsoft.AspNet.Authorization": "1.0.0-*",
