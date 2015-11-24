@@ -17,15 +17,15 @@ namespace PCSC.GreenShelter.Api.v1 {
 	[ApiExplorerSettings(IgnoreApi = true)]
 	public class ClientController : Controller, IGreenShelterApplication {
 		
-		public ClientController(ILoggerFactory loggerFactory, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager) {
+		public ClientController(ILogger<ClientController> logger, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager) {
            SignInManager = signInManager;
 		   UserManager = userManager;
-		   Logger = loggerFactory.CreateLogger(this.TagName);
+		   Logger = logger;
         }
 
-		public ILogger Logger { get; private set; }
-        public SignInManager<ApplicationUser> SignInManager { get; private set; }
-		public UserManager<ApplicationUser> UserManager {get; private set;}
+		protected ILogger Logger { get; private set; }
+        protected SignInManager<ApplicationUser> SignInManager { get; private set; }
+		protected UserManager<ApplicationUser> UserManager {get; private set;}
 		
 		/// <summary>
 		/// Describe name for the class implementing <cref="IGreenShelterApplication"/> interface
@@ -72,6 +72,7 @@ namespace PCSC.GreenShelter.Api.v1 {
 		//[AllowAnonymous]
         [Route("AuthTypes", Name="AuthTypes")]
         public JsonResult AuthenticationTypes() {
+			this.Logger.LogInformation("AuthTypes");
 			return new JsonResult("{}");
         }
 		
