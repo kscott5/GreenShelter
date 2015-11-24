@@ -24,10 +24,10 @@ namespace PCSC.GreenShelter.Models {
 
 		public DbSet<Address> Addresses { get; set; }
 		public DbSet<Organization> Organizations { get; set; }
-		private ILogger logger;
+		private ILogger<GreenShelterDbContext> logger;
 		
-		public GreenShelterDbContext(ILoggerFactory loggerFactory) {
-			this.logger = loggerFactory.CreateLogger(this.TagName);
+		public GreenShelterDbContext(ILogger<GreenShelterDbContext> logger) {
+			this.logger = logger;
 		}
 		
 		protected override void OnConfiguring(DbContextOptionsBuilder builder) {
