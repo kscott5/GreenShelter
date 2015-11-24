@@ -27,11 +27,12 @@ namespace PCSC.GreenShelter
 {
     public class Startup : IGreenShelterApplication
     {
-        private IConfigurationRoot configuration;
-        
         public string TagName { get {return "Startup"; } }
         
-        public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
+        public Startup() {}
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services, IHostingEnvironment env, IApplicationEnvironment appEnv)
         {
             // Setup configuration sources.
             var builder = new ConfigurationBuilder()
@@ -39,36 +40,26 @@ namespace PCSC.GreenShelter
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
+            if (env.IsDevelopment())
+            {
+                // This reads the configuration keys from the secret store.
+                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
+                builder.AddUserSecrets();
+            }
+            
             builder.AddEnvironmentVariables();
-            this.configuration = builder.Build();             
-        }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            var loggingConfiguration = this.configuration.GetSection("Logging");
-            var loggerSettings = new ConfigurationConsoleLoggerSettings(loggingConfiguration);
-           
-            // NOTE: Wasn't sure if needed
-            // Add configuration console logger settings to services container
-            services.AddInstance(loggerSettings);
+            var configuration = builder.Build();            
             
-            // Create new logger factory
-            var loggerFactory = new LoggerFactory();
-            loggerFactory.AddConsole(loggerSettings);
-            loggerFactory.AddDebug((string name, LogLevel level) => { 
-                LogLevel result;
-                return loggerSettings.TryGetSwitch(name, out result) && level >= level;
-            });
+            // Add Configuration to services container
+            services.AddInstance(configuration);
             
-            // Add logger factory to services containter
-            services.AddInstance(loggerFactory);
-
+            var connectionString = configuration["Data:DefaultConnectionString:ConnectionString"];
+            
             // Add Entity Framework services to the services container.
             services.AddEntityFramework()
                 .AddSqlite()
-                .AddDbContext<GreenShelterDbContext>(options =>
-                    options.UseSqlite(this.configuration["Data:DefaultConnection:ConnectionString"]));
+                .AddDbContext<GreenShelterDbContext>(option => 
+                    option.UseSqlite(connectionString));
             
             // Add Identity services to the services container.
             services.AddIdentity<ApplicationUser, ApplicationRole>()
@@ -80,8 +71,18 @@ namespace PCSC.GreenShelter
         }
 
         // Configure is called after ConfigureServices is called.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IConfigurationRoot configuration, ILoggerFactory loggerFactory)
+        {            
+            // Configure application wide logging
+            var loggingConfiguration = configuration.GetSection("Logging");
+            var loggerSettings = new ConfigurationConsoleLoggerSettings(loggingConfiguration);
+                       
+            loggerFactory.AddConsole(loggerSettings);
+            loggerFactory.AddDebug((string name, LogLevel level) => { 
+                LogLevel result;
+                return loggerSettings.TryGetSwitch(name, out result) && level >= level;
+            });
+         
             // Configure the HTTP request pipeline.
 
             // Add the platform handler to the request pipeline.
