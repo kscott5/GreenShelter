@@ -69,7 +69,7 @@ namespace PCSC.GreenShelter.Api.v1 {
         }
 		
         [HttpGet]
-		//[AllowAnonymous]
+		[AllowAnonymous]
         [Route("AuthTypes", Name="AuthTypes")]
         public JsonResult AuthenticationTypes() {
 			this.Logger.LogInformation("AuthTypes");
@@ -85,10 +85,23 @@ namespace PCSC.GreenShelter.Api.v1 {
 		}
 		
 		[HttpPost]
-		//[AllowAnonymous]
+		[AllowAnonymous]
 		[Route("Register", Name="Register")]
 		public async Task<JsonResult> Register([FromBody] ApplicationUser model) {
-			throw new NotImplementedException();
+			this.Logger.LogInformation("Register: {0}", model);
+			
+			// if(ModelState.IsValid) {
+			// 	throw new NotImplementedException("ModelState.IsValid is false");
+			// }
+			
+			var result = await this.UserManager.CreateAsync(model);
+			if(result.Succeeded) {
+				await this.SignInManager.SignInAsync(model, false);
+				
+				return new JsonResult("{message: 'SUCCESSFUL'}");
+			} 
+			
+			return new JsonResult("{message: 'FAILED'}");
 		}
 		
 		[Route("Me/{guidId?}", Name="Me")]

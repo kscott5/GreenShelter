@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
 
 using Microsoft.AspNet.Identity.EntityFramework;
 
@@ -78,6 +79,18 @@ namespace PCSC.GreenShelter.Models {
 				IsAuthenticated = isAuthenticated,
 				ReturnUrl = returnUrl
 			};
+		}
+		
+		public override string ToString() {
+			StringBuilder builder = new StringBuilder();
+			
+			builder.AppendFormat("User Id: {0}\n", this.Id);			
+			builder.AppendFormat("User Name: {0}\n", this.UserName);
+			builder.AppendFormat("Email: {0}\n", this.Email);
+			builder.AppendFormat("Full Name: {0} {1}\n", this.FirstName, this.LastName);
+			builder.AppendFormat("SSNo: xxx-xxx-{0}\n", this.SSNo.Substring(5));
+			
+			return builder.ToString();
 		}
     } // end class
 } // end namespace
