@@ -118,7 +118,12 @@ $(document).ready(
 							// Use arguments. arguments.length == 1 or arguments.length == 2.
 							// Then you can remove the function parameters
 							$resource('/api/v1/client/register', {}, {
-								post: {	method: 'POST'}
+								post: {	
+									method: 'POST',
+									headers: {										
+										'__RequestVerificationToken': $gs.Token
+									 }
+								}
 							}).post(Data).$promise.then(successHandler,errorHandler);
 						},
 						'getMe': function(Data,successHandler,errorHandler){

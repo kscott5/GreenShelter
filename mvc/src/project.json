@@ -36,8 +36,10 @@
     "Microsoft.Extensions.PlatformAbstractions": "1.0.0-*",
     "Microsoft.Extensions.Logging.Debug": "1.0.0-*",
     "GenFu": "1.0.4",
-    "EntityFramework.InMemory": "7.0.0-rc1-final",
-    "EntityFramework.Sqlite": "7.0.0-rc1-final"
+    "EntityFramework.InMemory": "7.0.0-*",
+    "EntityFramework.Sqlite": "7.0.0-*",
+    "Microsoft.AspNet.Antiforgery": "1.0.0-*",
+    "Microsoft.Extensions.Primitives": "1.0.0-*"
   },
   "commands": {
     "run": "Microsoft.AspNet.Server.Kestrel",

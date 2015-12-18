@@ -1,24 +1,35 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text;
+
+using Microsoft.AspNet.Antiforgery;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Diagnostics.Entity;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Http.Abstractions;
+using Microsoft.AspNet.Http.Features;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+
 using Microsoft.Data.Entity;
 using Microsoft.Dnx.Runtime;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.EnvironmentVariables;
 using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using Microsoft.Extensions.Logging.Debug;
 using Microsoft.Extensions.PlatformAbstractions;
+using Microsoft.Extensions.Primitives;
 
 using PCSC.GreenShelter;
 using PCSC.GreenShelter.Models;
@@ -72,6 +83,13 @@ namespace PCSC.GreenShelter
 
             // Add MVC services to the services container.
             services.AddMvc();
+            
+            // Add Antiforgery services to the service container
+            services.AddAntiforgery();
+            
+            // HACK: Header based Antiforgery Token won't be supported until RC2 
+            var serviceDescriptor = ServiceDescriptor.Singleton(typeof(IAntiforgeryTokenStore), typeof(CustomAntiforgeryTokenStore));
+            services.Replace(serviceDescriptor);
         }
 
         // Configure is called after ConfigureServices is called.
@@ -123,6 +141,7 @@ namespace PCSC.GreenShelter
                     name: "default",
                     template: "{controller=Spa}/{action=StartPage}/{id?}");
             });
+            
         }
     }
 }

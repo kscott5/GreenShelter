@@ -86,22 +86,33 @@ namespace PCSC.GreenShelter.Api.v1 {
 		
 		[HttpPost]
 		[AllowAnonymous]
+		[ValidateAntiForgeryToken]
 		[Route("Register", Name="Register")]
 		public async Task<JsonResult> Register([FromBody] ApplicationUser model) {
 			this.Logger.LogInformation("Register: {0}", model);
 			
-			// if(ModelState.IsValid) {
-			// 	throw new NotImplementedException("ModelState.IsValid is false");
-			// }
+			var response = new ApiResponse { Code = 400	};
 			
-			var result = await this.UserManager.CreateAsync(model);
-			if(result.Succeeded) {
-				await this.SignInManager.SignInAsync(model, false);
-				
-				return new JsonResult("{message: 'SUCCESSFUL'}");
-			} 
+			try {
+				var result = await this.UserManager.CreateAsync(model);
+				if(result.Succeeded) {
+					await this.SignInManager.SignInAsync(model, false);
+
+					response.Code = 200;
+					response.Data =  model.CreateData(true);
+					response.Description = string.Format("{0} registered successfully", model.UserName);
+				} else {
+					response.Description = string.Format("{0} Registration failed", model.UserName);
+					response.Data = result.Errors;
+				}
+			} catch(Exception ex) {
+				response.Description = string.Format("Failed to register new User {0}", model.UserName);
+				this.Logger.LogError(response.Description, ex);
+			}
 			
-			return new JsonResult("{message: 'FAILED'}");
+			this.HttpContext.Response.StatusCode = response.Code;
+						
+			return new JsonResult(response);
 		}
 		
 		[Route("Me/{guidId?}", Name="Me")]

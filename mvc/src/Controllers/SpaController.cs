@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 
 using Microsoft.AspNet.Mvc;
 
+using PCSC.GreenShelter;
+
 namespace PCSC.GreenShelter.Controllers
 {
 	/// <summary>
