@@ -16,6 +16,7 @@ using Microsoft.AspNet.Http.Abstractions;
 using Microsoft.AspNet.Http.Features;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Session;
 
 using Microsoft.Data.Entity;
 using Microsoft.Dnx.Runtime;
@@ -38,35 +39,35 @@ namespace PCSC.GreenShelter
 {
     public class Startup : IGreenShelterApplication
     {
+        private IConfigurationRoot configuration;
+        
         public string TagName { get {return "Startup"; } }
         
-        public Startup() {}
+        public Startup(IHostingEnvironment env) {
+            System.Console.WriteLine(new ConfigurationBuilder().GetBasePath());
+            
+            // Setup configuration sources.
+            var builder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+
+            builder.AddEnvironmentVariables();
+            configuration = builder.Build();           
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var serviceProvider = services.BuildServiceProvider();
-            var env = serviceProvider.GetService(typeof(IHostingEnvironment)) as IHostingEnvironment;
-            var appEnv = serviceProvider.GetService(typeof(IApplicationEnvironment)) as IApplicationEnvironment;
-            
-            // Setup configuration sources.
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(appEnv.ApplicationBasePath)
-                .AddJsonFile("appsettings.json")
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+            // Configure session to use built-in in-memory caching option 
+            // TODO: Configure session to using IDistributedCache (not built-in memory caching option)
+            services.AddCaching();
 
-            if (env.IsDevelopment())
-            {
-                // This reads the configuration keys from the secret store.
-                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets();
-            }
+            // Configure Session Options
+            var sessionOptions = new SessionOptions();
+            configuration.GetSection("Session").Bind(sessionOptions);
             
-            builder.AddEnvironmentVariables();
-            var configuration = builder.Build();            
-            
-            // Add Configuration to services container
-            services.AddInstance(configuration);
+            // Add Session to services container
+            services.AddSession(option => option = sessionOptions);
             
             var connectionString = configuration["Data:DefaultConnectionString:ConnectionString"];
             
@@ -93,7 +94,7 @@ namespace PCSC.GreenShelter
         }
 
         // Configure is called after ConfigureServices is called.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IConfigurationRoot configuration, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {            
             // Configure application wide logging
             var loggingConfiguration = configuration.GetSection("Logging");
@@ -107,12 +108,15 @@ namespace PCSC.GreenShelter
          
             // Configure the HTTP request pipeline.
 
+            app.UseSession();
+            
             // Add the platform handler to the request pipeline.
             app.UseIISPlatformHandler();
 
             // Add the following to the request pipeline only in development environment.
             if (env.IsDevelopment())
             {
+                app.UseRuntimeInfoPage();
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage((DatabaseErrorPageOptions options) => options = new DatabaseErrorPageOptions { 
                     ShowExceptionDetails = true,
