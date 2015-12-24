@@ -22,25 +22,39 @@ namespace PCSC.GreenShelter.Models {
 	[Table("AspNetUsers")]
     public class ApplicationUser : IdentityUser<int>   {
 		public ApplicationUser() : base() {
+            GuidId = Guid.NewGuid();
 			Addresses = new List<Address>();
 			Organizations = new List<Organization>();
 		}
 
+        /// <summary>
+        /// Password is minimum 8 characters at least 1 Uppercase Alphabet, 1 Lowercase Alphabet, 1 Number and 1 Special Character
+        /// </summary>
+        [Required]       
+        [RegularExpression("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$")] 
+        public override string PasswordHash {get; set; }
+
+        /// <summary>
+        /// https://html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address
+        /// </summary>        
+        [Required]
+        [RegularExpression("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")]
+        public override string Email {get; set;}
+        
 		[NotMapped]
 		[Compare("PasswordHash")]
 		public virtual string ConfirmedPassword {get; set;}
 		
 		[Key]
-		//[Column("UserId")]
+		[Column("UserId")]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public override int Id {get; set;}
 		
-		public virtual string GuidId {get; set;}
+		public virtual Guid GuidId {get; set;}
 		
-		//[ForeignKey("RoleId")]
-		public virtual ApplicationRole Role {get; set;}
+        public virtual ApplicationRole Role {get; set;}
 		
-		public virtual string FirstName {get; set; }
+        public virtual string FirstName {get; set; }
 		public virtual string LastName {get; set; }
 		
 		public virtual List<Address> Addresses {get; set;}
@@ -57,8 +71,7 @@ namespace PCSC.GreenShelter.Models {
 		
 		public virtual DateTime? ModifiedDate {get; set;}
 		
-		//[ForeignKey(UserId)]
-		public virtual int? ModifiedByUserId {get; set;}		
+		public virtual ApplicationUser ModifiedByUser {get; set;}		
 		
 		/// <summary>
 		/// Creates a data object used for JsonResult serialization. This

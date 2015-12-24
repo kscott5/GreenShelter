@@ -63,13 +63,17 @@ namespace PCSC.GreenShelter
             services.AddCaching();
 
             // Configure Session Options
-            var sessionOptions = new SessionOptions();
-            configuration.GetSection("Session").Bind(sessionOptions);
+            var sessionOptionsConfig = configuration.GetSection("SessionOptions");
+            services.Configure<SessionOptions>(sessionOptionsConfig);
             
             // Add Session to services container
-            services.AddSession(option => option = sessionOptions);
+            services.AddSession();
             
             var connectionString = configuration["Data:DefaultConnectionString:ConnectionString"];
+
+            // Configure Identity Options
+            var identityOptionsConfig = configuration.GetSection("IdentityOptions");
+            services.Configure<IdentityOptions>(identityOptionsConfig);            
             
             // Add Entity Framework services to the services container.
             services.AddEntityFramework()
@@ -85,12 +89,16 @@ namespace PCSC.GreenShelter
             // Add MVC services to the services container.
             services.AddMvc();
             
+            // Configure Identity Options
+            var antiforgeryOptionsConfig = configuration.GetSection("AntiforgeryOptions");
+            services.Configure<AntiforgeryOptions>(antiforgeryOptionsConfig);            
+
             // Add Antiforgery services to the service container
             services.AddAntiforgery();
             
             // HACK: Header based Antiforgery Token won't be supported until RC2 
             var serviceDescriptor = ServiceDescriptor.Singleton(typeof(IAntiforgeryTokenStore), typeof(CustomAntiforgeryTokenStore));
-            services.Replace(serviceDescriptor);
+            services.Replace(serviceDescriptor);            
         }
 
         // Configure is called after ConfigureServices is called.
@@ -146,6 +154,9 @@ namespace PCSC.GreenShelter
                     template: "{controller=Spa}/{action=StartPage}/{id?}");
             });
             
+            app.Run( context => { 
+                context.ApplicationServices.EnsureDbContextCreatedAndSeeded();               
+            });
         }
     }
 }

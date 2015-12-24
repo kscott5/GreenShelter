@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 using Microsoft.AspNet.Identity.EntityFramework;
 
-﻿namespace PCSC.GreenShelter.Models {
+namespace PCSC.GreenShelter.Models {
 	/// <summary>
 	/// 
 	/// </summary>
@@ -16,7 +16,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 		public static readonly string Client = "Client";
 		
 		[Key]
-		//[Column("RoleId")]
+		[Column("RoleId")]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public override int Id {get; set;}
 		

@@ -8,9 +8,10 @@ using PCSC.GreenShelter.Models;
 namespace mvc.Migrations
 {
     [DbContext(typeof(GreenShelterDbContext))]
-    partial class GreenShelterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20151223213727_ApplicationRelationships")]
+    partial class ApplicationRelationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348");
