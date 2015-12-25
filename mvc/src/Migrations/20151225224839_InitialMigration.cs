@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Data.Entity.Migrations;
 
-namespace mvc.Migrations
+namespace src.Migrations
 {
     public partial class InitialMigration : Migration
     {
@@ -12,7 +12,7 @@ namespace mvc.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    RoleId = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
@@ -21,7 +21,7 @@ namespace mvc.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApplicationRole", x => x.Id);
+                    table.PrimaryKey("PK_ApplicationRole", x => x.RoleId);
                 });
             migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
@@ -40,23 +40,23 @@ namespace mvc.Migrations
                         name: "FK_IdentityRoleClaim<int>_ApplicationRole_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
-                        principalColumn: "Id",
+                        principalColumn: "RoleId",
                         onDelete: ReferentialAction.Cascade);
                 });
             migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    UserId = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     AccessFailedCount = table.Column<int>(nullable: false),
                     Active = table.Column<bool>(nullable: false),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     CreationDate = table.Column<DateTime>(nullable: false),
-                    Email = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: false),
                     EmailConfirmed = table.Column<bool>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
-                    GuidId = table.Column<string>(nullable: true),
+                    GuidId = table.Column<Guid>(nullable: false),
                     LastActive = table.Column<DateTime>(nullable: false),
                     LastName = table.Column<string>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
@@ -65,7 +65,7 @@ namespace mvc.Migrations
                     ModifiedDate = table.Column<DateTime>(nullable: true),
                     NormalizedEmail = table.Column<string>(nullable: true),
                     NormalizedUserName = table.Column<string>(nullable: true),
-                    PasswordHash = table.Column<string>(nullable: true),
+                    PasswordHash = table.Column<string>(nullable: false),
                     PhoneNumber = table.Column<string>(nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
                     PhoneNumberType = table.Column<int>(nullable: false),
@@ -77,12 +77,18 @@ namespace mvc.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApplicationUser", x => x.Id);
+                    table.PrimaryKey("PK_ApplicationUser", x => x.UserId);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUser_ApplicationUser_ModifiedByUserId",
+                        column: x => x.ModifiedByUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ApplicationUser_ApplicationRole_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
-                        principalColumn: "Id",
+                        principalColumn: "RoleId",
                         onDelete: ReferentialAction.Restrict);
                 });
             migrationBuilder.CreateTable(
@@ -102,7 +108,7 @@ namespace mvc.Migrations
                         name: "FK_IdentityUserClaim<int>_ApplicationUser_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
             migrationBuilder.CreateTable(
@@ -121,7 +127,7 @@ namespace mvc.Migrations
                         name: "FK_IdentityUserLogin<int>_ApplicationUser_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
             migrationBuilder.CreateTable(
@@ -138,13 +144,13 @@ namespace mvc.Migrations
                         name: "FK_IdentityUserRole<int>_ApplicationRole_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
-                        principalColumn: "Id",
+                        principalColumn: "RoleId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_IdentityUserRole<int>_ApplicationUser_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
             migrationBuilder.CreateTable(
@@ -169,7 +175,7 @@ namespace mvc.Migrations
                         name: "FK_Address_ApplicationUser_ApplicationUserId",
                         column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                 });
             migrationBuilder.CreateTable(
@@ -198,7 +204,7 @@ namespace mvc.Migrations
                         name: "FK_Organization_ApplicationUser_ApplicationUserId",
                         column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                 });
             migrationBuilder.CreateIndex(
@@ -213,10 +219,15 @@ namespace mvc.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName");
+                
+                
+            this.UpData(migrationBuilder);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            this.DownData(migrationBuilder);
+            
             migrationBuilder.DropTable("AspNetRoleClaims");
             migrationBuilder.DropTable("AspNetUserClaims");
             migrationBuilder.DropTable("AspNetUserLogins");

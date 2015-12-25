@@ -154,9 +154,7 @@ namespace PCSC.GreenShelter
                     template: "{controller=Spa}/{action=StartPage}/{id?}");
             });
             
-            app.Run( context => { 
-                context.ApplicationServices.EnsureDbContextCreatedAndSeeded();               
-            });
+            app.ApplicationServices.EnsureDbContextCreatedAndSeeded();
         }
     }
 }

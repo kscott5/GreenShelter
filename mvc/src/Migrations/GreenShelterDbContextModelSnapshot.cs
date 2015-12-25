@@ -5,7 +5,7 @@ using Microsoft.Data.Entity.Metadata;
 using Microsoft.Data.Entity.Migrations;
 using PCSC.GreenShelter.Models;
 
-namespace mvc.Migrations
+namespace src.Migrations
 {
     [DbContext(typeof(GreenShelterDbContext))]
     partial class GreenShelterDbContextModelSnapshot : ModelSnapshot

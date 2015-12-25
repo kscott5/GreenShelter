@@ -52,6 +52,8 @@ namespace PCSC.GreenShelter.Models {
 		
 		public virtual Guid GuidId {get; set;}
 		
+        [Column("RoleId")]
+        [ForeignKey("RoleId")]
         public virtual ApplicationRole Role {get; set;}
 		
         public virtual string FirstName {get; set; }

@@ -14,13 +14,11 @@ namespace PCSC.GreenShelter
     public static class GreenShelterExtensions
     {
         public static async void EnsureDbContextCreatedAndSeeded(this IServiceProvider serviceProvider) {
-            var logger = serviceProvider.GetService<LoggerFactory>().CreateLogger("GreenShelterExtensions");
-            
             var dbContext = serviceProvider.GetService<GreenShelterDbContext>();
-            if(!dbContext.Database.EnsureCreated()) {
-                throw new ApplicationException("Failed to create the database");
-            } else {
-                dbContext.EnsureCreatedAndSeeded(serviceProvider);
+
+            if(dbContext.Database.EnsureCreated()) {
+                // Database was just created
+                // TODO: How do I get the Migrations.Data.* classes to seed the database 
             }
         } // end EnsureDbContextCreatedAndSeeded
     }

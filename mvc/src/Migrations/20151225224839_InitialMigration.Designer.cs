@@ -5,11 +5,11 @@ using Microsoft.Data.Entity.Metadata;
 using Microsoft.Data.Entity.Migrations;
 using PCSC.GreenShelter.Models;
 
-namespace mvc.Migrations
+namespace src.Migrations
 {
     [DbContext(typeof(GreenShelterDbContext))]
-    [Migration("20151223213727_ApplicationRelationships")]
-    partial class ApplicationRelationships
+    [Migration("20151225224839_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
