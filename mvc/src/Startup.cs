@@ -32,6 +32,8 @@ using Microsoft.Extensions.Logging.Debug;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.Extensions.Primitives;
 
+using Autofac;
+
 using PCSC.GreenShelter;
 using PCSC.GreenShelter.Models;
 
