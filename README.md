@@ -6,7 +6,7 @@ This application is based on the ASP.NET vNext that includes documentation, samp
 
 The project demonstrates a few features such as Identity (customization and configuration), Entity Framework 7 (configuration and migration), and external login providers (Facebook, Google and MSN) provided via the ASP.NET vNext framework, and commonly used javascript libraries such as AngularJS, Gulp and Bower. The goal is to create an API that would also allow the mobile application to perform many of the same tasks. 
 
-![alt Screen Shoot](https://raw.githubusercontent.com/kscott5/GreenShelter/master/src/mvc/wwwroot/images/screenshot1.jpg)
+![alt Screen Shoot](https://github.com/kscott5/GreenShelter/blob/master/mvc/src/wwwroot/images/screenshot1.jpg)
 
 Identity 
 ---------
