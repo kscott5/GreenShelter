@@ -22,9 +22,9 @@
     "Microsoft.AspNet.Mvc.TagHelpers": "6.0.0-*",
     "Microsoft.AspNet.Session": "1.0.0-*",
     "Microsoft.AspNet.Server.Kestrel": "1.0.0-*",
+    "Microsoft.AspNet.Server.Kestrel.Https": "1.0.0-*",
     "Microsoft.AspNet.StaticFiles": "1.0.0-*",
     "Microsoft.AspNet.Tooling.Razor": "1.0.0-*",
-    "System.ComponentModel.Annotations": "4.0.11-*",
     "Microsoft.Extensions.Caching.Memory": "1.0.0-*",
     "Microsoft.Extensions.Configuration": "1.0.0-*",
     "Microsoft.Extensions.Configuration.Abstractions": "1.0.0-*",
@@ -38,6 +38,8 @@
     "Microsoft.Extensions.PlatformAbstractions": "1.0.0-*",
     "Microsoft.Extensions.Logging.Debug": "1.0.0-*",
     "GenFu": "1.0.4",
+    "System.ComponentModel.Annotations": "4.0.11-*",
+    "System.Diagnostics.DiagnosticSource": "4.0.0-beta-23516",
     "EntityFramework.InMemory": "7.0.0-*",
     "EntityFramework.Sqlite": "7.0.0-*",
     "Microsoft.AspNet.Antiforgery": "1.0.0-*",
@@ -45,9 +47,12 @@
     "AutoFac": "4.0.0-*",
     "AutoFac.Extensions.DependencyInjection": "4.0.0-*"
   },
+  "compilationOptions": {
+    "emitEntryPoint": true
+  },
   "commands": {
-    "run": "Microsoft.AspNet.Server.Kestrel",
-    "web": "Microsoft.AspNet.Server.Kestrel",
+    "run": "src",
+    "web": "src",
     "ef": "EntityFramework.Commands"
   },
   "frameworks": {

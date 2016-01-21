@@ -158,5 +158,20 @@ namespace PCSC.GreenShelter
             
             app.ApplicationServices.EnsureDbContextCreatedAndSeeded();
         }
+        
+        // Entry point for the application.
+        public static void Main(string[] args)
+        {
+            var config = WebApplicationConfiguration.GetDefault(args);
+
+            var builder = new WebApplicationBuilder()
+                .UseConfiguration(config)
+                .UseStartup<Startup>();
+                
+            var application =   builder.Build();
+
+            application.Run();
+        }
+
     }
 }
