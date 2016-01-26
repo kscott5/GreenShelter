@@ -9,6 +9,7 @@
     "EntityFramework.Core": "7.0.0-rc1-*",
     "EntityFramework.Commands": "7.0.0-rc1-*",
     "EntityFramework.SQLite": "7.0.0-rc1-*",
+    "EntityFramework.Sqlite.Design": "7.0.0-rc1-*",
     "Microsoft.AspNet.Authorization": "1.0.0-rc1-*",
     "Microsoft.AspNet.Diagnostics": "1.0.0-rc1-*",
     "Microsoft.AspNet.Diagnostics.Entity": "7.0.0-rc1-*",
@@ -44,8 +45,7 @@
     "Microsoft.AspNet.Antiforgery": "1.0.0-rc1-*",
     "Microsoft.Extensions.Primitives": "1.0.0-rc1-*",
     "AutoFac": "4.0.0-*",
-    "AutoFac.Extensions.DependencyInjection": "4.0.0-*",
-    "EntityFramework.Sqlite.Design": "7.0.0-rc1-final"
+    "AutoFac.Extensions.DependencyInjection": "4.0.0-*"
   },
   "compilationOptions": {
     "emitEntryPoint": true
