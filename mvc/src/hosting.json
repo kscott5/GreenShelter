@@ -1,4 +1,0 @@
-﻿{
-  "server": "Microsoft.AspNet.Server.Kestrel",
-  "server.urls": "http://192.169.175.164:6000;https://192.169.175.164:6001"
-}
