@@ -32,8 +32,6 @@ using Microsoft.Extensions.Logging.Debug;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.Extensions.Primitives;
 
-using Autofac;
-
 using PCSC.GreenShelter;
 using PCSC.GreenShelter.Models;
 
@@ -45,9 +43,7 @@ namespace PCSC.GreenShelter
         
         public string TagName { get {return "Startup"; } }
         
-        public Startup(IHostingEnvironment env) {
-            System.Console.WriteLine(new ConfigurationBuilder().GetBasePath());
-            
+        public Startup(IHostingEnvironment env) {           
             // Setup configuration sources.
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
@@ -62,7 +58,7 @@ namespace PCSC.GreenShelter
         {
             // Configure session to use built-in in-memory caching option 
             // TODO: Configure session to using IDistributedCache (not built-in memory caching option)
-            services.AddCaching();
+            services.AddMemoryCache();
 
             // Configure Session Options
             var sessionOptionsConfig = configuration.GetSection("SessionOptions");
