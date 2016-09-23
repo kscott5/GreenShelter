@@ -1,0 +1,32 @@
+{
+    "version": "0.1.0",
+    "command": "dotnet",
+    "isShellCommand": true,
+    "args": [],
+    "options": {
+        "env": {
+            "ASPNETCORE_ENVIRONMENT": "development"
+        }
+    },
+    "tasks": [
+        {
+            "taskName": "build",
+            "args": [
+                "${fileDirname}\\..\\project.json",
+                "--runtime", "win10-x64",
+                "--configuration", "Debug",
+                "--framework", "netcoreapp1.0"                
+            ],
+            "isBuildCommand": true,
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "taskName": "restore",        
+            "args": [
+                 "${fileDirname}\\..\\project.json"
+            ],
+            "isBuildCommand": true,
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}
