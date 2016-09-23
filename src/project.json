@@ -70,7 +70,23 @@
     }
   },
 
+  "configurations": {
+    "Release": {
+      "buildOptions": {}
+    },
+    "Debug": {
+      "buildOptions": {
+        "debugType": "portable"
+      }
+    }
+  },
+
+  "runtimes": {
+    "win10-x64": {}
+  },
+
   "buildOptions": {
+    "outputName": "PCSC.GreenShelter",
     "emitEntryPoint": true,
     "preserveCompilationContext": true
   },
@@ -92,8 +108,8 @@
   },
 
   "scripts": {
-    "precompile": [ "dotnet bundle" ],
-    "prepublish": [ "npm install", "bower install", "gulp clean", "gulp min" ],
+    //"precompile": [ "dotnet bundle" ],
+    "prepublish": [ "dotnet bundle clean", "dotnet bundle", "npm install", "bower install", "gulp clean", "gulp min" ],
     "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
   },
 

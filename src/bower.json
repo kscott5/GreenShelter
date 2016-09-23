@@ -5,6 +5,16 @@
     "bootstrap": "3.3.6",
     "jquery": "2.2.3",
     "jquery-validation": "1.15.0",
-    "jquery-validation-unobtrusive": "3.2.6"
+    "jquery-validation-unobtrusive": "3.2.6",
+    "hammerjs": "2.0.8",
+    "angular": "1.5.8",
+    "angular-resource": "1.5.8",
+    "angular-route": "1.5.8",
+    "angular-local-storage": "0.5.1",
+    "font-awesome": "4.6.3",
+    "bootstrap-touch-carousel": "0.8.0"
+  },
+  "resolutions": {
+    "bootstrap": "3.3.6"
   }
 }
