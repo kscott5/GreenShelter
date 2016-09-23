@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-using Microsoft.Data.Entity.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 // TODO: How to configure namespace for entityframe commands
 namespace src.Migrations

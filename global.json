@@ -1,6 +1,6 @@
-{
-	"projects": ["mvc/src", "mvc/test"],
-	"sdk": {
-		"version": "1.0.0-rc2-16357"
-	}
+﻿{
+  "projects": [ "src", "test" ],
+  "sdk": {
+    "version": "1.0.0-preview2-003131"
+  }
 }

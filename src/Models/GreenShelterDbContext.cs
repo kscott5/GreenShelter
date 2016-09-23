@@ -4,13 +4,13 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Security.Claims;
 
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-using Microsoft.Data.Entity;
-using Microsoft.Data.Entity.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 using PCSC.GreenShelter;
 
@@ -28,7 +28,7 @@ namespace PCSC.GreenShelter.Models {
 		public DbSet<Organization> Organizations { get; set; }
 		private ILogger<GreenShelterDbContext> logger;
 		
-		public GreenShelterDbContext(ILogger<GreenShelterDbContext> logger) {
+		public GreenShelterDbContext(DbContextOptions<GreenShelterDbContext> options, ILogger<GreenShelterDbContext> logger) : base(options) {
 			this.logger = logger;
 		}
 		

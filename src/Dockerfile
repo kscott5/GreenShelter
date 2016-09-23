@@ -1,10 +1,17 @@
-FROM microsoft/aspnet:1.0.0-beta8
+FROM microsoft/dotnet:latest
 
-COPY project.json /app/
-WORKDIR /app
-RUN ["dnu", "restore"]
+RUN apt-get update && apt-get install -y sqlite3 libsqlite3-dev && rm -rf /var/lib/apt/lists/*
+
 COPY . /app
 
+WORKDIR /app
 
-EXPOSE 5000
-ENTRYPOINT ["dnx", "-p", "project.json", "web"]
+RUN ["dotnet", "restore"]
+
+RUN ["dotnet", "build"]
+
+RUN ["dotnet", "ef", "database", "update"]
+
+EXPOSE 5000/tcp
+
+CMD ["dotnet", "run", "--server.urls", "http://*:5000"]

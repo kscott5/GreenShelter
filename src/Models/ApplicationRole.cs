@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
-using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace PCSC.GreenShelter.Models {
 	/// <summary>
