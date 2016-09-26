@@ -22,6 +22,7 @@ namespace PCSC.GreenShelter.Models {
 	[Table("AspNetUsers")]
     public class ApplicationUser : IdentityUser<int>   {
 		public ApplicationUser() : base() {
+			SSNo = String.Empty;
             GuidId = Guid.NewGuid();
 			Addresses = new List<Address>();
 			Organizations = new List<Organization>();
@@ -103,7 +104,7 @@ namespace PCSC.GreenShelter.Models {
 			builder.AppendFormat("User Name: {0}\n", this.UserName);
 			builder.AppendFormat("Email: {0}\n", this.Email);
 			builder.AppendFormat("Full Name: {0} {1}\n", this.FirstName, this.LastName);
-			builder.AppendFormat("SSNo: xxx-xxx-{0}\n", this.SSNo.Substring(5));
+			//builder.AppendFormat("SSNo: xxx-xxx-{0}\n", this.SSNo.Substring(5));
 			
 			return builder.ToString();
 		}

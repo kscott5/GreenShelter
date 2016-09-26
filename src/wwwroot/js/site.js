@@ -404,7 +404,7 @@ $(document).ready(
 							UserName: 'Email',
 							Password: 'Password',
 							ConfirmPassword: 'Confirm Password',
-							SSNo: 'SS #',
+							//SSNo: 'SS #',
 							Submit: 'Register'
 					};
 					
@@ -412,10 +412,14 @@ $(document).ready(
 							FirstName: '',
 							LastName: '',
 							UserName: '',
+							Email: '',
 							PasswordHash: '',
 							ConfirmPassword: '',
 							SSNo: '',
-							updateSSNo: function() {self.Data.SSNo = self.SSNoPart1+self.SSNoPart2+self.SSNoPart3; }
+							Update: function() {
+								self.Email = self.UserName;
+								self.Data.SSNo = self.SSNoPart1+self.SSNoPart2+self.SSNoPart3; 
+							}
 					};
 					
 					self.SSNoPart1 = '';
@@ -434,7 +438,7 @@ $(document).ready(
 								},
 								ConfirmPassword: {
 									equalTo: "#PasswordHash"
-								},
+								},/*
 								SSNoPart1: {
 									required: true,
 									digits: true,
@@ -452,7 +456,7 @@ $(document).ready(
 									digits: true,
 									maxlength: 4,
 									minlength: 4
-								},
+								},*/
 								Message: {
 									UserName: {
 										required: "Required input"
@@ -469,7 +473,7 @@ $(document).ready(
 								if(registerForm.valid()) {
 									$log.debug('Preparing register new User');
 							
-									self.Data.updateSSNo();
+									self.Data.Update();
 									
 									Client.register(self.Data,
 										function(success){
