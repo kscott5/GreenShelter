@@ -46,8 +46,10 @@ namespace PCSC.GreenShelter
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<GreenShelterDbContext,int>()
                 .AddDefaultTokenProviders();
-
-            services.AddMvc();
+            
+            services.AddDataProtection();
+            services.AddAntiforgery();
+            services.AddMvc();            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,6 +83,8 @@ namespace PCSC.GreenShelter
                     name: "default",
                     template: "{controller=Spa}/{action=StartPage}/{id?}");
             });
+
+            //app.ApplicationServices.EnsureDbContextCreatedAndSeeded();
         }
     }
 }

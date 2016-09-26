@@ -78,7 +78,7 @@ namespace PCSC.GreenShelter.Api.v1 {
 		
 		[HttpPost]
 		//[AllowAnonymous]
-		//[ValidateAntiForgeryToken]
+		[ValidateAntiForgeryToken]
 		[Route("Login", Name="Login")]
 		public async Task<JsonResult> Login([FromBody] ApplicationUser model, string returnUrl = null) {
 			throw new NotImplementedException();
@@ -86,7 +86,7 @@ namespace PCSC.GreenShelter.Api.v1 {
 		
 		[HttpPost]
 		[AllowAnonymous]
-		[ValidateAntiForgeryToken]
+		//[ValidateAntiForgeryToken]
 		[Route("Register", Name="Register")]
 		public async Task<JsonResult> Register([FromBody] ApplicationUser model) {
 			this.Logger.LogInformation("Register: {0}", model);

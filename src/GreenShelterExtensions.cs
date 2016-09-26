@@ -14,12 +14,14 @@ namespace PCSC.GreenShelter
     public static class GreenShelterExtensions
     {
         public static async void EnsureDbContextCreatedAndSeeded(this IServiceProvider serviceProvider) {
-            var dbContext = serviceProvider.GetService<GreenShelterDbContext>();
+            await Task.Run(()=>{
+                var dbContext = serviceProvider.GetService<GreenShelterDbContext>();
 
-            if(dbContext.Database.EnsureCreated()) {
-                // Database was just created
-                // TODO: How do I get the Migrations.Data.* classes to seed the database 
-            }
+                if(dbContext.Database.EnsureCreated()) {
+                    // Database was just created
+                    // TODO: How do I get the Migrations.Data.* classes to seed the database 
+                }
+            });
         } // end EnsureDbContextCreatedAndSeeded
     }
 }
